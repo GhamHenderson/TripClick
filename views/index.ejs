@@ -1,0 +1,40 @@
+<! ---
+This is a D3.Js Map Created By Graham,Eduard and James
+as part of the Major Group Project.
+--->
+<!DOCTYPE html>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v6.js"></script>
+  <link rel="stylesheet" href="./stylesheets/style.css">
+
+  <!-- Create an element where the map will take place -->
+ <div><svg id="europeMap" width="700" height="500"></svg></div>
+
+
+ <script>
+   // The svg
+   const svg = d3.select("svg"),
+           width = +svg.attr("width"),
+           height = +svg.attr("height");
+
+   // Map and projection
+   const projection = d3.geoNaturalEarth1()
+           .scale(width / 1.2 ) // Lower the num closer the zoom
+           .translate([200, 700])  // (Horizontal, Vertical)
+
+   // Load external data and boot
+   d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then( function(data) {
+
+     // Draw the map
+     svg.append("g")
+
+             .selectAll("path")
+             .data(data.features)
+             .join("path")
+             .attr("fill", "#348C31") // Color Of Country
+             .attr("d", d3.geoPath().projection(projection))
+             .style("stroke", "white") // Border Lines
+             .on("click", )
+   })
+
+ </script>
