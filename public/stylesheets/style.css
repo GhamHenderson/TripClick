@@ -7,7 +7,10 @@ a {
   color: blue;
 }
 
-
+.euro{
+  display: flex;
+  justify-content: center;
+}
 svg {
   background-color: #AADAFF ;
 }
@@ -22,17 +25,7 @@ h1 {
 
 }
 
-#container {
-  width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 1px 1px 1px 2px rgb(217, 217, 217);
-}
-
 path:hover {
-  fill: rgba(8, 81, 80, 0.2);
+  fill: rgba(255, 255, 255, 0.8);
   cursor:pointer;
 }
