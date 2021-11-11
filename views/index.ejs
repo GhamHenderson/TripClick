@@ -1,7 +1,3 @@
-<! ---
-This is a D3.Js Map Created By Graham,Eduard and James
-as part of the Major Group Project.
---->
 <!DOCTYPE html>
   <meta charset="utf-8">
   <script src="https://d3js.org/d3.v6.js"></script>
@@ -12,10 +8,9 @@ as part of the Major Group Project.
 
  <script>
    // The svg
-
-   const svg = d3.select("svg"),
-           width = +svg.attr("width"),
-           height = +svg.attr("height");
+            const svg = d3.select("svg"),
+            width = +svg.attr("width"),
+            height = +svg.attr("height");
 
    // Map and projection
    const projection = d3.geoNaturalEarth1()
@@ -32,19 +27,14 @@ as part of the Major Group Project.
              .join("path")
              .attr("fill", "#348C31") // Color Of Country
              .attr("d", d3.geoPath().projection(projection))
+             .on("click", clickHandler)
              .style("stroke", "white")// Border Lines
-             .append("title")
-                .text(d => console.log(d))
-
-             .on("click", buttonClick()); //Want to run on click of country,
+       //Want to run on click of country,
    })
 
-
-
-   function buttonClick() {
-       window.alert("Boom");
-
+   function clickHandler(d) {
+       console.log("hello");
+       console.log(d);
    }
-
 
  </script>

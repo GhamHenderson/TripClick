@@ -29,3 +29,9 @@ path:hover {
   fill: rgba(255, 255, 255, 0.8);
   cursor:pointer;
 }
+
+.country {
+  fill: lightgreen;
+  stroke: black;
+  stroke-opacity: 0.1;
+}
