@@ -8,22 +8,19 @@ as part of the Major Group Project.
   <link rel="stylesheet" href="./stylesheets/style.css">
 
   <!-- Create an element where the map will take place -->
- <div class="euro"><svg id="europeMap" width="700" height="500"></svg></div>
+ <div class="euro"><svg id="europeMap" width="800" height="500"></svg></div>
 
  <script>
    // The svg
+
    const svg = d3.select("svg"),
            width = +svg.attr("width"),
            height = +svg.attr("height");
 
    // Map and projection
    const projection = d3.geoNaturalEarth1()
-           .scale(width / 1.1 ) // Lower the num closer the zoom
-           .translate([200, 800])  // (Horizontal, Vertical)
-
-   function buttonClick() {
-       window.alert("Boom");
-   }
+           .scale(width / 1.5 ) // Lower the num closer the zoom
+           .translate([200, 700])  // (Horizontal, Vertical)
 
    // Load external data and boot
    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then( function(data) {
@@ -35,8 +32,19 @@ as part of the Major Group Project.
              .join("path")
              .attr("fill", "#348C31") // Color Of Country
              .attr("d", d3.geoPath().projection(projection))
-             .style("stroke", "white") // Border Lines
+             .style("stroke", "white")// Border Lines
+             .append("title")
+                .text(d => console.log(d))
+
              .on("click", buttonClick()); //Want to run on click of country,
    })
+
+
+
+   function buttonClick() {
+       window.alert("Boom");
+
+   }
+
 
  </script>
