@@ -6,11 +6,16 @@
   <!-- Create an element where the map will take place -->
  <div class="euro"><svg id="europeMap" width="800" height="500"></svg></div>
 
+<! ---
+This is a D3.Js Map Created By Graham,Eduard and James
+as part of the Major Group Project.
+--->
+
  <script>
    // The svg
-            const svg = d3.select("svg"),
-            width = +svg.attr("width"),
-            height = +svg.attr("height");
+   const svg = d3.select("svg"),
+       width = +svg.attr("width"),
+       height = +svg.attr("height");
 
    // Map and projection
    const projection = d3.geoNaturalEarth1()
@@ -21,17 +26,18 @@
    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then( function(data) {
 
      // Draw the map
-     svg.append("g")
-             .selectAll("path")
-             .data(data.features)
-             .join("path")
-             .attr("fill", "#348C31") // Color Of Country
-             .attr("d", d3.geoPath().projection(projection))
-             .on("click", clickHandler)
-             .style("stroke", "white")// Border Lines
-       //Want to run on click of country,
-   })
 
+   svg.append("g")
+         .selectAll("path")
+         .data(data.features)
+         .join("path")
+         .attr("fill", "#348C31") // Color Of Country
+         .attr("d", d3.geoPath().projection(projection))
+         .on("click", clickHandler) // Click Handling <- We Will try to Use this to display country info.
+         .style("stroke", "white")// Border Lines
+})
+
+   // Function to Handle Button Click
    function clickHandler(d) {
        console.log("hello");
        console.log(d);
