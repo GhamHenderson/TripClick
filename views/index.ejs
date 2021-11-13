@@ -33,14 +33,13 @@ as part of the Major Group Project.
          .join("path")
          .attr("fill", "#348C31") // Color Of Country
          .attr("d", d3.geoPath().projection(projection))
-         .on("click", clickHandler) // Click Handling <- We Will try to Use this to display country info.
+          .on("click", (_, d) => clickHandler(d)) // Click Handling <- We Will try to Use this to display country info.
          .style("stroke", "white")// Border Lines
 })
 
    // Function to Handle Button Click
    function clickHandler(d) {
        console.log("hello");
-       console.log(d);
+       window.alert(d.id);
    }
-
  </script>
