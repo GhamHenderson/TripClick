@@ -1,14 +1,50 @@
 <!DOCTYPE html>
   <meta charset="utf-8">
   <script src="https://d3js.org/d3.v6.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
   <link rel="stylesheet" href="./stylesheets/style.css">
 
   <!-- Create an element where the map will take place -->
  <div class="euro"><svg id="europeMap" width="800" height="500"></svg></div>
 
+  <!-- This is an Example Graph -->
+ <div class="container">
+     <div class="graph1">
+         <canvas id="chart" width="200" height="200"></canvas>
+         <script>
+
+             const ctx = document.getElementById('chart').getContext('2d');
+             const myChart1 = new Chart(ctx, {
+                 type: 'line',
+                 data: {
+                     labels: ['January', 'February', 'March', 'April', 'May', 'June','July','August','September','October','November','December'],
+                     datasets: [{
+                         label: 'Coronavirus Numbers',
+                         data: [100,234,432,456,754,400,370,300,450,320,100],
+                         backgroundColor: [
+                             'rgba(255, 99, 132, 0.2)'
+                         ],
+                         borderColor: [
+                             'rgba(255, 99, 132, 1)'
+                         ],
+                         borderWidth: 1
+                     }]
+                 }
+             });
+         </script>
+     </div>
+
+     <div class="graph2">.</div>
+ </div>
+
+
+
+
 <! ---
 This is a D3.Js Map Created By Graham,Eduard and James
 as part of the Major Group Project.
+
+This Script Will be moved to a Script.Js File after testing.
 --->
 
  <script>
@@ -39,7 +75,11 @@ as part of the Major Group Project.
 
    // Function to Handle Button Click
    function clickHandler(d) {
-       console.log("hello");
-       window.alert(d.id);
+       if(d.id === "IRL"){
+           window.alert("You have Clicked Ireland");
+       }
+       else{
+           window.alert("The Country you Clicked is " + d.id);
+       }
    }
  </script>

@@ -7,9 +7,33 @@ a {
   color: blue;
 }
 
+.container{
+  display: flex;
+}
+
+.graph2{
+  display: flex;
+  padding: 20px;
+  height: 50%;
+  width: 50%;
+  justify-content: right;
+
+
+}
+
+.graph1{
+  display: flex;
+  padding: 20px;
+  height: 50%;
+  width: 50%;
+  justify-content: left;
+
+}
+
 .euro{
   display: flex;
   justify-content: center;
+
 }
 svg {
   background-color: #AADAFF ;
