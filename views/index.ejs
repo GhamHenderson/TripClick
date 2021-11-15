@@ -48,10 +48,8 @@ This Script Will be moved to a Script.Js File after testing.
 --->
 
  <script>
-   // The svg
    const svg = d3.select("svg"),
-       width = +svg.attr("width"),
-       height = +svg.attr("height");
+       width = +svg.attr("width")
 
    // Map and projection
    const projection = d3.geoNaturalEarth1()
@@ -60,26 +58,26 @@ This Script Will be moved to a Script.Js File after testing.
 
    // Load external data and boot
    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then( function(data) {
-
-     // Draw the map
-
-   svg.append("g")
-         .selectAll("path")
-         .data(data.features)
-         .join("path")
-         .attr("fill", "#348C31") // Color Of Country
-         .attr("d", d3.geoPath().projection(projection))
-          .on("click", (_, d) => clickHandler(d)) // Click Handling <- We Will try to Use this to display country info.
-         .style("stroke", "white")// Border Lines
+       svg.append("g")
+           .selectAll("path")
+           .data(data.features)
+           .join("path")
+           .attr("fill", "#348C31") // Color Of Country
+           .attr("d", d3.geoPath().projection(projection))
+           .on("click", (_, d) => clickHandler(d)) // Click Handling <- We Will try to Use this to display country info.
+           .on("mouseover", handleMouseOver)
+           .on("mouseout", handleMouseOut)
+           .style("stroke", "white")// Border Lines
 })
 
+   function handleMouseOver(d,i){
+       console.log("Mouse Is On " + i.properties.name)
+   }
+   function handleMouseOut(){
+        console.log("Leaving Country")
+   }
    // Function to Handle Button Click
    function clickHandler(d) {
-       if(d.id === "IRL"){
-           window.alert("You have Clicked Ireland");
-       }
-       else{
-           window.alert("The Country you Clicked is " + d.id);
-       }
+           window.alert("The Country you Clicked is " + d.properties.name);
    }
  </script>
