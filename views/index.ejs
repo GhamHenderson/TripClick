@@ -1,84 +1,139 @@
 <!DOCTYPE html>
-  <meta charset="utf-8">
-  <script src="https://d3js.org/d3.v6.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
-  <link rel="stylesheet" href="./stylesheets/style.css">
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Data Visualization</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.css"/>
+    <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v6.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+    <link rel="stylesheet" href="./stylesheets/style.css">
+    <link rel="stylesheet" href="./stylesheets/navbar.css">
+    <script src="./javascripts/script.js" defer></script>
+</head>
 
-  <!-- Create an element where the map will take place -->
- <div class="euro"><svg id="europeMap" width="800" height="500"></svg></div>
+<body>
 
-  <!-- This is an Example Graph -->
- <div class="container">
- 
-     <div class="graph1">
-         <canvas id="chart" width="200" height="200"></canvas>
-         <script>
+<div data-role="page" id="home">
+    <nav>
+        <label class="logo">Project Logo</label>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Graph</a></li>
+            <li><a href="#register">Register</a></li>
+        </ul>
+        <label id="icon">
+            <i class="fas fa-bars"></i>
+        </label>
+    </nav>
 
-             const ctx = document.getElementById('chart').getContext('2d');
-             const myChart1 = new Chart(ctx, {
-                 type: 'line',
-                 data: {
-                     labels: ['January', 'February', 'March', 'April', 'May', 'June','July','August','September','October','November','December'],
-                     datasets: [{
-                         label: 'Coronavirus Numbers',
-                         data: [100,234,432,456,754,400,370,300,450,320,100],
-                         backgroundColor: [
-                             'rgba(255, 99, 132, 0.2)'
-                         ],
-                         borderColor: [
-                             'rgba(255, 99, 132, 1)'
-                         ],
-                         borderWidth: 1
-                     }]
-                 }
-             });
-         </script>
-     </div>
+    <!-- Create an element where the map will take place -->
+    <div class="euro">
+        <svg id="europeMap" width="800" height="500"></svg>
+    </div>
 
-     <div class="graph2">.</div>
- </div>
+    <!-- This is an Example Graph -->
+    <div class="container">
 
+        <div class="graph1">
+            <canvas id="chart" width="200" height="200"></canvas>
+            <script>
 
+                const ctx = document.getElementById('chart').getContext('2d');
+                const myChart1 = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        datasets: [{
+                            label: 'Coronavirus Numbers',
+                            data: [100, 234, 432, 456, 754, 400, 370, 300, 450, 320, 100],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    }
+                });
+            </script>
+        </div>
 
+        <div class="graph2">.</div>
+    </div>
 
-<! ---
-This is a D3.Js Map Created By Graham,Eduard and James
-as part of the Major Group Project.
+    <! ---
+    This is a D3.Js Map Created By Graham,Eduard and James
+    as part of the Major Group Project.
 
-This Script Will be moved to a Script.Js File after testing.
---->
+    This Script Will be moved to a Script.Js File after testing.
+    --->
 
- <script>
-   const svg = d3.select("svg"),
-       width = +svg.attr("width")
+    <script>
+        const svg = d3.select("svg"),
+            width = +svg.attr("width")
 
-   // Map and projection
-   const projection = d3.geoNaturalEarth1()
-           .scale(width / 1.5 ) // Lower the num closer the zoom
-           .translate([200, 700])  // (Horizontal, Vertical)
+        // Map and projection
+        const projection = d3.geoNaturalEarth1()
+            .scale(width / 1.5) // Lower the num closer the zoom
+            .translate([200, 700])  // (Horizontal, Vertical)
 
-   // Load external data and boot
-   d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then( function(data) {
-       svg.append("g")
-           .selectAll("path")
-           .data(data.features)
-           .join("path")
-           .attr("fill", "#348C31") // Color Of Country
-           .attr("d", d3.geoPath().projection(projection))
-           .on("click", (_, d) => clickHandler(d)) // Click Handling <- We Will try to Use this to display country info.
-           .on("mouseover", handleMouseOver)
-           .on("mouseout", handleMouseOut)
-           .style("stroke", "white")// Border Lines
-})
+        // Load external data and boot
+        d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function (data) {
+            svg.append("g")
+                .selectAll("path")
+                .data(data.features)
+                .join("path")
+                .attr("fill", "#348C31") // Color Of Country
+                .attr("d", d3.geoPath().projection(projection))
+                .on("click", (_, d) => clickHandler(d)) // Click Handling <- We Will try to Use this to display country info.
+                .on("mouseover", handleMouseOver)
+                .on("mouseout", handleMouseOut)
+                .style("stroke", "white")// Border Lines
+        })
 
-   function handleMouseOver(d,i){
-       console.log("Mouse Is On " + i.properties.name)
-   }
-   function handleMouseOut(){
-        console.log("Leaving Country")
-   }
-   // Function to Handle Button Click
-   function clickHandler(d) {
-           window.alert("The Country you Clicked is " + d.properties.name);
-   }
- </script>
+        function handleMouseOver(d, i) {
+            console.log("Mouse Is On " + i.properties.name)
+        }
+
+        function handleMouseOut() {
+            console.log("Leaving Country")
+        }
+
+        // Function to Handle Button Click
+        function clickHandler(d) {
+            window.alert("The Country you Clicked is " + d.properties.name);
+        }
+    </script>
+
+    <div data-role="footer" class="footer">
+        <h1>Page Footer</h1>
+    </div><!-- /footer -->
+
+</div>
+
+<div data-role="page" id="register">
+    <nav>
+        <label class="logo">Project Logo</label>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Graph</a></li>
+            <li><a href="#register">Register</a></li>
+        </ul>
+        <label id="icon">
+            <i class="fas fa-bars"></i>
+        </label>
+    </nav>
+    <h1>This is register page!!!</h1>
+
+</div>
+
+</body>
+</html>
