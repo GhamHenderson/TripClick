@@ -28,8 +28,6 @@ a {
     height: 50%;
     width: 50%;
     justify-content: right;
-
-
 }
 
 .graph1 {
@@ -44,11 +42,15 @@ a {
 .euro {
     display: flex;
     justify-content: center;
-
 }
 
-svg {
+/*svg {*/
+/*    background-color: #AADAFF;*/
+/*}*/
+
+.europe-map {
     background-color: #AADAFF;
+
 }
 
 h1 {

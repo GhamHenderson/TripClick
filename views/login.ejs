@@ -2,9 +2,9 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <title>Data Visualization</title>
+    <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./stylesheets/login.css">
+    <link rel="stylesheet" href="stylesheets/login.css">
 
 </head>
 <%- include('header') %>
@@ -23,19 +23,51 @@
 
             <div class="input-field-login">
                 <label>Username</label>
-                <input type="text" class="input" required>
+                <input type="text" id="username" name="username" class="input" required>
             </div>
             <div class="input-field-login">
                 <label>Password</label>
-                <input type="password" class="input" required>
+                <input type="password" id="password" name="password" class="input" required>
             </div>
 
 
             <div class="input-field-login">
-                <input type="submit" value="Login" class="login-btn">
+                <input type="submit" id="login-button" value="Login" class="login-btn">
             </div>
         </div>
     </div>
+
+    <script>
+        $("#login-button").click(function () {
+
+            // Get the values
+            var username = $('#username').val();
+            var password = $('#password').val();
+
+
+            if (username == '') {
+                alert("too short");
+            } else {
+
+                // Send the data
+                $.post("/login", {
+                    username: username,
+                    password: password
+                })
+                    .done(function (data) {
+
+                        if (data.includes("manager")) {
+                            window.location = "/#manager";
+                        } else {
+                            window.location = "/";
+                            alert("bravo!");
+                        }
+                    });
+            }
+
+        });
+
+    </script>
 
     <div data-role="footer" class="footer">
         <h1>Page Footer</h1>

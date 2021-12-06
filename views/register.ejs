@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Register</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./stylesheets/register.css">
+    <link rel="stylesheet" href="stylesheets/register.css">
 </head>
 
 <%- include('header') %>
@@ -325,74 +325,60 @@
                 <input type="text" id="city" name="city" class="input">
             </div>
 
-            <!--            <div class="input-field terms">-->
-            <!--                <label class="check">-->
-            <!--                    <input type="checkbox">-->
-            <!--                    <span class="checkmark"></span>-->
-            <!--                </label>-->
-            <!--                <p>Agreed to terms and conditions</p>-->
-            <!--            </div>-->
             <div class="input-field">
-                <input type="submit" id="register-button" value="Register" class="btn">
-                <!--                <button id="register-button">REGISTER</button>-->
+                <input type="submit" id="register-button" value="Register" class="register-button">
             </div>
         </div>
     </div>
 
 
     <!--    register script to send the info to database- will be changed later-->
-    <!--    <script>-->
+    <script>
 
-    <!--        $("#register-button").click(function () {-->
+        $("#register-button").click(function () {
 
-    <!--            // get the values-->
-    <!--            var fname = $('#firstname').val();-->
-    <!--            var lname = $('#lastname').val();-->
-    <!--            var uname = $('#username').val();-->
-    <!--            var pass = $('#password').val();-->
-    <!--            var email = $('#email').val();-->
-    <!--            var phone = $('#phone').val();-->
-    <!--            var gender = $('#gender').val();-->
-    <!--            var country = $('#country').val();-->
-    <!--            var city = $('#city').val();-->
+            // get the values
+            var fname = $('#firstname').val();
+            var lname = $('#lastname').val();
+            var uname = $('#username').val();
+            var pass = $('#password').val();
+            var email = $('#email').val();
+            var phone = $('#phone').val();
+            var gender = $('#gender').val();
+            var country = $('#country').val();
+            var city = $('#city').val();
 
-    <!--            // if (fname == '') {-->
-    <!--            //     alert("too short");-->
-    <!--            // } else {-->
+            // if (fname == '') {
+            //     alert("too short");
+            // } else {
 
-    <!--            //send data-->
-    <!--            $.post("/register", {-->
-    <!--                firstname: fname,-->
-    <!--                lastname: lname,-->
-    <!--                username: uname,-->
-    <!--                password: pass,-->
-    <!--                email: email,-->
-    <!--                phone: phone,-->
-    <!--                gender: gender,-->
-    <!--                country: country,-->
-    <!--                city: city-->
-    <!--            })-->
-    <!--                .done(function (data) {-->
+            //send data
+            $.post("/register", {
+                firstname: fname,
+                lastname: lname,
+                username: uname,
+                password: pass,
+                email: email,
+                phone: phone,
+                gender: gender,
+                country: country,
+                city: city
+            })
+                .done(function (data) {
 
-    <!--                    // if (data.includes("customer")) {-->
-    <!--                    //     window.location = "/#customer";-->
-    <!--                    // } else if (data.includes("manager")) {-->
-    <!--                    //     window.location = "/#manager";-->
-    <!--                    // } else if (data.includes("cook")) {-->
-    <!--                    //-->
-    <!--                    //     $.get("/getcookdata", function (data) {-->
-    <!--                    //         $("#cookoutput").html(data);-->
-    <!--                    //     });-->
-    <!--                    //     window.location = "/#cook";-->
-    <!--                    // }-->
+                    // if (data.includes("manager")) {
+                    //     window.location = "/#manager";
+                    // } else if(data.includes()) {
+                    window.location = "/";
+                    alert("Registered successful!");
+                    // }
 
+                });
+            //}
 
-    <!--                });-->
-    <!--            //}-->
+        });
 
-    <!--        });-->
-
-    <!--    </script>-->
+    </script>
 
 
     <div data-role="footer" class="footer">
