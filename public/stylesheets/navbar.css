@@ -1,19 +1,7 @@
-* {
-    padding: 0;
-    margin: 0;
-    text-decoration: none;
-    list-style: none;
-}
-
-body {
-    font-family: montserrat;
-}
-
 nav {
     height: 80px;
     width: 100%;
     background: #34495e;
-    margin-bottom: 25px;
 }
 
 label.logo {
@@ -109,4 +97,14 @@ nav #icon {
     nav ul.show {
         left: 0;
     }
+}
+
+.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+.footer {
+    background: #ffd658;
 }

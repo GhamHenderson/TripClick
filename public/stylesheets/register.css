@@ -1,0 +1,137 @@
+* {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+
+}
+
+.register-page {
+    padding-top: 20px;
+}
+
+.wrapper {
+    max-width: 800px;
+    width: 100%;
+    background: #fff;
+    margin: 0px auto;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.125);
+    padding: 30px;
+}
+
+.wrapper .title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: dodgerblue;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.wrapper .form {
+    width: 100%;
+}
+
+.wrapper .form .input-field {
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.wrapper .form .input-field label {
+    width: 200px;
+    color: #757575;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.wrapper .form .input-field .input {
+    width: 100%;
+    outline: none;
+    border: 1px solid #d5dbd9;
+    font-size: 15px;
+    padding: 8px 10px;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.wrapper .form .input-field {
+    width: 100%;
+    resize: none;
+}
+
+.wrapper .form .input-field .custom_select {
+    position: relative;
+    width: 100%;
+    height: 37px;
+}
+
+.wrapper .form .input-field .custom_select:before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    border: 8px solid;
+    border-color: #d5dbd9 transparent transparent transparent;
+    pointer-events: none;
+}
+
+.wrapper .form .input-field .custom_select select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    border: 0px;
+    padding: 8px 10px;
+    font-size: 15px;
+    border: 1px solid #d5dbd9;
+    border-radius: 3px;
+}
+
+.wrapper .form .input-field .input:focus,
+.wrapper .form .input-field .custom_select select:focus {
+    border: 1px solid #fec107;
+}
+
+.wrapper .form .input-field p {
+    font-size: 14px;
+    color: #757575;
+}
+
+.wrapper .form .input-field .btn {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 15px;
+    border: 0px;
+    background: #fec107;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: none;
+}
+
+.wrapper .form .input-field .btn:hover {
+    background: #ffd658;
+}
+
+.wrapper .form .input-field:last-child {
+    margin-bottom: 0;
+}
+
+@media (max-width: 500px) {
+    .wrapper .form .input-field {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .wrapper .form .input-field label {
+        margin-bottom: 5px;
+    }
+}
+
+body #register {
+    background: lightgrey;
+}

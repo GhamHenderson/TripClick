@@ -1,37 +1,19 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
     <title>Data Visualization</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.css"/>
-    <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
-    <script src="https://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v6.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
-    <link rel="stylesheet" href="./stylesheets/style.css">
-    <link rel="stylesheet" href="./stylesheets/navbar.css">
-    <script src="./javascripts/script.js" defer></script>
+    <link rel="stylesheet" href="./stylesheets/index.css">
 </head>
 
-<body>
+<%- include('header') %>
 
-<div data-role="page" id="home">
-    <nav>
-        <label class="logo">Project Logo</label>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Graph</a></li>
-            <li><a href="#register">Register</a></li>
-        </ul>
-        <label id="icon">
-            <i class="fas fa-bars"></i>
-        </label>
-    </nav>
+<body>
+<!--start of home page-->
+<div class="home-page" id="home">
 
     <!-- Create an element where the map will take place -->
     <div class="euro">
@@ -116,23 +98,6 @@
     <div data-role="footer" class="footer">
         <h1>Page Footer</h1>
     </div><!-- /footer -->
-
-</div>
-
-<div data-role="page" id="register">
-    <nav>
-        <label class="logo">Project Logo</label>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Graph</a></li>
-            <li><a href="#register">Register</a></li>
-        </ul>
-        <label id="icon">
-            <i class="fas fa-bars"></i>
-        </label>
-    </nav>
-    <h1>This is register page!!!</h1>
 
 </div>
 

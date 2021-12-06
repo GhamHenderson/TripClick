@@ -1,7 +1,18 @@
-/*body {*/
-/*  padding: 50px;*/
-/*  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
-/*}*/
+* {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    font-family: montserrat;
+}
+
+.home-page {
+    margin-top: 25px;
+}
 
 a {
     color: blue;
@@ -55,6 +66,4 @@ path:hover {
     cursor: pointer;
 }
 
-.footer {
-    background: #ffd658;
-}
+
