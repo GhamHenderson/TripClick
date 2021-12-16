@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="utf-8">
-    <title>Data Visualization</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://d3js.org/d3.v6.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
-    <link rel="stylesheet" href="stylesheets/index.css">
+<title>Home</title>
+<script src="https://d3js.org/d3.v6.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheets/index.css">
 </head>
 
-<%- include('header') %>
+<%- include('common/header') %>
 
 <body>
 <!--start of home page-->
@@ -97,11 +93,6 @@
         }
     </script>
 
-    <div data-role="footer" class="footer">
-        <h1>Page Footer</h1>
-    </div><!-- /footer -->
-
 </div>
 
-</body>
-</html>
+<%- include('common/footer') %>

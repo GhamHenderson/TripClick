@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="utf-8">
-    <title>Register</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesheets/register.css">
+<title>Register</title>
+<link rel="stylesheet" href="stylesheets/register.css">
 </head>
 
-<%- include('header') %>
+<%- include('common/header') %>
 
 <body>
 <!--start of register page-->
@@ -348,44 +344,39 @@
             var country = $('#country').val();
             var city = $('#city').val();
 
-            // if (fname == '') {
-            //     alert("too short");
-            // } else {
+            if (fname == '' && pass == '') {
+                alert("too short");
+            } else {
 
-            //send data
-            $.post("/register", {
-                firstname: fname,
-                lastname: lname,
-                username: uname,
-                password: pass,
-                email: email,
-                phone: phone,
-                gender: gender,
-                country: country,
-                city: city
-            })
-                .done(function (data) {
+                //send data
+                $.post("/register", {
+                    firstname: fname,
+                    lastname: lname,
+                    username: uname,
+                    password: pass,
+                    email: email,
+                    phone: phone,
+                    gender: gender,
+                    country: country,
+                    city: city
+                })
+                    .done(function (data) {
 
-                    // if (data.includes("manager")) {
-                    //     window.location = "/#manager";
-                    // } else if(data.includes()) {
-                    window.location = "/";
-                    alert("Registered successful!");
-                    // }
+                        // if (data.includes("manager")) {
+                        //     window.location = "/#manager";
+                        // } else if(data.includes()) {
+                        window.location = "/";
+                        alert("Registered successful!");
+                        // }
 
-                });
-            //}
+                    });
+            }
 
         });
 
     </script>
 
-
-    <div data-role="footer" class="footer">
-        <h1>Page Footer</h1>
-    </div><!-- /footer -->
-
 </div>
 
-</body>
-</html>
+<%- include('common/footer') %>
+
