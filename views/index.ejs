@@ -19,7 +19,8 @@
             <p id="countryclicked">Country clicked displays here.</p>
         </div>
     </div>
-    <!-- This is an Example Graph -->
+
+    <!-- This is an Example Graph using Graph.Js Library-->
     <div class="container">
 
         <div class="graph1">
@@ -76,7 +77,7 @@
                 .join("path")
                 .attr("fill", "#348C31") // Color Of Country
                 .attr("d", d3.geoPath().projection(projection))
-                .on("click", (_, d) => clickHandler(d)) // Click Handling <- We Will try to Use this to display country info.
+                .on("click", (_, d) => clickHandler(d)) // Click Handling
                 .on("mouseover", handleMouseOver)
                 .on("mouseout", handleMouseOut)
                 .style("stroke", "white")// Border Lines
@@ -91,7 +92,7 @@
         }
 
         // Function to Handle Button Click
-        function clickHandler(d, i) {
+        function clickHandler(d) {
             document.getElementById("countryclicked").innerHTML = d.properties.name;
         }
     </script>
