@@ -71,6 +71,8 @@
             .translate([200, 700])  // (Horizontal, Vertical)
 
         let counter = 0;
+        let selectedcountry1;
+        let selectedcountry2;
         // Load external data and boot
         d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function (data) {
             svg.append("g")
@@ -87,11 +89,21 @@
                     if(counter < 2){
                         d3.select(this).style("fill", '#0000FF');
                         document.getElementById("countryclicked").innerHTML = i.properties.name;
-                        counter ++;
+
                     }
                     else{
                         document.getElementById("errorcountryclicked").innerHTML = "Error You can Only Select 2 Countries!!";
                     }
+                    counter ++;
+                    if(counter == 1){
+                        selectedcountry1 = i.properties.name;
+                    }
+                    if(counter == 2){
+                        selectedcountry2 = i.properties.name;
+                        document.getElementById("countryclicked").innerHTML = "Selected Countries = " + selectedcountry1 + " and " + selectedcountry2;
+
+                    }
+
                 })
                 .style("stroke", "white")// Border Lines
         })
