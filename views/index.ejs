@@ -10,12 +10,15 @@
 <body>
 <!--start of home page-->
 <div class="home-page" id="home">
+    <div class = "mapcontainer">
+        <div class="euro">
+            <svg id="europeMap" class="europe-map" width="800" height="500"></svg>
+        </div>
 
-    <!-- Create an element where the map will take place -->
-    <div class="euro">
-        <svg id="europeMap" class="europe-map" width="800" height="500"></svg>
+        <div class = "infobox">
+            <p id="countryclicked">Country clicked displays here.</p>
+        </div>
     </div>
-
     <!-- This is an Example Graph -->
     <div class="container">
 
@@ -88,8 +91,8 @@
         }
 
         // Function to Handle Button Click
-        function clickHandler(d) {
-            window.alert("The Country you Clicked is " + d.properties.name);
+        function clickHandler(d, i) {
+            document.getElementById("countryclicked").innerHTML = d.properties.name;
         }
     </script>
 
