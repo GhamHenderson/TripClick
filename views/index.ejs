@@ -126,17 +126,20 @@
     </script>
 
     <script>
+        // Function to Get Data from API and feed into the program
         async function getCurrent() {
             console.log("Get into API Function");
 
-            //make request to url
+            // Make request to coronavirus api
+            // Github for cleaned data https://github.com/covid19-eu-zh/covid19-eu-data-api
             const response = await fetch(
-                `https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=ie&days=1`
+                `https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=ie&days=6`
             );
 
             const data = await response.json();
             console.log(data);
 
+            // Display Cases from dublin as an example into a paragraph on the website.
             document.getElementById("apidata").innerHTML = "Cases in Dublin = " + data[0].records[5].cases;
 
             return data;
