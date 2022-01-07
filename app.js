@@ -6,6 +6,9 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var registerRouter = require('./routes/register');
+var loginRouter = require('./routes/login');
+var customsRouter = require('./routes/customs');
 
 var app = express();
 
@@ -20,27 +23,30 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/register', registerRouter);
+app.use('/login', loginRouter);
+app.use('/customs', customsRouter);
 app.use('/users', usersRouter);
 
-app.get('/register', (req, res) => {    //here you can include a new "about" route that should take you to the "about" page
-    res.render('register')
-});
+// app.get('/register', (req, res) => {    //here you can include a new "about" route that should take you to the "about" page
+//     res.render('register')
+// });
 
-app.get('/login', (req, res) => {    //here you can include a new "about" route that should take you to the "about" page
-    res.render('login')
-});
-
-app.get('/customs', (req, res) => {    //here you can include a new "about" route that should take you to the "about" page
-    res.render('customs')
-});
+// app.get('/login', (req, res) => {    //here you can include a new "about" route that should take you to the "about" page
+//     res.render('login')
+// });
+//
+// app.get('/customs', (req, res) => {    //here you can include a new "about" route that should take you to the "about" page
+//     res.render('customs')
+// });
 
 //register form send into database
-app.get('/register', function (req, res) {
-
-    console.log("hello");
-    res.send("all ok")
-
-});
+// app.get('/register', function (req, res) {
+//
+//     console.log("hello");
+//     res.send("all ok")
+//
+// });
 
 app.post('/register', function (req, res) {
 
@@ -55,6 +61,58 @@ app.post('/register', function (req, res) {
     var country = req.body.country;
     var city = req.body.city;
 
+    var errorMessage = '';
+
+    //get the library
+    var validator = require('validator');
+    //run the validator
+    var emailValid = validator.isEmail(email); //true
+    //check the response
+    console.log(emailValid);
+
+    if (email.length == '') {
+        errorMessage += 'Please enter a valid email address!!<br>';
+    } else if (emailValid == false) {
+        errorMessage += 'Email address is not valid. Please enter a valid email address!!<br>';
+    } else if (email.length > 40) {
+        errorMessage += 'Email address is too long. Maximum length allowed it 40 characters!<br>';
+    }
+
+    if (password.length == '') {
+        errorMessage += 'Please enter a password! <br>';
+    } else if (password.length < 8) {
+        errorMessage += 'Password too short. Minimum characters should be 8! <br>';
+    } else if (password.length > 25) {
+        errorMessage += 'Password too long. Maximum length allowed is 25 characters! <br>';
+    }
+
+
+    if (username.length == '') {
+        errorMessage += 'Please enter a username! <br>';
+    } else if (username.length < 6) {
+        errorMessage += 'Username too short. Minimum characters should be 6! <br>';
+    } else if (username.length > 15) {
+        errorMessage += 'Username too long. Maximum length allowed is 15 characters! <br>';
+    }
+
+    var xss = require("xss");
+    username = xss(username);
+
+    var emojiStrip = require('emoji-strip');
+    username = emojiStrip(username);
+
+    var sqlString = require('sqlstring');
+    var cleanedUsername = sqlString.escape(username);
+
+    username = cleanedUsername;
+
+    const bcrypt = require('bcrypt');
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hashPass = bcrypt.hashSync(password, salt);
+
+    password = hashPass;
+
 
     // Print it out to the NodeJS console just to see if we got the variable.
     console.log("first name = " + firstname);
@@ -67,28 +125,52 @@ app.post('/register', function (req, res) {
     console.log("country = " + country);
     console.log("city = " + city);
 
+    //if the length of the error is > than 0 send back the error
+    if (errorMessage.length > 0) {
+        res.send(errorMessage);
+    } else {
+        // console.log("first name = " + firstname);
+        // console.log("last name = " + lastname);
+        // console.log("User name = " + username);
+        // console.log("pass = " + password);
+        // console.log("email = " + email);
+        // console.log("phone = " + phone);
+        // console.log("gender = " + gender);
+        // console.log("country = " + country);
+        // console.log("city = " + city);
 
-    // Remember to check what database you are connecting to and if the
-    // values are correct.
-    var mysql = require('mysql');
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'Database2001',
-        database: 'majorproject'
-    });
+        var valid = true;
+        var validator = require('validator');
 
-    connection.connect();
+        var response = validator.isEmail(email);
 
-    // This is the actual SQL query part
-    connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phonenum`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', '" + username + "', '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {
-        if (error) throw error;
+        if (response = false) {
+            valid = false;
+        }
 
-        res.send("all ok");
-    });
+        // Remember to check what database you are connecting to and if the
+        // values are correct.
+        var mysql = require('mysql');
+        var connection = mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'Database2001',
+            database: 'majorproject'
+        });
 
-    connection.end();
+        connection.connect();
 
+        // This is the actual SQL query part
+        connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phonenum`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', " + username + ", '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {
+            if (error) throw error;
+
+        });
+
+        connection.end();
+
+        res.send("Registered!");
+
+    }
 });
 
 app.get('/login', function (req, res) {

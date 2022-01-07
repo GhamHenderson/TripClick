@@ -344,9 +344,9 @@
             var country = $('#country').val();
             var city = $('#city').val();
 
-            if (fname == '' && pass == '') {
-                alert("too short");
-            } else {
+            // if (fname == '' && pass == '') {
+            //     alert("too short");
+            // } else {
 
                 //send data
                 $.post("/register", {
@@ -362,15 +362,10 @@
                 })
                     .done(function (data) {
 
-                        // if (data.includes("manager")) {
-                        //     window.location = "/#manager";
-                        // } else if(data.includes()) {
                         window.location = "/";
-                        alert("Registered successful!");
-                        // }
-
+                        alert(data);
                     });
-            }
+            // }
 
         });
 
