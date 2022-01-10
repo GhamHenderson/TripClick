@@ -150,7 +150,8 @@
             console.log(data);
 
             // Declare Variable to Count total cases in all counties
-            let CasesTotal = totalCountryCases(data);
+            let CasesTotal = 0;
+            CasesTotal = totalCountryCases(data);
 
             function totalCountryCases(data){
                 for(let i = 0; i < data[0].records.length; i++ ){
