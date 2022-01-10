@@ -1,5 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
+var session = require('express-session');
+var bodyParser = require('body-parser');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -11,6 +13,14 @@ var loginRouter = require('./routes/login');
 var customsRouter = require('./routes/customs');
 
 var app = express();
+
+app.set('trust proxy', 1);// trust first proxy
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {secure: false} // this bit is important or it will keep making a new session by accident!
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -47,6 +57,9 @@ app.use('/users', usersRouter);
 //     res.send("all ok")
 //
 // });
+
+app.use(express.json())
+//middleware to read req.body.<params>
 
 app.post('/register', function (req, res) {
 
@@ -173,12 +186,6 @@ app.post('/register', function (req, res) {
     }
 });
 
-app.get('/login', function (req, res) {
-
-    console.log("hello");
-    res.send("all ok")
-
-});
 
 app.post('/login', function (req, res) {
 
@@ -186,13 +193,9 @@ app.post('/login', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
 
-    // Print it out to the NodeJS console just to see if we got the variable.
-    console.log("User name = " + username);
-    console.log("Password = " + password);
+    var errorMessage = '';
 
-
-    // Remember to check what database you are connecting to and if the
-    // values are correct.
+    const bcrypt = require('bcrypt');
     var mysql = require('mysql');
     var connection = mysql.createConnection({
         host: 'localhost',
@@ -204,16 +207,44 @@ app.post('/login', function (req, res) {
     connection.connect();
 
     // This is the actual SQL query part
-    connection.query("select * from users where username='" + username + "' AND password='" + password + "';", function (error, results, fields) {
+    // if (username && password) {
+    connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], function (error, result) {
         if (error) throw error;
-        res.send("all ok");
 
+        if (result.length == 0) {
+            console.log("--------> User does not exist");
+        } else {
+            const hashedPassword = result[0].password
+            //get the hashedPassword from result
+            if (bcrypt.compare(password, hashedPassword)) {
+                console.log("---------> Login Successful")
+                res.send(`${username} is logged in!`)
+            } else {
+                console.log("---------> Password Incorrect")
+                res.send("Password incorrect!")
+            } //end of bcrypt.compare()
+        }
 
     });
 
     connection.end();
 
+    req.session.username = username;
+
+    console.log(req.session.username);
+
 });
+
+// app.get('/customs', function (request, response) {
+//     console.log("User logged" + request.session.loggedin);
+//     if (request.session.loggedin) {
+//         response.render('customs');
+//         response.send('Welcome back, ' + request.session.username + '!');
+//     } else {
+//         response.send('Please login to view this page!');
+//     }
+//     response.end();
+// });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

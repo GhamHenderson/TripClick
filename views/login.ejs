@@ -7,7 +7,6 @@
 
 <body>
 
-    <!-- bewufbwq;irvfwidfvehivbd -->
 <!--start of login page-->
 <div class="login-page" id="login">
 
@@ -38,8 +37,8 @@
         $("#login-button").click(function () {
 
             // Get the values
-            var username = $('#username').val();
-            var password = $('#password').val();
+            var user = $('#username').val();
+            var pass = $('#password').val();
 
 
             if (username == '') {
@@ -48,17 +47,13 @@
 
                 // Send the data
                 $.post("/login", {
-                    username: username,
-                    password: password
+                    username: user,
+                    password: pass
                 })
                     .done(function (data) {
 
-                        if (data.includes("manager")) {
-                            window.location = "/#manager";
-                        } else {
-                            window.location = "/";
-                            alert("bravo!");
-                        }
+                        window.location = "/customs";
+                        alert(data);
                     });
             }
 
