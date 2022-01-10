@@ -111,8 +111,12 @@
                     }
                     if(counter == 2){
                         selectedcountry2 = i.properties.name;
-                        document.getElementById("countryclicked").innerHTML = "Selected Countries = " + selectedcountry1 + " and " + selectedcountry2;
-
+                        if (selectedcountry1 == selectedcountry2){
+                            counter --;
+                        }
+                        if(selectedcountry1 != selectedcountry2){
+                            document.getElementById("countryclicked").innerHTML = "Selected Countries = " + selectedcountry1 + " and " + selectedcountry2;
+                        }
                     }
 
                 })
