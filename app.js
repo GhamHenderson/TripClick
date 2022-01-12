@@ -192,6 +192,7 @@ app.post('/login', function (req, res) {
     // catch the username that was sent to us from the jQuery POST on the index.ejs page
     var username = req.body.username;
     var password = req.body.password;
+    var firstname = req.body.firstname;
 
     var errorMessage = '';
 
@@ -208,7 +209,7 @@ app.post('/login', function (req, res) {
 
     // This is the actual SQL query part
     // if (username && password) {
-    connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], function (error, result) {
+    connection.query("SELECT * FROM users WHERE username = ?", [username], function (error, result) {
         if (error) throw error;
 
         if (result.length == 0) {

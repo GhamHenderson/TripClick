@@ -39,6 +39,7 @@
             // Get the values
             var user = $('#username').val();
             var pass = $('#password').val();
+            var firstn = $('#firstname').val();
 
 
             if (username == '') {
@@ -48,7 +49,8 @@
                 // Send the data
                 $.post("/login", {
                     username: user,
-                    password: pass
+                    password: pass,
+                    firstname: firstn
                 })
                     .done(function (data) {
 
