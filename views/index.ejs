@@ -77,6 +77,7 @@
         let counter = 0;
         let selectedcountry1;
         let selectedcountry2;
+        let tempcountry;
 
         // Load external data from geographic api and use data to project path info from map.
         d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function (data) {
@@ -89,24 +90,23 @@
                 .on("mouseover", handleMouseOver)
                 .on("mouseout", handleMouseOut)
                 .on('click', function(d,i){
-                    console.log(counter);
+                  //  console.log(counter);
                     console.log(d);
                     console.log(i);
 
                     if(counter < 2){
                         d3.select(this).style("fill", '#0000FF');
                         document.getElementById("countryclicked").innerHTML = i.properties.name;
-
+                        counter ++;
                         let countryID = i.id;
                         console.log(countryID);
-                        if(countryID === "IRL"){
-                            getCurrent(countryID);
+                        if(countryID === "IRL"){getCurrent(countryID);
                         }
                     }
                     else{
                         document.getElementById("errorcountryclicked").innerHTML = "Error You can Only Select 2 Countries!!";
                     }
-                    counter ++;
+
 
                     if(counter === 1){
                         selectedcountry1 = i.properties.name;
@@ -118,16 +118,30 @@
                         // If clicked check if country is already selected if it is unselect.
                         //If it is not print site info to paragraph in site.
                         if (selectedcountry1 === selectedcountry2){
-                            counter --;
+
                             // Code Below used to Deselect Colour
-                            // d3.select(this).style("fill", '#348C31');
+                            d3.select(this).style("fill", '#348C31');
+                            counter = 0;
+
                         }
+
                         if(selectedcountry1 !== selectedcountry2){
                             document.getElementById("countryclicked").innerHTML = "Selected Countries = " + selectedcountry1 + " and " + selectedcountry2;
                         }
                     }
+                    if(counter === 3)
+                    {
+                        tempcountry = i.properties.name;
+                        if(selectedcountry2 === tempcountry)
+                        {
+                            d3.select(this).style("fill", '#348C31');
+                            counter = 0;
+                        }
+                    }
+                    console.log(counter);
                 })
                 .style("stroke", "white")// Border Lines
+
         })
 
         function handleMouseOver(d, i) {
