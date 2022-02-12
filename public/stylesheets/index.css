@@ -8,6 +8,7 @@
 
 body {
     font-family: montserrat;
+    background-image: url("../images/map.jpg");
 }
 
 .home-page {
@@ -32,16 +33,42 @@ a {
 
 .graph1 {
     display: flex;
-    padding: 20px;
+
     height: 50%;
     width: 50%;
     justify-content: left;
 
 }
 
-.euro {
+.apidisplay{
+    width: 800px;
+    background-color: #757575;
+    height: 100px;
+
+}
+
+.apicontainer{
     display: flex;
+    align-content: center;
     justify-content: center;
+    padding: 50px;
+}
+
+.mapcontainer{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.infobox{
+    background-color: #757575;
+    width: 800px;
+    height: 8vh;
+    padding: 100px;
+}
+
+.euro {
+
 }
 
 /*svg {*/

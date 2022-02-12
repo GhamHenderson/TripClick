@@ -6,15 +6,17 @@
 </head>
 
 <%- include('common/header') %>
-
 <body>
-<!--start of home page-->
+
 <div class="home-page" id="home">
     <div class = "mapcontainer">
-        <div class="euro">
-            <svg id="europeMap" class="europe-map" width="800" height="500"></svg>
-        </div>
 
+        <div class="euro">
+            <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
+        </div>
+    </div>
+
+    <div class = "mapcontainer">
         <div class = "infobox">
             <p id="countryclicked">Country clicked displays here.</p>
             <p id="errorcountryclicked"></p>
@@ -23,40 +25,37 @@
         </div>
     </div>
 
-    <!-- This is an Example Graph using Graph.Js Library-->
-    <div class="container">
-
-        <div class="graph1">
-            <canvas id="chart" width="200" height="200"></canvas>
-            <script>
-
-                const ctx = document.getElementById('chart').getContext('2d');
-                const myChart1 = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                        datasets: [{
-                            label: 'Coronavirus Numbers',
-                            data: [100, 234, 432, 456, 754, 400, 370, 300, 450, 320, 100],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    }
-                });
-            </script>
-        </div>
-
-        <div class="graph2">
-
+    <div class = "apicontainer">
+        <div class = "apidisplay">
+            Api Info will be fully displayed here
         </div>
     </div>
+<%- include('common/footer') %>
 
-    <! ---
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<! ---
     This is a D3.Js Map Created By Graham,Eduard and James
     as part of the Major Group Project.
 
@@ -92,7 +91,7 @@
                 .on('click', function(d,i){
                     // Fill country with color onClick
                     d3.select(this).style("fill", '#0000FF');
-                    // Chnage HTML to display country ID.
+                    // Change HTML to display country ID.
                     document.getElementById("countryclicked").innerHTML = i.properties.name;
 
                     if(counter === 1 && selectedcountry1 === false){
@@ -100,13 +99,12 @@
                         d3.select(this).style("fill", '#20bf83');
                         counter++;
                     }
+
                     if(counter === 1 && selectedcountry1 === true){
                         selectedcountry1 === false;
                         d3.select(this).style("fill", '#20bf83');
                         counter--;
                     }
-
-
 
                     if(counter < 3){
                         d3.select(this).style("fill", '#0000FF');
@@ -120,7 +118,6 @@
                     else{
                         document.getElementById("errorcountryclicked").innerHTML = "Error You can Only Select 2 Countries!!";
                     }
-
 
                     if(counter === 1){
                         selectedcountry1 = i.properties.name;
@@ -156,12 +153,6 @@
                         d3.select(this).style("fill", '#348C31');
                         counter =1;
                     }
-
-
-                    console.log(selectedcountry1);
-                    console.log(selectedcountry2);
-                    console.log(tempcountry);
-                    console.log(counter);
                 })
                 .style("stroke", "white")// Border Lines
 
@@ -217,5 +208,3 @@
     }
     </script>
 </div>
-
-<%- include('common/footer') %></body>

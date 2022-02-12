@@ -1,7 +1,7 @@
 nav {
     height: 80px;
     width: 100%;
-    background: #34495e;
+    background: #001C44;
 }
 
 label.logo {
@@ -106,5 +106,5 @@ header {
 }
 
 footer {
-    background: #ffd658;
+    padding-top: 200px;
 }
