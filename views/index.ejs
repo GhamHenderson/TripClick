@@ -27,11 +27,12 @@
 
     <div class = "apicontainer">
         <div class = "apidisplay">
-            Api Info will be fully displayed here
+            Api Info will be fully displayed here for testing
+            and in Later versions we will display the Graphs here
         </div>
     </div>
 <%- include('common/footer') %>
-
+</div>
 </body>
 
 
@@ -63,6 +64,12 @@
     --->
 
     <script>
+
+
+
+
+
+
         // Create an Svg variable
         const svg = d3.select("svg"),
             width = +svg.attr("width")
@@ -70,13 +77,70 @@
         // Map and projection
         //
         const projection = d3.geoNaturalEarth1()
-            .scale(width / 1.5) // Lower the num closer the zoom
-            .translate([200, 700])  // (Horizontal, Vertical)
+            .scale(width / 1.9) // Lower the num closer the zoom
+            .translate([200, 550])  // (Horizontal, Vertical)
 
         let counter = 0;
         let selectedcountry1;
         let selectedcountry2;
         let tempcountry;
+        const cars = ["Saab", "Volvo", "BMW"];
+        const eu = [
+            "Albania",
+            "Andorra",
+            "Armenia",
+            "Austria",
+            "Azerbaijan",
+            "Belarus",
+            "Belgium",
+            "Bosnia and Herzegovina",
+            "Bulgaria",
+            "Croatia",
+            "Cyprus",
+            "Czech Republic",
+            "Denmark",
+            "Estonia",
+            "Finland",
+            "France",
+            "Georgia",
+            "Germany",
+            "Greece",
+            "Hungary",
+            "Iceland",
+            "Ireland",
+            "Italy",
+            "Kosovo",
+            "Latvia",
+            "Liechtenstein",
+            "Lithuania",
+            "Luxembourg",
+            "Macedonia",
+            "Malta",
+            "Moldova",
+            "Monaco",
+            "Montenegro",
+            "The Netherlands",
+            "Norway",
+            "Poland",
+            "Portugal",
+            "Romania",
+            "Russia",
+            "San Marino",
+            "Serbia",
+            "Slovakia",
+            "Slovenia",
+            "Spain",
+            "Sweden",
+            "Switzerland",
+            "Turkey",
+            "Ukraine",
+            "United Kingdom",
+            "Vatican City",
+        ];
+
+        for(let i = 0; i < eu.length ; i++){
+            console.log(eu[i].toLowerCase());
+        }
 
         // Load external data from geographic api and use data to project path info from map.
         d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function (data) {
@@ -89,12 +153,14 @@
                 .on("mouseover", handleMouseOver)
                 .on("mouseout", handleMouseOut)
                 .on('click', function(d,i){
+
                     // Fill country with color onClick
                     d3.select(this).style("fill", '#0000FF');
                     // Change HTML to display country ID.
                     document.getElementById("countryclicked").innerHTML = i.properties.name;
 
                     if(counter === 1 && selectedcountry1 === false){
+
                         selectedcountry1 === true;
                         d3.select(this).style("fill", '#20bf83');
                         counter++;
@@ -158,6 +224,12 @@
 
         })
 
+        function isEurope(d,i){
+            for(let count = 0; count < eu.length; count++){
+                document.getElementById("apidisplay").innerHTML = eu[i];
+            }
+
+        }
         function handleMouseOver(d, i) {
           //  console.log("Mouse Is On " + i.properties.name);
            //d3.select(this).style("fill", '#FFFFFF');
@@ -184,7 +256,7 @@
             // Make request to coronavirus api
             // Github for cleaned data https://github.com/covid19-eu-zh/covid19-eu-data-api
             const response = await fetch(
-                `https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=ie&days=1`
+                "https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=ie&days=1"
             );
 
             // Data variable will store all data received from api call.
@@ -206,5 +278,8 @@
 
             return data;
     }
+
+
+
     </script>
 </div>
