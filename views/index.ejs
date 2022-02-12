@@ -90,9 +90,23 @@
                 .on("mouseover", handleMouseOver)
                 .on("mouseout", handleMouseOut)
                 .on('click', function(d,i){
-                  //  console.log(counter);
-                    console.log(d);
-                    console.log(i);
+                    // Fill country with color onClick
+                    d3.select(this).style("fill", '#0000FF');
+                    // Chnage HTML to display country ID.
+                    document.getElementById("countryclicked").innerHTML = i.properties.name;
+
+                    if(counter === 1 && selectedcountry1 === false){
+                        selectedcountry1 === true;
+                        d3.select(this).style("fill", '#20bf83');
+                        counter++;
+                    }
+                    if(counter === 1 && selectedcountry1 === true){
+                        selectedcountry1 === false;
+                        d3.select(this).style("fill", '#20bf83');
+                        counter--;
+                    }
+
+
 
                     if(counter < 3){
                         d3.select(this).style("fill", '#0000FF');
@@ -156,6 +170,11 @@
         function handleMouseOver(d, i) {
           //  console.log("Mouse Is On " + i.properties.name);
            //d3.select(this).style("fill", '#FFFFFF');
+        }
+
+        function increaseCounter(counter){
+            counter++;
+            return counter;
         }
 
         function handleMouseOut() {
