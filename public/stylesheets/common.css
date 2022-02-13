@@ -10,6 +10,7 @@ label.logo {
     color: white;
     padding: 0 100px;
     line-height: 80px;
+
 }
 
 nav ul {
@@ -20,7 +21,13 @@ nav ul {
 nav li {
     display: inline-block;
     margin: 0 8px;
-    line-height: 80px;
+    line-height: 83px;
+}
+
+ul li:nth-child(1) {
+
+    padding-right: 80vh;
+    color: red;
 }
 
 nav a {
