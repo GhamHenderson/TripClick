@@ -222,7 +222,7 @@ app.post('/login', function (req, res) {
                 res.send(`${username} is logged in!`)
             } else {
                 console.log("---------> Password Incorrect")
-                res.send("Password incorrect!")
+                res.send("portPassword incorrect!")
             } //end of bcrypt.compare()
         }
 
