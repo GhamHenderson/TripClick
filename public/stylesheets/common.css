@@ -1,5 +1,5 @@
 nav {
-    height: 80px;
+    height: 100px;
     width: 100%;
     background: #0a1640;
 }
@@ -25,9 +25,9 @@ nav li {
 }
 
 ul li:nth-child(1) {
+    height: 100px;
+    padding-right: 70vh;
 
-    padding-right: 80vh;
-    color: red;
 }
 
 nav a {
