@@ -24,11 +24,7 @@ nav li {
     line-height: 83px;
 }
 
-ul li:nth-child(1) {
-    height: 100px;
-    padding-right: 70vh;
 
-}
 
 nav a {
     color: white;
@@ -70,7 +66,7 @@ nav #icon {
     }
 }
 
-@media (max-width: 909px) {
+@media (max-width: 1300px) {
     nav #icon {
         display: block;
     }
