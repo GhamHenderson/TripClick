@@ -19,58 +19,55 @@
 <!--start of login page-->
 <div class="customs-page" id="customs">
 
-<div class ="inputContainer">
-    <div class="TitleInput">
-        <label class="form-label" for="form12">Graph Title</label>
-        <input type="text" id="form12" class="form-control" />
+    <div class ="inputContainer">
+        <div class="TitleInput">
+            <label class="form-label" for="form12">Graph Title</label>
+            <input type="text" id="form12" class="form-control" />
+        </div>
+
+        <div class="form-outline">
+             <label class="form-label" for="form12">Field Labels</label>
+             <input type="text" id="form12" class="form-control" />
+        </div>
     </div>
 
-    <div class="form-outline">
-         <label class="form-label" for="form12">Field Labels</label>
-         <input type="text" id="form12" class="form-control" />
-    </div>
-
-
-</div>
- <button type="button" class="btn btn-secondary" onclick = "generate()">Generate</button>
-
+    <button type="button" class="btn btn-secondary" onclick = "generate()">Generate</button>
 
     <div class="custGraphOutput1">
-                <canvas id="chart" width="200" height="200"></canvas>
+        <canvas id="chart" width="200" height="200"></canvas>
 
+        <script>
 
-                <script>
+            function generate()
+            {
+                window.alert("graph will generate");
+            }
 
-                    function generate()
-                    {
-                        window.alert("graph will generate");
-                    }
+            const ctx = document.getElementById('chart').getContext('2d');
+            const custChart1 = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['2010', '2011', '2012', '2013', '2014'],
+                    datasets: [{
+                        label: 'Users Choice',
+                        data: [100, 234, 200, 400, 70],
+                        backgroundColor: [
+                            'rgba(255, 99, 50, 0.7)',
+                            'rgba(25, 10, 255, 0.7)',
+                            'rgba(10, 200, 50, 0.7)',
+                            'rgba(100, 100, 100, 0.7)',
+                            'rgba(150, 0, 150, 0.7)',
+                        ],
+                        borderColor: [
+                            'rgb(0,0,0)'
 
-                    const ctx = document.getElementById('chart').getContext('2d');
-                    const custChart1 = new Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            labels: ['2010', '2011', '2012', '2013', '2014'],
-                            datasets: [{
-                                label: 'Users Choice',
-                                data: [100, 234, 200, 400, 70],
-                                backgroundColor: [
-                                    'rgba(255, 99, 50, 0.7)',
-                                    'rgba(25, 10, 255, 0.7)',
-                                    'rgba(10, 200, 50, 0.7)',
-                                    'rgba(100, 100, 100, 0.7)',
-                                    'rgba(150, 0, 150, 0.7)',
-                                ],
-                                borderColor: [
-                                    'rgb(0,0,0)'
-
-                                ],
-                                borderWidth: 1.5
-                            }]
-                        }
-                    });
-                </script>
-            </div>
+                        ],
+                        borderWidth: 1.5
+                    }]
+                }
+            });
+        </script>
+    </div>
 </div>
 
 <%- include('common/footer') %>

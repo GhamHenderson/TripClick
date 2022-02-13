@@ -8,55 +8,32 @@
 <%- include('common/header') %>
 
 <body>
+    <div class="home-page" id="home">
+        <div class = "mapcontainer">
 
-
-
-<div class="home-page" id="home">
-    <div class = "mapcontainer">
-
-        <div class="euro">
-            <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
+            <div class="euro">
+                <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
+            </div>
         </div>
-    </div>
 
-    <div class = "mapcontainer">
-        <div class = "infobox">
-            <p id="countryclicked">Country clicked displays here.</p>
-            <p id="errorcountryclicked"></p>
-            <p id="apidata"></p>
-            <p id="apidata2"></p>
+        <div class = "mapcontainer">
+            <div class = "infobox">
+                <p id="countryclicked">Country clicked displays here.</p>
+                <p id="errorcountryclicked"></p>
+                <p id="apidata"></p>
+                <p id="apidata2"></p>
+            </div>
         </div>
-    </div>
 
-    <div class = "apicontainer">
-        <div class = "apidisplay">
-            Api Info will be fully displayed here for testing
-            and in Later versions we will display the Graphs here
+        <div class = "apicontainer">
+            <div class = "apidisplay">
+                Api Info will be fully displayed here for testing
+                and in Later versions we will display the Graphs here
+            </div>
         </div>
+    <%- include('common/footer') %>
     </div>
-<%- include('common/footer') %>
-</div>
 </body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <! ---
@@ -66,223 +43,213 @@
     This Script Will be moved to a Script.Js File after testing.
     --->
 
-    <script>
+<script>
 
+    // Create an Svg variable
+    const svg = d3.select("svg"),
+        width = +svg.attr("width")
 
+    // Map and projection
+    //
+    const projection = d3.geoNaturalEarth1()
+        .scale(width / 1.9) // Lower the num closer the zoom
+        .translate([200, 550])  // (Horizontal, Vertical)
 
+    let counter = 0;
+    let selectedcountry1;
+    let selectedcountry2;
+    let tempcountry;
+    const eu = [
+        "Albania",
+        "Andorra",
+        "Armenia",
+        "Austria",
+        "Azerbaijan",
+        "Belarus",
+        "Belgium",
+        "Bosnia and Herzegovina",
+        "Bulgaria",
+        "Croatia",
+        "Cyprus",
+        "Czech Republic",
+        "Denmark",
+        "Estonia",
+        "Finland",
+        "France",
+        "Georgia",
+        "Germany",
+        "Greece",
+        "Hungary",
+        "Iceland",
+        "Ireland",
+        "Italy",
+        "Kosovo",
+        "Latvia",
+        "Liechtenstein",
+        "Lithuania",
+        "Luxembourg",
+        "Macedonia",
+        "Malta",
+        "Moldova",
+        "Monaco",
+        "Montenegro",
+        "The Netherlands",
+        "Norway",
+        "Poland",
+        "Portugal",
+        "Romania",
+        "Russia",
+        "San Marino",
+        "Serbia",
+        "Slovakia",
+        "Slovenia",
+        "Spain",
+        "Sweden",
+        "Switzerland",
+        "Turkey",
+        "Ukraine",
+        "United Kingdom",
+        "Vatican City",
+    ];
 
-
-
-        // Create an Svg variable
-        const svg = d3.select("svg"),
-            width = +svg.attr("width")
-
-        // Map and projection
-        //
-        const projection = d3.geoNaturalEarth1()
-            .scale(width / 1.9) // Lower the num closer the zoom
-            .translate([200, 550])  // (Horizontal, Vertical)
-
-        let counter = 0;
-        let selectedcountry1;
-        let selectedcountry2;
-        let tempcountry;
-        const cars = ["Saab", "Volvo", "BMW"];
-        const eu = [
-            "Albania",
-            "Andorra",
-            "Armenia",
-            "Austria",
-            "Azerbaijan",
-            "Belarus",
-            "Belgium",
-            "Bosnia and Herzegovina",
-            "Bulgaria",
-            "Croatia",
-            "Cyprus",
-            "Czech Republic",
-            "Denmark",
-            "Estonia",
-            "Finland",
-            "France",
-            "Georgia",
-            "Germany",
-            "Greece",
-            "Hungary",
-            "Iceland",
-            "Ireland",
-            "Italy",
-            "Kosovo",
-            "Latvia",
-            "Liechtenstein",
-            "Lithuania",
-            "Luxembourg",
-            "Macedonia",
-            "Malta",
-            "Moldova",
-            "Monaco",
-            "Montenegro",
-            "The Netherlands",
-            "Norway",
-            "Poland",
-            "Portugal",
-            "Romania",
-            "Russia",
-            "San Marino",
-            "Serbia",
-            "Slovakia",
-            "Slovenia",
-            "Spain",
-            "Sweden",
-            "Switzerland",
-            "Turkey",
-            "Ukraine",
-            "United Kingdom",
-            "Vatican City",
-        ];
-
-        for(let i = 0; i < eu.length ; i++){
-            console.log(eu[i].toLowerCase());
-        }
-
-        // Load external data from geographic api and use data to project path info from map.
-        d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function (data) {
-            svg.append("g")
-                .selectAll("path")
-                .data(data.features)
-                .join("path")
-                .attr("fill", "#348C31") // Color Of Country
-                .attr("d", d3.geoPath().projection(projection))
-                .on("mouseover", handleMouseOver)
-                .on("mouseout", handleMouseOut)
-                .on('click', function(d,i){
-
-                    // Fill country with color onClick
-                    d3.select(this).style("fill", '#0000FF');
-                    // Change HTML to display country ID.
-                    document.getElementById("countryclicked").innerHTML = i.properties.name;
-
-                    if(counter === 1 && selectedcountry1 === false){
-
-                        selectedcountry1 === true;
-                        d3.select(this).style("fill", '#20bf83');
-                        counter++;
-                    }
-
-                    if(counter === 1 && selectedcountry1 === true){
-                        selectedcountry1 === false;
-                        d3.select(this).style("fill", '#20bf83');
-                        counter--;
-                    }
-
-                    if(counter < 3){
-                        d3.select(this).style("fill", '#0000FF');
-                        document.getElementById("countryclicked").innerHTML = i.properties.name;
-                        counter ++;
-                        let countryID = i.id;
-                        console.log(countryID);
-                        if(countryID === "IRL"){getCurrent(countryID);
-                        }
-                    }
-                    else{
-                        document.getElementById("errorcountryclicked").innerHTML = "Error You can Only Select 2 Countries!!";
-                    }
-
-                    if(counter === 1){
-                        selectedcountry1 = i.properties.name;
-                    }
-
-                    //If country is clicked twice
-                    if(counter === 2){
-                        selectedcountry2 = i.properties.name;
-                        tempcountry = selectedcountry2;
-                        // If clicked check if country is already selected if it is unselect.
-                        //If it is not print site info to paragraph in site.
-                        if (selectedcountry1 === selectedcountry2) {
-                            // Code Below used to Deselect Colour
-                            d3.select(this).style("fill", '#348C31');
-
-                            counter = 0;
-                        }
-
-                        if(selectedcountry1 !== selectedcountry2){
-                            document.getElementById("countryclicked").innerHTML = "Selected Countries = " + selectedcountry1 + " and " + selectedcountry2;
-                        }
-
-                        if(counter === 0)
-                        {
-                            selectedcountry1 = "";
-                            selectedcountry2 = "";
-                            tempcountry = "";
-                        }
-
-                    }
-                    if (counter === 3 ){
-                        // Code Below used to Deselect Colour
-                        d3.select(this).style("fill", '#348C31');
-                        counter =1;
-                    }
-                })
-                .style("stroke", "white")// Border Lines
-
-        })
-
-        function isEurope(d,i){
-            for(let count = 0; count < eu.length; count++){
-                document.getElementById("apidisplay").innerHTML = eu[i];
-            }
-
-        }
-        function handleMouseOver(d, i) {
-          //  console.log("Mouse Is On " + i.properties.name);
-           //d3.select(this).style("fill", '#FFFFFF');
-        }
-
-        function increaseCounter(counter){
-            counter++;
-            return counter;
-        }
-
-        function handleMouseOut() {
-           // console.log("Leaving Country")
-        }
-
-        // Function to Handle Button Click
-        function clickHandler(d) {
-
-        }
-
-        // Function to Get Data from API and feed into the program
-        async function getCurrent(countryID) {
-            console.log("Get into API Function");
-
-            // Make request to coronavirus api
-            // Github for cleaned data https://github.com/covid19-eu-zh/covid19-eu-data-api
-            const response = await fetch(
-                "https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=ie&days=1"
-            );
-
-            // Data variable will store all data received from api call.
-            const data = await response.json();
-            console.log(data);
-
-            // Declare Variable to Count total cases in all counties
-            let CasesTotal = 0;
-            CasesTotal = totalCountryCases(data);
-
-            function totalCountryCases(data){
-                for(let i = 0; i < data[0].records.length; i++ ){
-                    CasesTotal = CasesTotal + data[0].records[i].cases;
-                }
-                return CasesTotal;
-            }
-
-            document.getElementById("apidata").innerHTML = "Cases in Ireland this Month = " + CasesTotal;
-
-            return data;
+    for(let i = 0; i < eu.length ; i++){
+        console.log(eu[i].toLowerCase());
     }
 
+    // Load external data from geographic api and use data to project path info from map.
+    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function (data) {
+        svg.append("g")
+            .selectAll("path")
+            .data(data.features)
+            .join("path")
+            .attr("fill", "#348C31") // Color Of Country
+            .attr("d", d3.geoPath().projection(projection))
+            .on("mouseover", handleMouseOver)
+            .on("mouseout", handleMouseOut)
+            .on('click', function(d,i){
 
+                // Fill country with color onClick
+                d3.select(this).style("fill", '#0000FF');
+                // Change HTML to display country ID.
+                document.getElementById("countryclicked").innerHTML = i.properties.name;
 
-    </script>
-</div>
+                if(counter === 1 && selectedcountry1 === false){
+
+                    selectedcountry1 === true;
+                    d3.select(this).style("fill", '#20bf83');
+                    counter++;
+                }
+
+                if(counter === 1 && selectedcountry1 === true){
+                    selectedcountry1 === false;
+                    d3.select(this).style("fill", '#20bf83');
+                    counter--;
+                }
+
+                if(counter < 3){
+                    d3.select(this).style("fill", '#0000FF');
+                    document.getElementById("countryclicked").innerHTML = i.properties.name;
+                    counter ++;
+                    let countryID = i.id;
+                    console.log(countryID);
+                    if(countryID === "IRL"){getCurrent(countryID);
+                    }
+                }
+                else{
+                    document.getElementById("errorcountryclicked").innerHTML = "Error You can Only Select 2 Countries!!";
+                }
+
+                if(counter === 1){
+                    selectedcountry1 = i.properties.name;
+                }
+
+                //If country is clicked twice
+                if(counter === 2){
+                    selectedcountry2 = i.properties.name;
+                    tempcountry = selectedcountry2;
+                    // If clicked check if country is already selected if it is unselect.
+                    //If it is not print site info to paragraph in site.
+                    if (selectedcountry1 === selectedcountry2) {
+                        // Code Below used to Deselect Colour
+                        d3.select(this).style("fill", '#348C31');
+
+                        counter = 0;
+                    }
+
+                    if(selectedcountry1 !== selectedcountry2){
+                        document.getElementById("countryclicked").innerHTML = "Selected Countries = " + selectedcountry1 + " and " + selectedcountry2;
+                    }
+
+                    if(counter === 0)
+                    {
+                        selectedcountry1 = "";
+                        selectedcountry2 = "";
+                        tempcountry = "";
+                    }
+
+                }
+                if (counter === 3 ){
+                    // Code Below used to Deselect Colour
+                    d3.select(this).style("fill", '#348C31');
+                    counter =1;
+                }
+            })
+            .style("stroke", "white")// Border Lines
+
+    })
+
+    function isEurope(d,i){
+        for(let count = 0; count < eu.length; count++){
+            document.getElementById("apidisplay").innerHTML = eu[i];
+        }
+
+    }
+    function handleMouseOver(d, i) {
+      //  console.log("Mouse Is On " + i.properties.name);
+       //d3.select(this).style("fill", '#FFFFFF');
+    }
+
+    function increaseCounter(counter){
+        counter++;
+        return counter;
+    }
+
+    function handleMouseOut() {
+       // console.log("Leaving Country")
+    }
+
+    // Function to Handle Button Click
+    function clickHandler(d) {
+
+    }
+
+    // Function to Get Data from API and feed into the program
+    async function getCurrent(countryID) {
+        console.log("Get into API Function");
+
+        // Make request to coronavirus api
+        // GitHub for cleaned data https://github.com/covid19-eu-zh/covid19-eu-data-api
+        const response = await fetch(
+            "https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=ie&days=1"
+        );
+
+        // Data variable will store all data received from api call.
+        const data = await response.json();
+        console.log(data);
+
+        // Declare Variable to Count total cases in all counties
+        let CasesTotal = 0;
+        CasesTotal = totalCountryCases(data);
+
+        function totalCountryCases(data){
+            for(let i = 0; i < data[0].records.length; i++ ){
+                CasesTotal = CasesTotal + data[0].records[i].cases;
+            }
+            return CasesTotal;
+        }
+
+        document.getElementById("apidata").innerHTML = "Cases in Ireland this Month = " + CasesTotal;
+
+        return data;
+}
+</script>
