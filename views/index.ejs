@@ -155,13 +155,17 @@
                     document.getElementById("countryclicked").innerHTML = i.properties.name;
                     counter ++;
                     let countryID = i.id;
+                    let countryName = i.properties.name;
                     console.log(countryID);
 
                     if(countryID === "IRL"){
                         getCurrentCovid(countryID);
                     }
                     if(countryID === "GBR"){
-                        getCurrentWeather(countryID);
+                        getCurrentWeather(countryName);
+                    }
+                    if(countryID === "RUS"){
+                        getCurrentWeather(countryName);
                     }
                 }
                 else{
@@ -274,23 +278,23 @@
      * @param countryID
      * @returns {Promise<Response<any, Record<string, any>, number>>}
      */
-    async function getCurrentWeather(countryID) {
+    async function getCurrentWeather(countryName) {
         console.log("Get into API Function of current weather");
 
 
         // Make request to coronavirus api
         // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
         const response = await fetch(
-            "http://api.weatherapi.com/v1/current.json?key=687f508b47e247bdbd1113110221402&q=England&aqi=no"
+            "http://api.weatherapi.com/v1/current.json?key=687f508b47e247bdbd1113110221402&q="+countryName+"&aqi=no"
         );
-
+        console.log(response);
 
         // Data variable will store all data received from api call.
         const data = await response.json();
         console.log(data);
 
 
-        document.getElementById("apitemp").innerHTML = "Weather in " + countryID + " Is = " +  data.current.temp_c + " Degrees Celcius";
+        document.getElementById("apitemp").innerHTML = "Weather in " + data.location.name + " Is = " +  data.current.temp_c + " Degrees Celcius";
         return data;
     }
 </script>
