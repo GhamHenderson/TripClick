@@ -161,12 +161,10 @@
                     if(countryID === "IRL"){
                         getCurrentCovid(countryID);
                     }
-                    if(countryID === "GBR"){
+                    if(countryID != null){
                         getCurrentWeather(countryName);
                     }
-                    if(countryID === "RUS"){
-                        getCurrentWeather(countryName);
-                    }
+
                 }
                 else{
                     document.getElementById("errorcountryclicked").innerHTML = "Error You can Only Select 2 Countries!!";
