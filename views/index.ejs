@@ -31,6 +31,9 @@
                     Api Info will be fully displayed here for testing
                     and in Later versions we will display the Graphs here
                 </p>
+                <p id="apitemp2">
+
+                </p>
             </div>
             </div>
         </div>
@@ -155,12 +158,14 @@
                     document.getElementById("countryclicked").innerHTML = i.properties.name;
                     counter ++;
                     let countryID = i.id;
+                    console.log(countryID);
                     let countryName = i.properties.name;
                     console.log(countryID);
 
-                    if(countryID === "IRL"){
+                    if(countryID != null){
                         getCurrentCovid(countryID);
                     }
+                    //If country has an ID call the countrys weather API
                     if(countryID != null){
                         getCurrentWeather(countryName);
                     }
@@ -293,6 +298,7 @@
 
 
         document.getElementById("apitemp").innerHTML = "Weather in " + data.location.name + " Is = " +  data.current.temp_c + " Degrees Celcius";
+        document.getElementById("apitemp2").innerHTML = "The Wind in " + data.location.name + " Is Blowing at = " +  data.current.gust_mph + " MPH";
         return data;
     }
 </script>
