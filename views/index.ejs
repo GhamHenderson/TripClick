@@ -3,6 +3,11 @@
 <script src="https://d3js.org/d3.v6.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
 <link rel="stylesheet" type="text/css" href="stylesheets/index.css">
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 </head>
 
 <%- include('common/header') %>
@@ -10,7 +15,6 @@
 <body>
     <div class="home-page" id="home">
         <div class = "mapcontainer">
-
             <div class="euro">
                 <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
             </div>
@@ -31,9 +35,9 @@
                     Api Info will be fully displayed here for testing
                     and in Later versions we will display the Graphs here
                 </p>
-                <p id="apitemp2">
 
-                </p>
+                <p id="apitemp2"></p>
+                <p id="apitemp3"></p>
             </div>
             </div>
         </div>
@@ -167,7 +171,7 @@
                     }
                     //If country has an ID call the countrys weather API
                     if(countryID != null){
-                        getCurrentWeather(countryName);
+                            getCurrentWeather(countryName);
                     }
 
                 }
@@ -288,7 +292,7 @@
         // Make request to coronavirus api
         // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
         const response = await fetch(
-            "http://api.weatherapi.com/v1/current.json?key=687f508b47e247bdbd1113110221402&q="+countryName+"&aqi=no"
+            "http://api.weatherapi.com/v1/current.json?key=687f508b47e247bdbd1113110221402&q="+countryName+"&days=7&aqi=no"
         );
         console.log(response);
 
@@ -299,6 +303,7 @@
 
         document.getElementById("apitemp").innerHTML = "Temperature in " + data.location.name + " Is = " +  data.current.temp_c + " Degrees Celcius";
         document.getElementById("apitemp2").innerHTML = "The Wind in " + data.location.name + " Is Blowing at = " +  data.current.gust_mph + " MPH";
+        document.getElementById("apitemp3").innerHTML = "Todays forecast in " + data.location.name + " Is " +  data.current.condition.text;
         return data;
     }
 </script>
