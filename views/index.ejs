@@ -297,7 +297,7 @@
         console.log(data);
 
 
-        document.getElementById("apitemp").innerHTML = "Weather in " + data.location.name + " Is = " +  data.current.temp_c + " Degrees Celcius";
+        document.getElementById("apitemp").innerHTML = "Temperature in " + data.location.name + " Is = " +  data.current.temp_c + " Degrees Celcius";
         document.getElementById("apitemp2").innerHTML = "The Wind in " + data.location.name + " Is Blowing at = " +  data.current.gust_mph + " MPH";
         return data;
     }
