@@ -27,8 +27,11 @@
 
         <div class = "apicontainer">
             <div class = "apidisplay">
-                Api Info will be fully displayed here for testing
-                and in Later versions we will display the Graphs here
+                <p id="apitemp">
+                    Api Info will be fully displayed here for testing
+                    and in Later versions we will display the Graphs here
+                </p>
+            </div>
             </div>
         </div>
     <%- include('common/footer') %>
@@ -113,7 +116,7 @@
     ];
 
     for(let i = 0; i < eu.length ; i++){
-        console.log(eu[i].toLowerCase());
+        //console.log(eu[i]);
     }
 
     // Load external data from geographic api and use data to project path info from map.
@@ -127,6 +130,7 @@
             .on("mouseover", handleMouseOver)
             .on("mouseout", handleMouseOut)
             .on('click', function(d,i){
+
 
                 // Fill country with color onClick
                 d3.select(this).style("fill", '#0000FF');
@@ -152,7 +156,12 @@
                     counter ++;
                     let countryID = i.id;
                     console.log(countryID);
-                    if(countryID === "IRL"){getCurrent(countryID);
+
+                    if(countryID === "IRL"){
+                        getCurrentCovid(countryID);
+                    }
+                    if(countryID === "GBR"){
+                        getCurrentWeather(countryID);
                     }
                 }
                 else{
@@ -223,15 +232,22 @@
 
     }
 
-    // Function to Get Data from API and feed into the program
-    async function getCurrent(countryID) {
+
+    /**
+     * Get Current Covid Numbers from API Call
+     * @param countryID
+     * @returns {Promise<Response<any, Record<string, any>, number>>}
+     */
+    async function getCurrentCovid(countryID) {
         console.log("Get into API Function");
+
 
         // Make request to coronavirus api
         // GitHub for cleaned data https://github.com/covid19-eu-zh/covid19-eu-data-api
         const response = await fetch(
             "https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=ie&days=1"
         );
+
 
         // Data variable will store all data received from api call.
         const data = await response.json();
@@ -252,4 +268,29 @@
 
         return data;
 }
+
+    /**
+     * Get current Temp on api call
+     * @param countryID
+     * @returns {Promise<Response<any, Record<string, any>, number>>}
+     */
+    async function getCurrentWeather(countryID) {
+        console.log("Get into API Function of current weather");
+
+
+        // Make request to coronavirus api
+        // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
+        const response = await fetch(
+            "http://api.weatherapi.com/v1/current.json?key=687f508b47e247bdbd1113110221402&q=England&aqi=no"
+        );
+
+
+        // Data variable will store all data received from api call.
+        const data = await response.json();
+        console.log(data);
+
+
+        document.getElementById("apitemp").innerHTML = "Weather in " + countryID + " Is = " +  data.current.temp_c + " Degrees Celcius";
+        return data;
+    }
 </script>
