@@ -18,9 +18,12 @@ app.set('trust proxy', 1);// trust first proxy
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {secure: false} // this bit is important or it will keep making a new session by accident!
 }));
+
+app.use(express.json())
+//middleware to read req.body.<params>
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,7 +31,7 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -57,9 +60,6 @@ app.use('/users', usersRouter);
 //     res.send("all ok")
 //
 // });
-
-app.use(express.json())
-//middleware to read req.body.<params>
 
 app.post('/register', function (req, res) {
 
@@ -214,6 +214,7 @@ app.post('/login', function (req, res) {
 
         if (result.length == 0) {
             console.log("--------> User does not exist");
+            res.sendStatus(404);
         } else {
             const hashedPassword = result[0].password
             //get the hashedPassword from result
@@ -230,22 +231,12 @@ app.post('/login', function (req, res) {
 
     connection.end();
 
-    req.session.username = username;
-
-    console.log(req.session.username);
-
 });
 
-// app.get('/customs', function (request, response) {
-//     console.log("User logged" + request.session.loggedin);
-//     if (request.session.loggedin) {
-//         response.render('customs');
-//         response.send('Welcome back, ' + request.session.username + '!');
-//     } else {
-//         response.send('Please login to view this page!');
-//     }
-//     response.end();
-// });
+app.get('/', function (request, response) {
+    session = request.session;
+
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
