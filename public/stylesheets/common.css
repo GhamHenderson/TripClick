@@ -1,7 +1,7 @@
 nav {
-    height: 80px;
+    height: 100px;
     width: 100%;
-    background: #34495e;
+    background: #0a1640;
 }
 
 label.logo {
@@ -10,6 +10,7 @@ label.logo {
     color: white;
     padding: 0 100px;
     line-height: 80px;
+
 }
 
 nav ul {
@@ -20,7 +21,7 @@ nav ul {
 nav li {
     display: inline-block;
     margin: 0 8px;
-    line-height: 80px;
+    line-height: 83px;
 }
 
 nav a {
@@ -63,7 +64,7 @@ nav #icon {
     }
 }
 
-@media (max-width: 909px) {
+@media (max-width: 1200px) {
     nav #icon {
         display: block;
     }
@@ -106,5 +107,5 @@ header {
 }
 
 footer {
-    background: #ffd658;
+    padding-top: 200px;
 }

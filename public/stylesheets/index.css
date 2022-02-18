@@ -8,6 +8,7 @@
 
 body {
     font-family: montserrat;
+    background-image: url("../images/map.jpg");
 }
 
 .home-page {
@@ -22,31 +23,35 @@ a {
     display: flex;
 }
 
-.graph2 {
-    display: flex;
-    padding: 20px;
-    height: 50%;
-    width: 50%;
-    justify-content: right;
-}
-
-.graph1 {
-    display: flex;
-    padding: 20px;
-    height: 50%;
-    width: 50%;
-    justify-content: left;
+.apidisplay{
+    width: 800px;
+    background-color: #AADAFF;
+    height: 100px;
 
 }
 
-.euro {
+.apicontainer{
     display: flex;
+    font-family: 'Roboto', sans-serif;
+    align-content: center;
+    justify-content: center;
+    padding: 50px;
+
+}
+
+
+.mapcontainer{
+    display: flex;
+    align-content: center;
     justify-content: center;
 }
 
-/*svg {*/
-/*    background-color: #AADAFF;*/
-/*}*/
+.infobox{
+    background-color: #AADAFF;
+    width: 800px;
+    height: 8vh;
+    padding: 100px;
+}
 
 .europe-map {
     background-color: #AADAFF;
