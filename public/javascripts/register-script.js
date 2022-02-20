@@ -1,10 +1,3 @@
-// navbar script
-$(document).ready(function () {
-    $('#icon').click(function () {
-        $('ul').toggleClass('show');
-    });
-});
-
 //list of countries in the world
 
 document.addEventListener('DOMContentLoaded', () => {
