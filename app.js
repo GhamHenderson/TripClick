@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var customsRouter = require('./routes/customs');
+var graphRouter = require('./routes/graph');
 
 var app = express();
 
@@ -40,6 +41,7 @@ app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/customs', customsRouter);
 app.use('/users', usersRouter);
+app.use('/graph', graphRouter);
 
 // app.get('/register', (req, res) => {    //here you can include a new "about" route that should take you to the "about" page
 //     res.render('register')
@@ -178,9 +180,7 @@ app.post('/register', function (req, res) {
             if (error) throw error;
 
         });
-
         connection.end();
-
         res.send("Registered!");
 
     }
