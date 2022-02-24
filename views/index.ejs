@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<title>Home Title</title>
-<script src="https://d3js.org/d3.v6.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
-<link rel="stylesheet" type="text/css" href="stylesheets/index.css">
-<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+<title>TripClick</title>
+    <script src="https://d3js.org/d3.v6.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheets/index.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 </head>
 
 <%- include('common/header') %>
 
 <body>
-    <button><a href="/graph.ejs">Button</a></button>
-
+    <button><a href="/graph">Button</a></button>
 
     <div class="home-page" id="home">
         <div class = "mapcontainer">
@@ -42,21 +41,70 @@
                 <p id="apitemp2"></p>
                 <p id="apitemp3"></p>
             </div>
-            </div>
         </div>
+        <div class="graph1">
+            <canvas id="chart1" width="200" height="200"></canvas>
+        </div>
+    </div>
     <%- include('common/footer') %>
     </div>
 </body>
 
 
 <! ---
-    This is a D3.Js Map Created By Graham,Eduard and James
-    as part of the Major Group Project.
+This is a D3.Js Map Created By Graham,Eduard and James
+as part of the Major Group Project.
 
-    This Script Will be moved to a Script.Js File after testing.
-    --->
+This Script Will be moved to a Script.Js File after testing.
+--->
 
 <script>
+    let initCountry = "Malta";
+    let graphdata = [];
+    let labeldata = [];
+    chartIT();
+
+
+
+    async function chartIT() {
+        const ctx = document.getElementById('chart1').getContext('2d')
+
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labeldata,
+                datasets: [{
+                    label: "Max Temp",
+                    data: graphdata,
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)',],
+                    borderColor: ['rgba(255, 99, 132, 1)',],
+                    borderWidth: 1
+                }]
+            },
+        });
+    }
+
+    async function getWeather(countryName) {
+
+        <!-- This is an Example Graph using Graph.Js Library-->
+        // Make request to coronavirus api
+        // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
+        const response = await fetch(
+            "http://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=&q="+countryName+"&days=30&aqi=no&alerts=no");
+
+        // Data variable will store all data received from api call.
+        const apidata = await response.json();
+        console.log(countryName);
+        console.log(apidata);
+
+        for(let i = 0; i < apidata.forecast.forecastday.length; i++) {
+            let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
+            let day = apidata.forecast.forecastday[i].date;
+            graphdata.push(maxtemp);
+            labeldata.push(day);
+        }
+    }
+
 
     // Create an Svg variable
     const svg = d3.select("svg"),
@@ -140,7 +188,8 @@
             .on("mouseover", handleMouseOver)
             .on("mouseout", handleMouseOut)
             .on('click', function(d,i){
-
+                console.log(i.properties.name);
+                getWeather(i.properties.name);
 
                 // Fill country with color onClick
                 d3.select(this).style("fill", '#0000FF');
@@ -165,16 +214,16 @@
                     document.getElementById("countryclicked").innerHTML = i.properties.name;
                     counter ++;
                     let countryID = i.id;
-                    console.log(countryID);
+
                     let countryName = i.properties.name;
-                    console.log(countryID);
+
 
                     if(countryID != null){
                         getCurrentCovid(countryID);
                     }
                     //If country has an ID call the countrys weather API
                     if(countryID != null){
-                            getCurrentWeather(countryName);
+                        getCurrentWeather(countryName);
                     }
 
                 }
@@ -209,8 +258,8 @@
                         selectedcountry2 = "";
                         tempcountry = "";
                     }
-
                 }
+
                 if (counter === 3 ){
                     // Code Below used to Deselect Colour
                     d3.select(this).style("fill", '#348C31');
@@ -218,7 +267,6 @@
                 }
             })
             .style("stroke", "white")// Border Lines
-
     })
 
     function isEurope(d,i){
@@ -228,8 +276,8 @@
 
     }
     function handleMouseOver(d, i) {
-      //  console.log("Mouse Is On " + i.properties.name);
-       //d3.select(this).style("fill", '#FFFFFF');
+        //  console.log("Mouse Is On " + i.properties.name);
+        //d3.select(this).style("fill", '#FFFFFF');
     }
 
     function increaseCounter(counter){
@@ -238,7 +286,7 @@
     }
 
     function handleMouseOut() {
-       // console.log("Leaving Country")
+        // console.log("Leaving Country")
     }
 
     // Function to Handle Button Click
@@ -253,7 +301,7 @@
      * @returns {Promise<Response<any, Record<string, any>, number>>}
      */
     async function getCurrentCovid(countryID) {
-        console.log("Get into API Function");
+        //  console.log("Get into API Function");
 
 
         // Make request to coronavirus api
@@ -265,7 +313,6 @@
 
         // Data variable will store all data received from api call.
         const data = await response.json();
-        console.log(data);
 
         // Declare Variable to Count total cases in all counties
         let CasesTotal = 0;
@@ -281,7 +328,7 @@
         document.getElementById("apidata").innerHTML = "Cases in Ireland this Month = " + CasesTotal;
 
         return data;
-}
+    }
 
     /**
      * Get current Temp on api call
@@ -289,20 +336,14 @@
      * @returns {Promise<Response<any, Record<string, any>, number>>}
      */
     async function getCurrentWeather(countryName) {
-        console.log("Get into API Function of current weather");
-
-
         // Make request to coronavirus api
         // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
         const response = await fetch(
             "http://api.weatherapi.com/v1/current.json?key=687f508b47e247bdbd1113110221402&q="+countryName+"&days=7&aqi=no"
         );
-        console.log(response);
 
         // Data variable will store all data received from api call.
         const data = await response.json();
-        console.log(data);
-
 
         document.getElementById("apitemp").innerHTML = "Temperature in " + data.location.name + " Is = " +  data.current.temp_c + " Degrees Celcius";
         document.getElementById("apitemp2").innerHTML = "The Wind in " + data.location.name + " Is Blowing at = " +  data.current.gust_mph + " MPH";
