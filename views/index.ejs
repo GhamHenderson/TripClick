@@ -42,8 +42,11 @@
                 <p id="apitemp3"></p>
             </div>
         </div>
-        <div class="graph1">
-            <canvas id="chart1" width="200" height="200"></canvas>
+
+        <div class = 'apicontainer'>
+            <div class="graph1">
+                <canvas id="chart1" width="200" height="200"></canvas>
+            </div>
         </div>
     </div>
     <%- include('common/footer') %>
@@ -59,26 +62,27 @@ This Script Will be moved to a Script.Js File after testing.
 --->
 
 <script>
-    let initCountry = "Malta";
+    let initCountry = "";
     let graphdata = [];
     let labeldata = [];
+    let namedata = [];
     chartIT();
 
 
 
     async function chartIT() {
         const ctx = document.getElementById('chart1').getContext('2d')
-
         const myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labeldata,
                 datasets: [{
-                    label: "Max Temp",
+                    label: namedata,
                     data: graphdata,
-                    backgroundColor: ['rgba(255, 99, 132, 0.2)',],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)','rgb(0,0,0)','rgb(247,255,0)'],
                     borderColor: ['rgba(255, 99, 132, 1)',],
-                    borderWidth: 1
+                    borderWidth: 2,
+                    hoverOffset: 4,
                 }]
             },
         });
@@ -89,8 +93,11 @@ This Script Will be moved to a Script.Js File after testing.
         <!-- This is an Example Graph using Graph.Js Library-->
         // Make request to coronavirus api
         // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
+        let temp = "";
+        temp = countryName;
+
         const response = await fetch(
-            "http://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=&q="+countryName+"&days=30&aqi=no&alerts=no");
+            "http://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=&q="+temp+"&days=30&aqi=no&alerts=no");
 
         // Data variable will store all data received from api call.
         const apidata = await response.json();
@@ -103,6 +110,8 @@ This Script Will be moved to a Script.Js File after testing.
             graphdata.push(maxtemp);
             labeldata.push(day);
         }
+        let name = apidata.location.country;
+        namedata.push(name);
     }
 
 
