@@ -110,7 +110,7 @@
         // Data variable will store all data received from api call.
         const apidata = await response.json();
         console.log(countryName);
-        console.log(apidata);
+        
 
         for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
             let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
