@@ -43,26 +43,6 @@ app.use('/customs', customsRouter);
 app.use('/users', usersRouter);
 app.use('/graph', graphRouter);
 
-// app.get('/register', (req, res) => {    //here you can include a new "about" route that should take you to the "about" page
-//     res.render('register')
-// });
-
-// app.get('/login', (req, res) => {    //here you can include a new "about" route that should take you to the "about" page
-//     res.render('login')
-// });
-//
-// app.get('/customs', (req, res) => {    //here you can include a new "about" route that should take you to the "about" page
-//     res.render('customs')
-// });
-
-//register form send into database
-// app.get('/register', function (req, res) {
-//
-//     console.log("hello");
-//     res.send("all ok")
-//
-// });
-
 app.post('/register', function (req, res) {
 
     // catch the username that was sent to us from the jQuery POST on the index.ejs page
@@ -174,6 +154,7 @@ app.post('/register', function (req, res) {
         });
 
         connection.connect();
+
 
         // This is the actual SQL query part
         connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phonenum`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', " + username + ", '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {

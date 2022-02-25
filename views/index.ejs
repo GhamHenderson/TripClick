@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<%- include('common/header') %>
 <title>Home Title</title>
 <script src="https://d3js.org/d3.v6.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
@@ -10,11 +10,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 </head>
 
-<%- include('common/header') %>
-
 <body>
-    <button><a href="/graph.ejs">Button</a></button>
-
+    <button><a href="/graph">Button Graph Page</a></button>
 
     <div class="home-page" id="home">
         <div class = "mapcontainer">
@@ -44,10 +41,11 @@
             </div>
             </div>
         </div>
-    <%- include('common/footer') %>
-    </div>
-</body>
 
+    </div>
+
+</body>
+<%- include('common/footer') %>
 
 <! ---
     This is a D3.Js Map Created By Graham,Eduard and James
@@ -174,7 +172,7 @@
                     }
                     //If country has an ID call the countrys weather API
                     if(countryID != null){
-                            getCurrentWeather(countryName);
+                        getCurrentWeather(countryName);
                     }
 
                 }
@@ -228,8 +226,8 @@
 
     }
     function handleMouseOver(d, i) {
-      //  console.log("Mouse Is On " + i.properties.name);
-       //d3.select(this).style("fill", '#FFFFFF');
+        //  console.log("Mouse Is On " + i.properties.name);
+        //d3.select(this).style("fill", '#FFFFFF');
     }
 
     function increaseCounter(counter){
@@ -238,7 +236,7 @@
     }
 
     function handleMouseOut() {
-       // console.log("Leaving Country")
+        // console.log("Leaving Country")
     }
 
     // Function to Handle Button Click
@@ -281,7 +279,7 @@
         document.getElementById("apidata").innerHTML = "Cases in Ireland this Month = " + CasesTotal;
 
         return data;
-}
+    }
 
     /**
      * Get current Temp on api call

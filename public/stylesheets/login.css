@@ -8,6 +8,10 @@
 
 }
 
+body #login {
+    background: lightblue;
+}
+
 .login-page {
     padding-top: 150px;
 }
@@ -102,6 +106,3 @@
     }
 }
 
-body #login {
-    background: lightblue;
-}

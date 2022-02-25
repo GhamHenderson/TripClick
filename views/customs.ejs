@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<%- include('common/header') %>
 <title>Customs</title>
 <script src="https://d3js.org/d3.v6.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
@@ -9,13 +9,11 @@
 </script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="stylesheets/customs.css">
+<script src="javascript/customs-script.js" defer></script>
 
 </head>
 
-<%- include('common/header') %>
-
 <body>
-
 <!--start of login page-->
 <div class="customs-page" id="customs">
 
@@ -36,37 +34,6 @@
     <div class="custGraphOutput1">
         <canvas id="chart" width="200" height="200"></canvas>
 
-        <script>
-
-            function generate()
-            {
-                window.alert("graph will generate");
-            }
-
-            const ctx = document.getElementById('chart').getContext('2d');
-            const custChart1 = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['2010', '2011', '2012', '2013', '2014'],
-                    datasets: [{
-                        label: 'Users Choice',
-                        data: [100, 234, 200, 400, 70],
-                        backgroundColor: [
-                            'rgba(255, 99, 50, 0.7)',
-                            'rgba(25, 10, 255, 0.7)',
-                            'rgba(10, 200, 50, 0.7)',
-                            'rgba(100, 100, 100, 0.7)',
-                            'rgba(150, 0, 150, 0.7)',
-                        ],
-                        borderColor: [
-                            'rgb(0,0,0)'
-
-                        ],
-                        borderWidth: 1.5
-                    }]
-                }
-            });
-        </script>
     </div>
 </div>
 

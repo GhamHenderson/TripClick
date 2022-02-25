@@ -8,6 +8,10 @@
 
 }
 
+body #register {
+    background: white;
+}
+
 .register-page {
     padding-top: 20px;
 }
@@ -15,35 +19,38 @@
 .wrapper {
     max-width: 800px;
     width: 100%;
-    background: #fff;
-    margin: 0px auto;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.125);
-    padding: 30px;
+    margin: 15px auto;
+    box-shadow: 2px 1px 20px rgba(0, 0, 0, 0.125);
+    padding: 20px;
 }
 
 .wrapper .title {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    color: dodgerblue;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: cadetblue;
     text-transform: uppercase;
     text-align: center;
 }
 
 .wrapper .form {
+    padding: 18px;
+    border: 2px solid cadetblue;
     width: 100%;
 }
 
 .wrapper .form .input-field {
     margin-bottom: 15px;
     align-items: center;
+    position: relative;
+    width: 100%;
 }
 
 .wrapper .form .input-field label {
-    width: 200px;
+    width: 150px;
     color: #757575;
     margin-right: 10px;
-    font-size: 16px;
+    font-size: 17px;
 }
 
 .wrapper .form .input-field .input {
@@ -93,20 +100,18 @@
 
 .wrapper .form .input-field .input:focus,
 .wrapper .form .input-field .custom_select select:focus {
-    border: 1px solid #fec107;
+    border: 1px solid cadetblue;
 }
 
 .wrapper .form .input-field p {
     font-size: 14px;
-    color: #757575;
 }
 
 .wrapper .form .input-field .register-button {
-    width: 100%;
     padding: 8px 10px;
     font-size: 15px;
     border: 0px;
-    background: #fec107;
+    background: cadetblue;
     color: #fff;
     cursor: pointer;
     border-radius: 3px;
@@ -132,6 +137,4 @@
     }
 }
 
-body #register {
-    background: lightgrey;
-}
+
