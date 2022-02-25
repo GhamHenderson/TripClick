@@ -90,12 +90,39 @@
         });
     }
 
+    // async function getWeather(countryName) {
+    //
+    //     <!-- This is an Example Graph using Graph.Js Library-->
+    //     // Make request to coronavirus api
+    //     // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
+    //     let temp = "";
+    //     temp = countryName;
+    //
+    //     const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=&q=" + temp + "&days=30&aqi=no&alerts=no");
+    //
+    //     // Data variable will store all data received from api call.
+    //     const apidata = await response.json();
+    //     console.log(countryName);
+    //
+    //
+    //     for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
+    //         let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
+    //         let day = apidata.forecast.forecastday[i].date;
+    //         graphdata.push(maxtemp);
+    //         labeldata.push(day);
+    //         chart.update();
+    //     }
+    //     let name = apidata.location.country;
+    //     namedata.push(name);
+    // }
+
 
     // Create an Svg variable
     const svg = d3.select("svg"),
         width = +svg.attr("width")
 
     // Map and projection
+    //
     const projection = d3.geoNaturalEarth1()
         .scale(width / 1.9) // Lower the num closer the zoom
         .translate([200, 550])  // (Horizontal, Vertical)
@@ -261,17 +288,19 @@
         const response = await fetch(url);
 
         // Data variable will store all data received from api call.
-        let data = await response.json();
+        let apidata = await response.json();
 
-        for (let i = 0; i < data.forecast.forecastday.length; i++) {
-             let maxtemp = data.forecast.forecastday[i].day.maxtemp_c;
-             let day = data.forecast.forecastday[i].date;
-             graphdata.push(maxtemp);
-             labeldata.push(day);
-             chart.update();
+        for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
+            let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
+            let day = apidata.forecast.forecastday[i].date;
+            graphdata.push(maxtemp);
+            labeldata.push(day);
+            namedata.push(countryName);
+            chart.update();
+
+            document.getElementById("apitemp").innerHTML = "Temperature in " + apidata.location.name + " Is = " + apidata.current.temp_c + " Degrees Celcius";
+            document.getElementById("apitemp2").innerHTML = "The Wind in " + apidata.location.name + " Is Blowing at = " + apidata.current.gust_mph + " MPH";
+            document.getElementById("apitemp3").innerHTML = "Todays forecast in " + apidata.location.name + " Is " + apidata.current.condition.text;
          }
-       //  document.getElementById("apitemp").innerHTML = "Temperature in " + data.location.name + " Is = " + data.current.temp_c + " Degrees Celcius";
-       // document.getElementById("apitemp2").innerHTML = "The Wind in " + data.location.name + " Is Blowing at = " + data.current.gust_mph + " MPH";
-       // document.getElementById("apitemp3").innerHTML = "Todays forecast in " + data.location.name + " Is " + data.current.condition.text;
     }
 </script>
