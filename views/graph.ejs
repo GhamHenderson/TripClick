@@ -18,16 +18,15 @@
     Graph Page
 </p>
 <p>
-    <button onclick="getWeather('ireland')"> Ireland Max Temp</button>
+    <button onclick="getWeather('Ireland')"> Ireland Max Temp</button>
 </p>
 </body>
 </html>
 
-<!-- This is an Example Graph using Graph.Js Library-->
-
 <script>
+
     const graphdata = [];
-    const labeldata = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
+    const labeldata = [];
 
 
     chartIT();
@@ -35,15 +34,14 @@
 
 
     async function chartIT() {
-        const ctx = document.getElementById('chart1').getContext('2d');
-
-        await getWeather("Russia");
+        const ctx = document.getElementById('chart1').getContext('2d')
+        await getWeather('Ireland');
         const myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labeldata,
                 datasets: [{
-                    label: 'Max Temp',
+                    label: "Max Temp",
                     data: graphdata,
                     backgroundColor: ['rgba(255, 99, 132, 0.2)',],
                     borderColor: ['rgba(255, 99, 132, 1)',],
@@ -54,6 +52,8 @@
     }
 
     async function getWeather(countryName) {
+<!-- This is an Example Graph using Graph.Js Library-->
+
         // Make request to coronavirus api
         // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
         const response = await fetch(
@@ -65,7 +65,9 @@
 
        for(let i = 0; i < apidata.forecast.forecastday.length; i++) {
            let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
+           let day = apidata.forecast.forecastday[i].date;
            graphdata.push(maxtemp);
+           labeldata.push(day);
            console.log("getWeather func -> Temp = " + graphdata[i]);
        }
     }

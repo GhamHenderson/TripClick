@@ -81,3 +81,23 @@ path:hover {
 .infobox{
     padding: 10px;
 }
+
+
+.graph2 {
+    display: flex;
+    padding: 20px;
+    height: 50%;
+    width: 50%;
+    justify-content: right;
+}
+
+.graph1 {
+    display: flex;
+    background-color: #ffffff;
+    height: 30%;
+    width: 30%;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+
+}

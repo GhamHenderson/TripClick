@@ -8,53 +8,121 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-</head>
 
 <body>
-    <button><a href="/graph">Button Graph Page</a></button>
+<button><a href="/graph">Button Graph Page</a></button>
 
-    <div class="home-page" id="home">
-        <div class = "mapcontainer">
-            <div class="euro">
-                <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
-            </div>
+<button><a href="/graph">Button</a></button>
+
+
+<div class="home-page" id="home">
+    <div class="mapcontainer">
+        <div class="euro">
+            <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
         </div>
-
-        <div class = "mapcontainer">
-            <div class = "infobox">
-                <p id="countryclicked">Country clicked displays here.</p>
-                <p id="errorcountryclicked"></p>
-                <p id="apidata"></p>
-                <p id="apidata2"></p>
-            </div>
-        </div>
-
-        <div class = "apicontainer">
-            <div class = "apidisplay">
-                <p id="apitemp">
-                    Api Info will be fully displayed here for testing
-                    and in Later versions we will display the Graphs here
-                </p>
-
-                <p id="apitemp2"></p>
-                <p id="apitemp3"></p>
-            </div>
-            </div>
-        </div>
-
     </div>
+
+    <div class="mapcontainer">
+        <div class="infobox">
+            <p id="countryclicked">Country clicked displays here.</p>
+            <p id="errorcountryclicked"></p>
+            <p id="apidata"></p>
+            <p id="apidata2"></p>
+        </div>
+    </div>
+
+    <div class="apicontainer">
+        <div class="apidisplay">
+            <p id="apitemp">
+<!--                Api Info will be fully displayed here for testing-->
+<!--                and in Later versions we will display the Graphs here-->
+            </p>
+
+            <p id="apitemp2"></p>
+            <p id="apitemp3"></p>
+        </div>
+    </div>
+
+    <div class='apicontainer'>
+        <div class="graph1">
+            <canvas id="chart1" width="200" height="200"></canvas>
+        </div>
+    </div>
+
+</div>
+<%- include('common/footer') %>
+<!--&gt;>>>>>> ce4337f6b347568bb76be4ac7c978be7b43b1bfc-->
+</div>
 
 </body>
 <%- include('common/footer') %>
 
-<! ---
-    This is a D3.Js Map Created By Graham,Eduard and James
-    as part of the Major Group Project.
+<!--This is a D3.Js Map Created By Graham,Eduard and James-->
+<!--as part of the Major Group Project.-->
 
-    This Script Will be moved to a Script.Js File after testing.
-    --->
+<!--This Script Will be moved to a Script.Js File after testing.-->
 
 <script>
+    let initCountry = "";
+    let graphdata = [];
+    let labeldata = [];
+    let namedata = [];
+    let chart;
+    chartIT();
+
+
+    async function chartIT() {
+        const ctx = document.getElementById('chart1').getContext('2d')
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labeldata,
+                datasets: [{
+                    label: namedata,
+                    data: graphdata,
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgb(0,0,0)', 'rgb(247,255,0)'],
+                    borderColor: ['rgba(255, 99, 132, 1)',],
+                    borderWidth: 2,
+                    hoverOffset: 4,
+                },
+                    {
+                        label: ["Graph2"],
+                        data: [1, 6, 3, 4, 6],
+                        backgroundColor: ['rgb(109,234,17)'],
+                        borderColor: ['rgb(180,144,93)',],
+                        borderWidth: 2,
+                        hoverOffset: 4
+                    }],
+            },
+        });
+    }
+
+    async function getWeather(countryName) {
+
+        <!-- This is an Example Graph using Graph.Js Library-->
+        // Make request to coronavirus api
+        // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
+        let temp = "";
+        temp = countryName;
+
+        const response = await fetch("http://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=&q=" + temp + "&days=30&aqi=no&alerts=no");
+
+        // Data variable will store all data received from api call.
+        const apidata = await response.json();
+        console.log(countryName);
+        console.log(apidata);
+
+        for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
+            let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
+            let day = apidata.forecast.forecastday[i].date;
+            graphdata.push(maxtemp);
+            labeldata.push(day);
+            chart.update();
+        }
+        let name = apidata.location.country;
+        namedata.push(name);
+    }
+
 
     // Create an Svg variable
     const svg = d3.select("svg"),
@@ -70,62 +138,6 @@
     let selectedcountry1;
     let selectedcountry2;
     let tempcountry;
-    const eu = [
-        "Albania",
-        "Andorra",
-        "Armenia",
-        "Austria",
-        "Azerbaijan",
-        "Belarus",
-        "Belgium",
-        "Bosnia and Herzegovina",
-        "Bulgaria",
-        "Croatia",
-        "Cyprus",
-        "Czech Republic",
-        "Denmark",
-        "Estonia",
-        "Finland",
-        "France",
-        "Georgia",
-        "Germany",
-        "Greece",
-        "Hungary",
-        "Iceland",
-        "Ireland",
-        "Italy",
-        "Kosovo",
-        "Latvia",
-        "Liechtenstein",
-        "Lithuania",
-        "Luxembourg",
-        "Macedonia",
-        "Malta",
-        "Moldova",
-        "Monaco",
-        "Montenegro",
-        "The Netherlands",
-        "Norway",
-        "Poland",
-        "Portugal",
-        "Romania",
-        "Russia",
-        "San Marino",
-        "Serbia",
-        "Slovakia",
-        "Slovenia",
-        "Spain",
-        "Sweden",
-        "Switzerland",
-        "Turkey",
-        "Ukraine",
-        "United Kingdom",
-        "Vatican City",
-    ];
-
-    for(let i = 0; i < eu.length ; i++){
-        //console.log(eu[i]);
-    }
 
     // Load external data from geographic api and use data to project path info from map.
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function (data) {
@@ -137,55 +149,55 @@
             .attr("d", d3.geoPath().projection(projection))
             .on("mouseover", handleMouseOver)
             .on("mouseout", handleMouseOut)
-            .on('click', function(d,i){
-
+            .on('click', function (d, i) {
+                console.log(i.properties.name);
+                getWeather(i.properties.name);
 
                 // Fill country with color onClick
                 d3.select(this).style("fill", '#0000FF');
                 // Change HTML to display country ID.
                 document.getElementById("countryclicked").innerHTML = i.properties.name;
 
-                if(counter === 1 && selectedcountry1 === false){
+                if (counter === 1 && selectedcountry1 === false) {
 
                     selectedcountry1 === true;
                     d3.select(this).style("fill", '#20bf83');
                     counter++;
                 }
 
-                if(counter === 1 && selectedcountry1 === true){
+                if (counter === 1 && selectedcountry1 === true) {
                     selectedcountry1 === false;
                     d3.select(this).style("fill", '#20bf83');
                     counter--;
                 }
 
-                if(counter < 3){
+                if (counter < 3) {
                     d3.select(this).style("fill", '#0000FF');
                     document.getElementById("countryclicked").innerHTML = i.properties.name;
-                    counter ++;
+                    counter++;
                     let countryID = i.id;
-                    console.log(countryID);
-                    let countryName = i.properties.name;
-                    console.log(countryID);
 
-                    if(countryID != null){
+                    let countryName = i.properties.name;
+
+
+                    if (countryID != null) {
                         getCurrentCovid(countryID);
                     }
                     //If country has an ID call the countrys weather API
-                    if(countryID != null){
+                    if (countryID != null) {
                         getCurrentWeather(countryName);
                     }
 
-                }
-                else{
+                } else {
                     document.getElementById("errorcountryclicked").innerHTML = "Error You can Only Select 2 Countries!!";
                 }
 
-                if(counter === 1){
+                if (counter === 1) {
                     selectedcountry1 = i.properties.name;
                 }
 
                 //If country is clicked twice
-                if(counter === 2){
+                if (counter === 2) {
                     selectedcountry2 = i.properties.name;
                     tempcountry = selectedcountry2;
                     // If clicked check if country is already selected if it is unselect.
@@ -197,40 +209,32 @@
                         counter = 0;
                     }
 
-                    if(selectedcountry1 !== selectedcountry2){
+                    if (selectedcountry1 !== selectedcountry2) {
                         document.getElementById("countryclicked").innerHTML = "Selected Countries = " + selectedcountry1 + " and " + selectedcountry2;
                     }
 
-                    if(counter === 0)
-                    {
+                    if (counter === 0) {
                         selectedcountry1 = "";
                         selectedcountry2 = "";
                         tempcountry = "";
                     }
-
                 }
-                if (counter === 3 ){
+
+                if (counter === 3) {
                     // Code Below used to Deselect Colour
                     d3.select(this).style("fill", '#348C31');
-                    counter =1;
+                    counter = 1;
                 }
             })
             .style("stroke", "white")// Border Lines
-
     })
 
-    function isEurope(d,i){
-        for(let count = 0; count < eu.length; count++){
-            document.getElementById("apidisplay").innerHTML = eu[i];
-        }
-
-    }
     function handleMouseOver(d, i) {
         //  console.log("Mouse Is On " + i.properties.name);
         //d3.select(this).style("fill", '#FFFFFF');
     }
 
-    function increaseCounter(counter){
+    function increaseCounter(counter) {
         counter++;
         return counter;
     }
@@ -251,7 +255,7 @@
      * @returns {Promise<Response<any, Record<string, any>, number>>}
      */
     async function getCurrentCovid(countryID) {
-        console.log("Get into API Function");
+        //  console.log("Get into API Function");
 
 
         // Make request to coronavirus api
@@ -263,14 +267,13 @@
 
         // Data variable will store all data received from api call.
         const data = await response.json();
-        console.log(data);
 
         // Declare Variable to Count total cases in all counties
         let CasesTotal = 0;
         CasesTotal = totalCountryCases(data);
 
-        function totalCountryCases(data){
-            for(let i = 0; i < data[0].records.length; i++ ){
+        function totalCountryCases(data) {
+            for (let i = 0; i < data[0].records.length; i++) {
                 CasesTotal = CasesTotal + data[0].records[i].cases;
             }
             return CasesTotal;
@@ -287,24 +290,18 @@
      * @returns {Promise<Response<any, Record<string, any>, number>>}
      */
     async function getCurrentWeather(countryName) {
-        console.log("Get into API Function of current weather");
-
-
         // Make request to coronavirus api
         // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
         const response = await fetch(
-            "http://api.weatherapi.com/v1/current.json?key=687f508b47e247bdbd1113110221402&q="+countryName+"&days=7&aqi=no"
+            "http://api.weatherapi.com/v1/current.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no"
         );
-        console.log(response);
 
         // Data variable will store all data received from api call.
         const data = await response.json();
-        console.log(data);
 
-
-        document.getElementById("apitemp").innerHTML = "Temperature in " + data.location.name + " Is = " +  data.current.temp_c + " Degrees Celcius";
-        document.getElementById("apitemp2").innerHTML = "The Wind in " + data.location.name + " Is Blowing at = " +  data.current.gust_mph + " MPH";
-        document.getElementById("apitemp3").innerHTML = "Todays forecast in " + data.location.name + " Is " +  data.current.condition.text;
+        document.getElementById("apitemp").innerHTML = "Temperature in " + data.location.name + " Is = " + data.current.temp_c + " Degrees Celcius";
+        document.getElementById("apitemp2").innerHTML = "The Wind in " + data.location.name + " Is Blowing at = " + data.current.gust_mph + " MPH";
+        document.getElementById("apitemp3").innerHTML = "Todays forecast in " + data.location.name + " Is " + data.current.condition.text;
         return data;
     }
 </script>
