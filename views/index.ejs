@@ -66,13 +66,14 @@ This Script Will be moved to a Script.Js File after testing.
     let graphdata = [];
     let labeldata = [];
     let namedata = [];
+    let chart;
     chartIT();
 
 
 
     async function chartIT() {
         const ctx = document.getElementById('chart1').getContext('2d')
-        const myChart = new Chart(ctx, {
+        chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labeldata,
@@ -82,8 +83,14 @@ This Script Will be moved to a Script.Js File after testing.
                     backgroundColor: ['rgba(255, 99, 132, 0.2)','rgb(0,0,0)','rgb(247,255,0)'],
                     borderColor: ['rgba(255, 99, 132, 1)',],
                     borderWidth: 2,
-                    hoverOffset: 4,
-                }]
+                    hoverOffset: 4,},
+                    {
+                    label: ["Graph2"],
+                    data: [1,6,3,4,6],
+                    backgroundColor: ['rgb(109,234,17)'],
+                    borderColor: ['rgb(180,144,93)',],
+                    borderWidth: 2,
+                    hoverOffset: 4 }],
             },
         });
     }
@@ -109,6 +116,7 @@ This Script Will be moved to a Script.Js File after testing.
             let day = apidata.forecast.forecastday[i].date;
             graphdata.push(maxtemp);
             labeldata.push(day);
+            chart.update();
         }
         let name = apidata.location.country;
         namedata.push(name);
@@ -129,62 +137,6 @@ This Script Will be moved to a Script.Js File after testing.
     let selectedcountry1;
     let selectedcountry2;
     let tempcountry;
-    const eu = [
-        "Albania",
-        "Andorra",
-        "Armenia",
-        "Austria",
-        "Azerbaijan",
-        "Belarus",
-        "Belgium",
-        "Bosnia and Herzegovina",
-        "Bulgaria",
-        "Croatia",
-        "Cyprus",
-        "Czech Republic",
-        "Denmark",
-        "Estonia",
-        "Finland",
-        "France",
-        "Georgia",
-        "Germany",
-        "Greece",
-        "Hungary",
-        "Iceland",
-        "Ireland",
-        "Italy",
-        "Kosovo",
-        "Latvia",
-        "Liechtenstein",
-        "Lithuania",
-        "Luxembourg",
-        "Macedonia",
-        "Malta",
-        "Moldova",
-        "Monaco",
-        "Montenegro",
-        "The Netherlands",
-        "Norway",
-        "Poland",
-        "Portugal",
-        "Romania",
-        "Russia",
-        "San Marino",
-        "Serbia",
-        "Slovakia",
-        "Slovenia",
-        "Spain",
-        "Sweden",
-        "Switzerland",
-        "Turkey",
-        "Ukraine",
-        "United Kingdom",
-        "Vatican City",
-    ];
-
-    for(let i = 0; i < eu.length ; i++){
-        //console.log(eu[i]);
-    }
 
     // Load external data from geographic api and use data to project path info from map.
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function (data) {
@@ -278,12 +230,6 @@ This Script Will be moved to a Script.Js File after testing.
             .style("stroke", "white")// Border Lines
     })
 
-    function isEurope(d,i){
-        for(let count = 0; count < eu.length; count++){
-            document.getElementById("apidisplay").innerHTML = eu[i];
-        }
-
-    }
     function handleMouseOver(d, i) {
         //  console.log("Mouse Is On " + i.properties.name);
         //d3.select(this).style("fill", '#FFFFFF');
