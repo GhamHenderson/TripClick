@@ -125,16 +125,14 @@
                 if(countriesSelected.includes(i.properties.name) === true){
                     console.log("Sorry this exists already")
                     console.log(countriesSelected);
-                    countriesSelected.pop(i.properties.name);
+                    
+                    countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
                     d3.select(this).style("fill", '#348C31');
                 }
                 else if(countriesSelected.includes(i.properties.name) === false){
                     d3.select(this).style("fill", '#03a5fd');
                     countriesSelected.push(i.properties.name);
                 }
-
-
-
                 document.getElementById("countryclicked").innerHTML = i.properties.name;
             })
             .style("stroke", "white")// Border Lines
@@ -163,9 +161,7 @@
             }
             return CasesTotal;
         }
-
         document.getElementById("apidata").innerHTML = "Cases in Ireland this Month = " + CasesTotal;
-
         return data;
     }
 
