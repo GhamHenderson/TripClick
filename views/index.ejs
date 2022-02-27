@@ -12,9 +12,6 @@
 <body>
 <button><a href="/graph">Button Graph Page</a></button>
 
-<button><a href="/graph">Button</a></button>
-
-
 <div class="home-page" id="home">
     <div class="mapcontainer">
         <div class="euro">
@@ -31,16 +28,22 @@
         </div>
     </div>
 
+    <button>Reset Selection</button>
+
     <div class="apicontainer">
         <div class="apidisplay">
             <p id="apitemp">
 <!--                Api Info will be fully displayed here for testing-->
 <!--                and in Later versions we will display the Graphs here-->
             </p>
-
             <p id="apitemp2"></p>
             <p id="apitemp3"></p>
         </div>
+    </div>
+
+
+    <div>
+
     </div>
 
     <div class='apicontainer'>
@@ -142,32 +145,20 @@
                     d3.select(this).style("fill", '#20bf83');
                     counter++;
                 }
-
-                if (counter === 1 && selectedcountry1 === true) {
+                else if(counter === 1 && selectedcountry1 === true) {
                     selectedcountry1 === false;
                     d3.select(this).style("fill", '#20bf83');
                     counter--;
                 }
 
-                if (counter < 3) {
+                if (counter <= 2) {
                     d3.select(this).style("fill", '#0000FF');
                     document.getElementById("countryclicked").innerHTML = i.properties.name;
                     counter++;
-                    let countryID = i.id;
-
-                    let countryName = i.properties.name;
-
-
-                    if (countryID != null) {
-                        getCurrentCovid(countryID);
-                    }
-                    //If country has an ID call the countrys weather API
-                    if (countryID != null) {
-                       // getCurrentWeather(countryName);
-                    }
-
-                } else {
+                }
+                else {
                     document.getElementById("errorcountryclicked").innerHTML = "Error You can Only Select 2 Countries!!";
+
                 }
 
                 if (counter === 1) {
@@ -198,11 +189,7 @@
                     }
                 }
 
-                if (counter === 3) {
-                    // Code Below used to Deselect Colour
-                    d3.select(this).style("fill", '#348C31');
-                    counter = 1;
-                }
+
             })
             .style("stroke", "white")// Border Lines
     })
