@@ -72,8 +72,7 @@
     let namedata3 = [];
     let chart;
     let temparray = [];
-    let counter = 0;
-    let trigger = false;
+    let trigger = 0;
     chartIT();
 
     async function chartIT() {
@@ -176,8 +175,9 @@
     }
 
     function weatherHandler(i){
-        if(trigger === false){getCurrentWeather(i.properties.name, 1); trigger = true;}
-        else getCurrentWeather(i.properties.name, 2);
+        if(trigger === 0){getCurrentWeather(i.properties.name, 1); trigger++}
+        else if(trigger === 1){ getCurrentWeather(i.properties.name, 2); trigger++}
+        else getCurrentWeather(i.properties.name, 3);
         chart.update();
     }
 
