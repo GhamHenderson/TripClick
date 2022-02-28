@@ -18,7 +18,6 @@ $("#login-button").click(function () {
         })
             .done(function (data) {
 
-                window.location = "/customs";
                 alert(data);
             });
     }
