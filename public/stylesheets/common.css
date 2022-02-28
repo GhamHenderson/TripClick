@@ -46,9 +46,41 @@ header {
     top: 0;
 }
 
-footer {
-
+.footer {
+    background-color: #26272b;
+    color: #737373;
 }
+
+.container-footer {
+    font-size: 16px;
+    /*font-family: 'Trebuchet MS', sans-serif;*/
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+hr {
+    border-top-color: #bbb;
+    opacity: 0.5
+}
+
+.footer-box1 {
+    padding-left: 180px;
+    padding-right: 180px;
+}
+
+.footer-box2 {
+    text-align: center;
+}
+
+.footer-text1 {
+    text-align: center;
+}
+
+.about-text {
+    font-size: 30px;
+    text-align: center;
+}
+
 @media (max-width: 1048px) {
     label.logo {
         font-size: 32px;
@@ -97,6 +129,70 @@ footer {
 
     nav ul.show {
         left: 0;
+    }
+}
+
+@media (max-width: 1220px) {
+    .container-footer {
+        font-size: 14px;
+        /*font-family: 'Trebuchet MS', sans-serif;*/
+        padding-top: 20px;
+        padding-bottom: 10px;
+    }
+
+    .footer-box1 {
+        padding-left: 160px;
+        padding-right: 160px;
+    }
+
+    .about-text {
+        font-size: 30px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 1100px) {
+    .container-footer {
+        font-size: 14px;
+    }
+
+    .footer-box1 {
+        padding-left: 110px;
+        padding-right: 110px;
+    }
+
+    .about-text {
+        font-size: 25px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 1000px) {
+
+    .footer-box1 {
+        padding-left: 90px;
+        padding-right: 90px;
+    }
+
+    .about-text {
+        font-size: 30px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .container-footer {
+        font-size: 13px;
+    }
+
+    .footer-box1 {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .about-text {
+        font-size: 20px;
+        text-align: center;
     }
 }
 

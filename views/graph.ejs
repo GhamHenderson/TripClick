@@ -9,11 +9,11 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="container">
-        <div class="graph1">
-            <canvas id="chart1" width="200" height="200"></canvas>
-        </div>
+<div class="container">
+    <div class="graph1">
+        <canvas id="chart1" width="200" height="200"></canvas>
     </div>
+</div>
 <p>
     Graph Page
 </p>
@@ -30,7 +30,6 @@
 
 
     chartIT();
-
 
 
     async function chartIT() {
@@ -52,24 +51,24 @@
     }
 
     async function getWeather(countryName) {
-<!-- This is an Example Graph using Graph.Js Library-->
+        <!-- This is an Example Graph using Graph.Js Library-->
 
         // Make request to coronavirus api
         // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
         const response = await fetch(
-            "http://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=&q="+countryName+"&days=30&aqi=no&alerts=no");
+            "http://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=&q=" + countryName + "&days=30&aqi=no&alerts=no");
 
         // Data variable will store all data received from api call.
         const apidata = await response.json();
         console.log(apidata);
 
-       for(let i = 0; i < apidata.forecast.forecastday.length; i++) {
-           let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
-           let day = apidata.forecast.forecastday[i].date;
-           graphdata.push(maxtemp);
-           labeldata.push(day);
-           console.log("getWeather func -> Temp = " + graphdata[i]);
-       }
+        for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
+            let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
+            let day = apidata.forecast.forecastday[i].date;
+            graphdata.push(maxtemp);
+            labeldata.push(day);
+            console.log("getWeather func -> Temp = " + graphdata[i]);
+        }
     }
 
-    </script>
+</script>

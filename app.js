@@ -193,19 +193,23 @@ app.post('/login', function (req, res) {
     connection.query("SELECT * FROM users WHERE username = ?", [username], function (error, result) {
         if (error) throw error;
 
-        const hashedPassword = result[0].password
-        //get the hashedPassword from result
-        var finalResult = bcrypt.compareSync(password, hashedPassword);
-        console.log("final result" + finalResult);
-
-        if (finalResult == true) {
-            console.log("Login Successful");
-            res.send(`${username} is logged in!`);
+        if (result.length == 0) {
+            console.log("User does not exist!!");
+            res.send(`${username} does not exist!!`)
         } else {
-            console.log("Password Incorrect")
-            res.send("Username or Password incorrect!")
-        }
+            const hashedPassword = result[0].password
+            //get the hashedPassword from result
+            var finalResult = bcrypt.compareSync(password, hashedPassword);
+            // console.log("final result" + finalResult);
 
+            if (finalResult == true) {
+                console.log("Login Successful");
+                res.send(`${username} is logged in!`);
+            } else {
+                console.log("Password Incorrect")
+                res.send("Username or Password incorrect!")
+            }
+        }
     });
 
     connection.end();

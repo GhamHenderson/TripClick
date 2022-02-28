@@ -9,45 +9,47 @@
 }
 
 body #login {
-    background: lightblue;
+    background: white;
 }
 
 .login-page {
-    padding-top: 150px;
+    padding-top: 50px;
 }
 
 .wrapper-login {
     max-width: 800px;
     width: 100%;
-    background: #fff;
-    margin: 0px auto;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.125);
-    padding: 30px;
+    margin: 15px auto;
+    box-shadow: 2px 1px 20px rgba(0, 0, 0, 0.125);
+    padding: 20px;
 }
 
 .wrapper-login .title {
     font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    color: dodgerblue;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: cadetblue;
     text-transform: uppercase;
     text-align: center;
 }
 
 .wrapper-login .login-form {
+    padding: 18px;
+    border: 2px solid cadetblue;
     width: 100%;
 }
 
 .wrapper-login .login-form .input-field-login {
     margin-bottom: 15px;
     align-items: center;
+    position: relative;
+    width: 100%;
 }
 
 .wrapper-login .login-form .input-field-login label {
     width: 200px;
     color: #757575;
-    margin-right: 10px;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .wrapper-login .login-form .input-field-login .input {
@@ -66,20 +68,24 @@ body #login {
 }
 
 .wrapper-login .login-form .input-field-login .input:focus {
-    border: 1px solid #fec107;
+    border: 1px solid cadetblue;
 }
 
-.wrapper-login .login-form .input-field-login p {
+.wrapper-login .login-form .input-field-login {
     font-size: 14px;
     color: #757575;
 }
 
-.wrapper-login .login-form .input-field-login .login-btn {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 15px;
+.wrapper-login .login-form .button-div {
+    text-align: center;
+    padding-top: 5px;
+}
+
+.wrapper-login .login-form .button-div .login-btn {
+    padding: 6px 12px;
+    font-size: 22px;
     border: 0px;
-    background: royalblue;
+    background: cadetblue;
     color: #fff;
     cursor: pointer;
     border-radius: 3px;
@@ -87,7 +93,7 @@ body #login {
 }
 
 
-.wrapper-login .login-form .input-field-login .login-btn:hover {
+.wrapper-login .login-form .button-div .login-btn:hover {
     background: #ffd658;
 }
 

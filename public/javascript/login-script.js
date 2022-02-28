@@ -7,7 +7,7 @@ $("#login-button").click(function () {
 
 
     if (user == '' || pass == '') {
-        alert("too short");
+        alert("Please enter your username and password!");
     } else {
 
         // Send the data

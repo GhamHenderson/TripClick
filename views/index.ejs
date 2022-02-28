@@ -10,7 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 
 <body>
-
 <div class="home-page" id="home">
     <div class="mapcontainer">
         <div class="euro">
@@ -30,8 +29,8 @@
     <div class="apicontainer">
         <div class="apidisplay">
             <p id="apitemp">
-<!--                Api Info will be fully displayed here for testing-->
-<!--                and in Later versions we will display the Graphs here-->
+                <!--                Api Info will be fully displayed here for testing-->
+                <!--                and in Later versions we will display the Graphs here-->
             </p>
 
             <p id="apitemp2"></p>
@@ -46,11 +45,8 @@
     </div>
 
 </div>
-<%- include('common/footer') %>
-<!--&gt;>>>>>> ce4337f6b347568bb76be4ac7c978be7b43b1bfc-->
-</div>
 
-</body>
+
 <%- include('common/footer') %>
 
 <!--This is a D3.Js Map Created By Graham,Eduard and James-->
@@ -88,14 +84,14 @@
                     borderColor: ['rgb(0,0,0)',],
                     borderWidth: 2,
                     hoverOffset: 4,
-                },{
+                }, {
                     label: namedata2,
                     data: graphdata2,
                     backgroundColor: ['rgba(255,0,0,0.37)'],
                     borderColor: ['rgb(0,0,0)',],
                     borderWidth: 2,
                     hoverOffset: 4,
-                },{
+                }, {
                     label: namedata3,
                     data: graphdata3,
                     backgroundColor: ['rgba(255,0,200,0.37)'],
@@ -131,14 +127,13 @@
                 weatherHandler(i);
 
 
-                if(countriesSelected.includes(i.properties.name) === true){
+                if (countriesSelected.includes(i.properties.name) === true) {
                     console.log("Sorry this exists already")
                     console.log(countriesSelected);
-                    
+
                     countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
                     d3.select(this).style("fill", '#348C31');
-                }
-                else if(countriesSelected.includes(i.properties.name) === false){
+                } else if (countriesSelected.includes(i.properties.name) === false) {
                     d3.select(this).style("fill", '#03a5fd');
                     countriesSelected.push(i.properties.name);
                 }
@@ -170,21 +165,26 @@
             }
             return CasesTotal;
         }
+
         document.getElementById("apidata").innerHTML = "Cases in Ireland this Month = " + CasesTotal;
         return data;
     }
 
-    function weatherHandler(i){
-        if(trigger === 0){getCurrentWeather(i.properties.name, 1); trigger++}
-        else if(trigger === 1){ getCurrentWeather(i.properties.name, 2); trigger++}
-        else getCurrentWeather(i.properties.name, 3);
+    function weatherHandler(i) {
+        if (trigger === 0) {
+            getCurrentWeather(i.properties.name, 1);
+            trigger++
+        } else if (trigger === 1) {
+            getCurrentWeather(i.properties.name, 2);
+            trigger++
+        } else getCurrentWeather(i.properties.name, 3);
         chart.update();
     }
 
     async function getCurrentWeather(countryName, gd) {
         // Make request to coronavirus api
         // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
-        if(gd === 1) {
+        if (gd === 1) {
             let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
             const response = await fetch(url);
 
@@ -199,9 +199,8 @@
             }
             namedata.push(countryName);
             chart.update();
-        }
-        else if(gd === 2) {
-            let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q="+countryName+"&days=7&aqi=no&alerts=no";
+        } else if (gd === 2) {
+            let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
             const response = await fetch(url);
             // Data variable will store all data received from api call.
             let apidata = await response.json();
@@ -211,15 +210,17 @@
                 graphdata2.push(maxtemp);
                 labeldata2.push(day);
             }
-            if(namedata2.length === 0){namedata2.push(countryName)};
+            if (namedata2.length === 0) {
+                namedata2.push(countryName)
+            }
+            ;
             chart.update();
 
             document.getElementById("apitemp").innerHTML = "Temperature in " + apidata.location.name + " Is = " + apidata.current.temp_c + " Degrees Celcius";
             document.getElementById("apitemp2").innerHTML = "The Wind in " + apidata.location.name + " Is Blowing at = " + apidata.current.gust_mph + " MPH";
             document.getElementById("apitemp3").innerHTML = "Todays forecast in " + apidata.location.name + " Is " + apidata.current.condition.text;
-         }
-        else if(gd === 3) {
-            let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q="+countryName+"&days=7&aqi=no&alerts=no";
+        } else if (gd === 3) {
+            let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
             const response = await fetch(url);
             // Data variable will store all data received from api call.
             let apidata = await response.json();
@@ -229,7 +230,10 @@
                 graphdata3.push(maxtemp);
                 labeldata3.push(day);
             }
-            if(namedata3.length === 0){namedata3.push(countryName)};
+            if (namedata3.length === 0) {
+                namedata3.push(countryName)
+            }
+            ;
             chart.update();
 
             document.getElementById("apitemp").innerHTML = "Temperature in " + apidata.location.name + " Is = " + apidata.current.temp_c + " Degrees Celcius";
