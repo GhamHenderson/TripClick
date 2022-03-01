@@ -28,11 +28,7 @@
 
     <div class="apicontainer">
         <div class="apidisplay">
-            <p id="apitemp">
-                <!--                Api Info will be fully displayed here for testing-->
-                <!--                and in Later versions we will display the Graphs here-->
-            </p>
-
+            <p id="apitemp"></p>
             <p id="apitemp2"></p>
             <p id="apitemp3"></p>
         </div>
@@ -68,12 +64,14 @@
     let chart;
     let CasesTotal = 0;
     let trigger = 0;
+
+    // Call Chart Function to build chart
     chartIT();
 
     async function chartIT() {
         const ctx = document.getElementById('chart1').getContext('2d')
         chart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: labeldata,
                 datasets: [{
@@ -174,6 +172,7 @@
         const response = await fetch(url);
         let apidata = await response.json();
         displayData(apidata, gd, countryName);
+        console.log(apidata);
     }
 
     function displayData(apidata, gd, countryName){
