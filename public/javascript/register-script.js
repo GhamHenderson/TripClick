@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
       
       <option value="${country.name}">${country.name}</option>`;
         })
-
         selectDropCountry.innerHTML = output;
     }).catch(err => {
         console.log(err);
@@ -21,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 //script to send data into database when registering
-
 $("#register-button").click(function () {
 
     // get the values
@@ -52,10 +50,7 @@ $("#register-button").click(function () {
         city: city
     })
         .done(function (data) {
-
             // window.location = "/";
             alert(data);
         });
-    // }
-
 });

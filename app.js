@@ -149,7 +149,7 @@ app.post('/register', function (req, res) {
         var connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: 'Database2001',
+            password: '2194',
             database: 'majorproject'
         });
 
@@ -182,7 +182,7 @@ app.post('/login', function (req, res) {
     var connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        password: 'Database2001',
+        password: '2194',
         database: 'majorproject'
     });
 

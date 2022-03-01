@@ -56,7 +56,6 @@
 
 <script>
     let countriesSelected = [];
-    let initCountry = "";
     let graphdata = [];
     let graphdata2 = [];
     let graphdata3 = [];
@@ -67,7 +66,6 @@
     let namedata2 = [];
     let namedata3 = [];
     let chart;
-    let temparray = [];
     let trigger = 0;
     chartIT();
 
@@ -119,34 +117,24 @@
             .selectAll("path")
             .data(data.features)
             .join("path")
+            .style("stroke", "white")// Border Lines
             .attr("fill", "#348C31") // Color Of Country
             .attr("d", d3.geoPath().projection(projection))
-            .on("mouseover", handleMouseOver)
-            .on("mouseout", handleMouseOut)
             .on('click', function (d, i) {
                 weatherHandler(i);
 
-
                 if (countriesSelected.includes(i.properties.name) === true) {
-                    console.log("Sorry this exists already")
-                    console.log(countriesSelected);
-
                     countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
                     d3.select(this).style("fill", '#348C31');
-                } else if (countriesSelected.includes(i.properties.name) === false) {
-                    d3.select(this).style("fill", '#03a5fd');
-                    countriesSelected.push(i.properties.name);
                 }
-                document.getElementById("countryclicked").innerHTML = i.properties.name;
+                else if (countriesSelected.includes(i.properties.name) === false) {
+                    countriesSelected.push(i.properties.name);
+                    d3.select(this).style("fill", '#03a5fd');
+                    document.getElementById("countryclicked").innerHTML = "Countries Selected : " + countriesSelected[0] + " , " + countriesSelected[1] + " , " + countriesSelected[2];
+                }
             })
-            .style("stroke", "white")// Border Lines
+
     })
-
-    function handleMouseOver(d, i) {
-    }
-
-    function handleMouseOut() {
-    }
 
     async function getCurrentCovid(countryID) {
         const response = await fetch(
@@ -173,24 +161,24 @@
     function weatherHandler(i) {
         if (trigger === 0) {
             getCurrentWeather(i.properties.name, 1);
-            trigger++
+            trigger++;
         } else if (trigger === 1) {
             getCurrentWeather(i.properties.name, 2);
-            trigger++
+            trigger++;
         } else getCurrentWeather(i.properties.name, 3);
         chart.update();
     }
 
-    async function getCurrentWeather(countryName, gd) {
-        // Make request to coronavirus api
-        // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
+    async function getCurrentWeather(countryName, gd) { // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
+        let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
+        const response = await fetch(url);
+        let apidata = await response.json();
+        displayData(apidata, gd, countryName);
+    }
+
+    function displayData(apidata, gd, countryName){
         if (gd === 1) {
-            let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
-            const response = await fetch(url);
-
-            // Data variable will store all data received from api call.
-            let apidata = await response.json();
-
+            // Data variable will store all data received from api call
             for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
                 let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
                 let day = apidata.forecast.forecastday[i].date;
@@ -199,41 +187,30 @@
             }
             namedata.push(countryName);
             chart.update();
+
         } else if (gd === 2) {
-            let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
-            const response = await fetch(url);
-            // Data variable will store all data received from api call.
-            let apidata = await response.json();
             for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
                 let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
                 let day = apidata.forecast.forecastday[i].date;
                 graphdata2.push(maxtemp);
                 labeldata2.push(day);
             }
-            if (namedata2.length === 0) {
-                namedata2.push(countryName)
-            }
-            ;
+            namedata2.push(countryName);
             chart.update();
 
             document.getElementById("apitemp").innerHTML = "Temperature in " + apidata.location.name + " Is = " + apidata.current.temp_c + " Degrees Celcius";
             document.getElementById("apitemp2").innerHTML = "The Wind in " + apidata.location.name + " Is Blowing at = " + apidata.current.gust_mph + " MPH";
             document.getElementById("apitemp3").innerHTML = "Todays forecast in " + apidata.location.name + " Is " + apidata.current.condition.text;
-        } else if (gd === 3) {
-            let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
-            const response = await fetch(url);
-            // Data variable will store all data received from api call.
-            let apidata = await response.json();
+        }
+
+        else if (gd === 3) {
             for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
                 let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
                 let day = apidata.forecast.forecastday[i].date;
                 graphdata3.push(maxtemp);
                 labeldata3.push(day);
             }
-            if (namedata3.length === 0) {
-                namedata3.push(countryName)
-            }
-            ;
+            namedata3.push(countryName);
             chart.update();
 
             document.getElementById("apitemp").innerHTML = "Temperature in " + apidata.location.name + " Is = " + apidata.current.temp_c + " Degrees Celcius";
@@ -241,5 +218,4 @@
             document.getElementById("apitemp3").innerHTML = "Todays forecast in " + apidata.location.name + " Is " + apidata.current.condition.text;
         }
     }
-
 </script>
