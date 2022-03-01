@@ -66,6 +66,7 @@
     let namedata2 = [];
     let namedata3 = [];
     let chart;
+    let CasesTotal = 0;
     let trigger = 0;
     chartIT();
 
@@ -133,7 +134,6 @@
                     document.getElementById("countryclicked").innerHTML = "Countries Selected : " + countriesSelected[0] + " , " + countriesSelected[1] + " , " + countriesSelected[2];
                 }
             })
-
     })
 
     async function getCurrentCovid(countryID) {
@@ -143,8 +143,8 @@
 
         // Data variable will store all data received from api call.
         const data = await response.json();
+
         // Declare Variable to Count total cases in all counties
-        let CasesTotal = 0;
         CasesTotal = totalCountryCases(data);
 
         function totalCountryCases(data) {
@@ -177,7 +177,7 @@
     }
 
     function displayData(apidata, gd, countryName){
-        if (gd === 1) {
+        if(gd === 1){
             // Data variable will store all data received from api call
             for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
                 let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
@@ -187,8 +187,8 @@
             }
             namedata.push(countryName);
             chart.update();
-
-        } else if (gd === 2) {
+        }
+        else if (gd === 2) {
             for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
                 let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
                 let day = apidata.forecast.forecastday[i].date;
@@ -197,12 +197,7 @@
             }
             namedata2.push(countryName);
             chart.update();
-
-            document.getElementById("apitemp").innerHTML = "Temperature in " + apidata.location.name + " Is = " + apidata.current.temp_c + " Degrees Celcius";
-            document.getElementById("apitemp2").innerHTML = "The Wind in " + apidata.location.name + " Is Blowing at = " + apidata.current.gust_mph + " MPH";
-            document.getElementById("apitemp3").innerHTML = "Todays forecast in " + apidata.location.name + " Is " + apidata.current.condition.text;
         }
-
         else if (gd === 3) {
             for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
                 let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
@@ -212,10 +207,9 @@
             }
             namedata3.push(countryName);
             chart.update();
-
-            document.getElementById("apitemp").innerHTML = "Temperature in " + apidata.location.name + " Is = " + apidata.current.temp_c + " Degrees Celcius";
-            document.getElementById("apitemp2").innerHTML = "The Wind in " + apidata.location.name + " Is Blowing at = " + apidata.current.gust_mph + " MPH";
-            document.getElementById("apitemp3").innerHTML = "Todays forecast in " + apidata.location.name + " Is " + apidata.current.condition.text;
         }
+        document.getElementById("apitemp").innerHTML = "Temperature in " + apidata.location.name + " Is = " + apidata.current.temp_c + " Degrees Celcius";
+        document.getElementById("apitemp2").innerHTML = "The Wind in " + apidata.location.name + " Is Blowing at = " + apidata.current.gust_mph + " MPH";
+        document.getElementById("apitemp3").innerHTML = "Todays forecast in " + apidata.location.name + " Is " + apidata.current.condition.text;
     }
 </script>
