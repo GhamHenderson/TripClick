@@ -121,8 +121,8 @@
             .attr("fill", "#348C31") // Color Of Country
             .attr("d", d3.geoPath().projection(projection))
             .on('click', function (d, i) {
-                weatherHandler(i);
-                getCurrentCovid(i.properties.name);
+                //weatherHandler(i);
+                getCurrentCovid(i);
 
                 if (countriesSelected.includes(i.properties.name) === true) {
                     countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
@@ -136,15 +136,26 @@
             })
     })
 
-    async function getCurrentCovid(countryName) {
-
+    async function getCurrentCovid(i, countrynum) {
+        countryName = i.properties.name;
         let countryID = isCovidDataAvailable(countryName);
-        const response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2="+countryID+"&days=1");
+        const response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2="+countryID+"&days=7");
         const data = await response.json();
+        covidHandler(data);
+    }
 
-        console.log(data);
-
-        return data;
+    function covidHandler(data){
+        let dailytotal = 0;
+        for(let j = 0; j < data.length; j++) {
+            for (let i = 0; i < data[j].records.length; i++) {
+                dailytotal = (data[j].records[i].cases + dailytotal);
+            }
+            graphdata.push(dailytotal);
+            labeldata.push(data[j].date);
+        }
+        console.log(graphdata);
+        console.log(labeldata);
+        chart.update();
     }
 
     function weatherHandler(i) {
@@ -227,6 +238,7 @@
         else if(countryName === "Sweden") {countryID = "se"}
         else if(countryName === "England") {countryID = "uk"}
         else if(countryName === "Wales") {countryID = "wales"}
+        else if(countryName === 'Spain'){countryID = "es"}
         return countryID;
     }
 </script>
