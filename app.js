@@ -12,6 +12,8 @@ var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var customsRouter = require('./routes/customs');
 var graphRouter = require('./routes/graph');
+var userInfoRouter = require('./routes/userInfo');
+const mysql = require("mysql");
 
 var app = express();
 
@@ -42,6 +44,7 @@ app.use('/login', loginRouter);
 app.use('/customs', customsRouter);
 app.use('/users', usersRouter);
 app.use('/graph', graphRouter);
+app.use('/userInfo', userInfoRouter);
 
 app.post('/register', function (req, res) {
 
@@ -110,29 +113,20 @@ app.post('/register', function (req, res) {
 
 
     // Print it out to the NodeJS console just to see if we got the variable.
-    console.log("first name = " + firstname);
-    console.log("last name = " + lastname);
-    console.log("User name = " + username);
-    console.log("pass = " + password);
-    console.log("email = " + email);
-    console.log("phone = " + phone);
-    console.log("gender = " + gender);
-    console.log("country = " + country);
-    console.log("city = " + city);
+    // console.log("first name = " + firstname);
+    // console.log("last name = " + lastname);
+    // console.log("User name = " + username);
+    // console.log("pass = " + password);
+    // console.log("email = " + email);
+    // console.log("phone = " + phone);
+    // console.log("gender = " + gender);
+    // console.log("country = " + country);
+    // console.log("city = " + city);
 
     //if the length of the error is > than 0 send back the error
     if (errorMessage.length > 0) {
         res.send(errorMessage);
     } else {
-        // console.log("first name = " + firstname);
-        // console.log("last name = " + lastname);
-        // console.log("User name = " + username);
-        // console.log("pass = " + password);
-        // console.log("email = " + email);
-        // console.log("phone = " + phone);
-        // console.log("gender = " + gender);
-        // console.log("country = " + country);
-        // console.log("city = " + city);
 
         var valid = true;
         var validator = require('validator');
@@ -145,17 +139,14 @@ app.post('/register', function (req, res) {
 
         // Remember to check what database you are connecting to and if the
         // values are correct.
+        const bcrypt = require('bcrypt');
         var mysql = require('mysql');
         var connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: '2194',
+            password: 'Database2001',
             database: 'majorproject'
         });
-
-        connection.connect();
-
-
         // This is the actual SQL query part
         connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phonenum`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', " + username + ", '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {
             if (error) throw error;
@@ -182,7 +173,7 @@ app.post('/login', function (req, res) {
     var connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        password: '2194',
+        password: 'Database2001',
         database: 'majorproject'
     });
 
@@ -203,10 +194,10 @@ app.post('/login', function (req, res) {
             // console.log("final result" + finalResult);
 
             if (finalResult == true) {
-                console.log("Login Successful");
+                // console.log("Login Successful");
                 res.send(`${username} is logged in!`);
             } else {
-                console.log("Password Incorrect")
+                // console.log("Password Incorrect")
                 res.send("Username or Password incorrect!")
             }
         }

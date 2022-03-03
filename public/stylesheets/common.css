@@ -39,6 +39,31 @@ nav #icon {
     display: none;
 }
 
+.logout-button {
+    background-color: #008CBA;
+    color: black;
+    border: 1px solid #008CBA;
+    padding: 10px 20px;
+    text-align: center;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    color: red;
+    border: 1px solid red;
+}
+
+.view-info {
+    color: #00cc00;
+}
+
+.view-info:hover {
+    border: none;
+    color: #00cc00;
+    /*text-decoration: none;*/
+}
+
 header {
     position: -webkit-sticky;
     position: sticky;
