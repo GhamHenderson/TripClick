@@ -1,6 +1,6 @@
 var createError = require('http-errors');
-var express = require('express');
-var session = require('express-session');
+const express = require('express');
+const session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -17,13 +17,17 @@ const mysql = require("mysql");
 
 var app = express();
 
-app.set('trust proxy', 1);// trust first proxy
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {secure: false} // this bit is important or it will keep making a new session by accident!
-}));
+const TWO_HOURS = 1000 * 60 * 60 * 2
+
+const {
+    NODE_ENV = 'development',
+
+    SESS_NAME = 'sid',
+    SESS_SECRET = 'keyboard cat',
+    SESS_LIFETIME = TWO_HOURS
+} = process.env
+
+const IN_PROD = NODE_ENV === 'production'
 
 app.use(express.json())
 //middleware to read req.body.<params>
@@ -35,8 +39,31 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.set('trust proxy', 1);// trust first proxy
+app.use(session({
+    name: SESS_NAME,
+    resave: false,
+    saveUninitialized: false,
+    secret: SESS_SECRET,
+    cookie: {
+        maxAge: SESS_LIFETIME,
+        samSite: true,
+        secure: IN_PROD
+    }
+}))
+// app.use(session({
+//     secret: 'keyboard cat',
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {secure: false} // this bit is important or it will keep making a new session by accident!
+// }));
 
 app.use('/', indexRouter);
 app.use('/register', registerRouter);
@@ -45,6 +72,14 @@ app.use('/customs', customsRouter);
 app.use('/users', usersRouter);
 app.use('/graph', graphRouter);
 app.use('/userInfo', userInfoRouter);
+
+const redirectLogin = (req, res, next) => {
+    if (!req.session.username) {
+        res.redirect('/login')
+    } else {
+        next()
+    }
+}
 
 app.post('/register', function (req, res) {
 
@@ -154,13 +189,12 @@ app.post('/register', function (req, res) {
         });
         connection.end();
         res.send("Registered!");
-
+        return res.redirect('/');
     }
 });
 
 
 app.post('/login', function (req, res) {
-
     // catch the username that was sent to us from the jQuery POST on the index.ejs page
     var username = req.body.username;
     var password = req.body.password;
@@ -195,10 +229,15 @@ app.post('/login', function (req, res) {
 
             if (finalResult == true) {
                 // console.log("Login Successful");
-                res.send(`${username} is logged in!`);
+                // res.redirect('/');
+                // res.send(`${username} is logged in!`);
+                req.session.username = username;
+                console.log(req.session.username);
+                res.redirect('/');
             } else {
                 // console.log("Password Incorrect")
                 res.send("Username or Password incorrect!")
+                // res.redirect('/login');
             }
         }
     });
@@ -207,9 +246,14 @@ app.post('/login', function (req, res) {
 
 });
 
-app.get('/', function (request, response) {
-    session = request.session;
-
+app.post('/logout', function (req, res) {
+    req.session.destroy(error => {
+        if (error) {
+            return res.redirect('/');
+        }
+        res.clearCookie(SESS_NAME)
+        res.redirect('/login');
+    });
 });
 
 // catch 404 and forward to error handler

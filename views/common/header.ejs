@@ -14,13 +14,78 @@
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/customs">Custom Graphs</a></li>
-            <li><a href="/login">Login</a></li>
-            <li><a href="/register">Register</a></li>
-            <li class="user-logged"><a href="/userInfo" class="view-info">Username</a></li>
-            <li class="logout"><a href="/" class="logout-button">Log out</a></li>
+            <li class="login"><a href="/login">Login</a></li>
+            <li class="register"><a href="/register">Register</a></li>
+            <li class="user-logged"><a href="/userInfo" class="view-info">
+                    <%= username %>
+                </a></li>
+            <li class="logout">
+                <form method="post" action="/logout">
+                    <button class="logout-button">Log out</button>
+                </form>
+            </li>
         </ul>
         <label id="icon">
             <i class="fas fa-bars"></i>
         </label>
     </nav>
 </header>
+
+<% if (!username) { %>
+    <style>
+        .login {
+            display: inline-block;
+        }
+
+        .register {
+            display: inline-block;
+        }
+
+        .user-logged {
+            display: none;
+        }
+
+        .logout {
+            display: none;
+        }
+
+        @media (max-width: 1200px) {
+            .login {
+                display: block;
+            }
+
+            .register {
+                display: block;
+            }
+        }
+    </style>
+<% } else { %>
+
+    <style>
+        .login {
+            display: none;
+        }
+
+        .register {
+            display: none;
+        }
+
+        .user-logged {
+            display: inline-block;
+        }
+
+        .logout {
+            display: inline-block;
+        }
+
+        @media (max-width: 1200px) {
+            .user-logged {
+                display: block;
+            }
+
+            .logout {
+                display: block;
+            }
+        }
+    </style>
+<% } %>

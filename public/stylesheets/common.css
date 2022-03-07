@@ -39,11 +39,19 @@ nav #icon {
     display: none;
 }
 
+.logout {
+    background-color: #008CBA;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    line-height: 30px;
+}
+
 .logout-button {
     background-color: #008CBA;
-    color: black;
+    font-size: 18px;
+    text-transform: uppercase;
+    padding: 4px 8px;
     border: 1px solid #008CBA;
-    padding: 10px 20px;
     text-align: center;
     transition-duration: 0.4s;
     cursor: pointer;
@@ -139,8 +147,17 @@ hr {
 
     nav li {
         display: block;
-        margin: 50px 0;
-        line-height: 30px;
+        margin: 40px 0;
+        line-height: 20px;
+    }
+
+    .logout {
+        margin-right: 180px;
+        margin-left: 180px;
+    }
+
+    .logout-button {
+        width: 100%;
     }
 
     nav a {
