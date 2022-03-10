@@ -1,0 +1,40 @@
+<%- include('common/header') %>
+
+<title><%= title %></title>
+<script src="https://d3js.org/d3.v6.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+<script>
+    var $ = require('jquery');
+    window.$ = $;
+    require('bootstrap');
+</script>
+<link rel="stylesheet" href="stylesheets/customs.css">
+<script src="javascript/customs-script.js" defer></script>
+
+</head>
+
+<body>
+<!--start of login page-->
+<div class="customs-page" id="customs">
+
+    <div class="inputContainer">
+        <div class="TitleInput">
+            <label class="form-label" for="form12">Graph Title</label>
+            <input type="text" id="form12" class="form-control"/>
+        </div>
+
+        <div class="form-outline">
+            <label class="form-label" for="form12">Field Labels</label>
+            <input type="text" id="form12" class="form-control"/>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary" onclick="generate()">Generate</button>
+
+    <div class="custGraphOutput1">
+        <canvas id="chart" width="200" height="200"></canvas>
+
+    </div>
+</div>
+
+<%- include('common/footer') %>
