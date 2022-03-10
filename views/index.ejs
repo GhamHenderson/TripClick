@@ -34,14 +34,17 @@
         </div>
     </div>
 
+
+<div class="apicontainer2">
     <div class="apidisplay">
-        <button onclick=selector("gdp")>GDP</button>
-        <button onclick=selector("happiness")>Happiness</button>
-        <button onclick=selector("corruption")>Corruption</button>
-        <button onclick=selector("health")>Health</button>
-        <button onclick=getGDP("Ireland","refresh")>Refresh Graph</button>
+        <button onclick=selector("gdp")>   GDP   </button>
+        <button onclick=selector("happiness")> Happiness </button>
+        <button onclick=selector("corruption")> Corruption </button>
+        <button onclick=selector("health")>  Health  </button>
+        <button>Refresh Graph</button>
         <p id="infoheader"></p>
     </div>
+</div>
     <div class='apicontainer'>
         <div class="graph1">
             <canvas id="chart1" width="200" height="200"></canvas>
@@ -231,7 +234,8 @@
         chart.update();
     }
 
-    async function getGDP(countryName,selectedItem) { // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
+
+    async function getGDP(countryName,selectedItem) { // Api Info -> https://world-happiness-database.herokuapp.com/
         let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/"+countryName+"";
         const response = await fetch(url);
         let apidata = await response.json();
