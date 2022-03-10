@@ -38,6 +38,8 @@
         <button onclick=selector("gdp")>GDP</button>
         <button onclick=selector("happiness")>Happiness</button>
         <button onclick=selector("corruption")>Corruption</button>
+        <button onclick=selector("health")>Health</button>
+        <button onclick=getGDP("Ireland","refresh")>Refresh Graph</button>
         <p id="infoheader"></p>
     </div>
     <div class='apicontainer'>
@@ -197,11 +199,10 @@
 
     function selector(input){
         selectedItem = input;
-        console.log(selectedItem);
     }
     function gdpHandler(i){
-         //<-- Button to control this element
         countryName = i.properties.name;
+
         if (trigger === 0) {
             getGDP(countryName,selectedItem);
             trigger++;
@@ -216,6 +217,14 @@
             trigger++;
         }
         else if(trigger === 4){
+            getGDP(countryName,selectedItem);
+            trigger++
+        }
+        else if(trigger === 5){
+            getGDP(countryName,selectedItem);
+            trigger++
+        }
+        else if(trigger === 6){
             getGDP(countryName,selectedItem);
             trigger++
         }
@@ -240,6 +249,17 @@
             document.getElementById("infoheader").innerHTML = "Country Corruption Score";
             graphdata.push(apidata[0].corruption);
             labeldata.push(countryName);
+        }
+        if(selectedItem === "health"){
+            document.getElementById("infoheader").innerHTML = "Average Health score per country 2020";
+            graphdata.push(apidata[0].health);
+            labeldata.push(countryName);
+        }
+        if(selectedItem === "refresh"){
+            document.getElementById("infoheader").innerHTML = "Graph Data is now refreshed";
+            graphdata = [];
+            labeldata = [];
+            chart.update;
         }
         chart.update();
         console.log(apidata);
