@@ -179,7 +179,7 @@ app.post('/register', function (req, res) {
         var connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: 'Database2001',
+            password: '2194',
             database: 'majorproject'
         });
         // This is the actual SQL query part
@@ -207,7 +207,7 @@ app.post('/login', function (req, res) {
     var connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        password: 'Database2001',
+        password: '2194',
         database: 'majorproject'
     });
 

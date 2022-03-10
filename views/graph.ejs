@@ -1,74 +1,84 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><%= title %></title>
+<%- include('common/header') %>
+
+<title><%= title %></title>
+<script src="https://d3js.org/d3.v6.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+<script>
+    let graphType;
+    let custChart1;
+    let $ = require('jquery');
+    window.$ = $;
+    require('bootstrap');
+</script>
+<link rel="stylesheet" href="stylesheets/customs.css">
+<script src="javascript/customs-script.js" defer></script>
+
 </head>
+
 <body>
-<div class="container">
-    <div class="graph1">
-        <canvas id="chart1" width="200" height="200"></canvas>
+<!--start of login page-->
+<div class="customs-page" id="customs">
+
+    <label for="graphs">Choose a graph type:</label>
+    <select name="graphs" id="graphs">
+        <option id="bar" value="bar">bar</option>
+        <option value="line">line</option>
+        <option value="pie">pie</option>
+        <option value="scatter">scatter</option>
+        <option value="radar">radar</option>
+    </select>
+
+    <div class="inputContainer">
+        <div class="TitleInput">
+            <label class="form-label" for="form12">Graph Title</label>
+            <input type="text" id="form12" class="form-control"/>
+        </div>
+
+        <div class="FieldInput">
+            <label class="form-label" for="form12">Field Labels</label>
+            <input type="text" id="form12" class="form-control"/>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary" onclick="generate()">Generate</button>
+
+    <div class="custGraph1">
+        <canvas id="chart" width="200" height="200"></canvas>
     </div>
 </div>
-<p>
-    Graph Page
-</p>
-<p>
-    <button onclick="getWeather('Ireland')"> Ireland Max Temp</button>
-</p>
-</body>
-</html>
 
 <script>
+    function generate()
+    {
+        window.alert("graph will generate");
 
-    const graphdata = [];
-    const labeldata = [];
-
-
-    chartIT();
-
-
-    async function chartIT() {
-        const ctx = document.getElementById('chart1').getContext('2d')
-        await getWeather('Ireland');
-        const myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labeldata,
-                datasets: [{
-                    label: "Max Temp",
-                    data: graphdata,
-                    backgroundColor: ['rgba(255, 99, 132, 0.2)',],
-                    borderColor: ['rgba(255, 99, 132, 1)',],
-                    borderWidth: 1
-                }]
-            },
-        });
+        graphType = document.getElementById("customs").value;
+        custChart1.update();
     }
 
-    async function getWeather(countryName) {
-        <!-- This is an Example Graph using Graph.Js Library-->
+    const ctx = document.getElementById('chart').getContext('2d');
+    custChart1 = new Chart(ctx, {
+        type: graphType,
+        data: {
+            labels: ['2010', '2011', '2012', '2013', '2014'],
+            datasets: [{
+                label: 'Users Choice',
+                data: [100, 234, 200, 400, 70],
+                backgroundColor: [
+                    'rgba(255, 99, 50, 0.7)',
+                    'rgba(25, 10, 255, 0.7)',
+                    'rgba(10, 200, 50, 0.7)',
+                    'rgba(100, 100, 100, 0.7)',
+                    'rgba(150, 0, 150, 0.7)',
+                ],
+                borderColor: [
+                    'rgb(0,0,0)'
 
-        // Make request to coronavirus api
-        // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
-        const response = await fetch(
-            "http://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=&q=" + countryName + "&days=30&aqi=no&alerts=no");
-
-        // Data variable will store all data received from api call.
-        const apidata = await response.json();
-        console.log(apidata);
-
-        for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
-            let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
-            let day = apidata.forecast.forecastday[i].date;
-            graphdata.push(maxtemp);
-            labeldata.push(day);
-            console.log("getWeather func -> Temp = " + graphdata[i]);
+                ],
+                borderWidth: 1.5
+            }]
         }
-    }
+    });
 
 </script>
+<%- include('common/footer') %>

@@ -24,6 +24,9 @@ a {
 }
 
 .apidisplay{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 30px;
     width: 800px;
     background-color: #AADAFF;
     height: 100px;
@@ -39,6 +42,15 @@ a {
 
 }
 
+
+.apicontainer2{
+    display: flex;
+    font-family: 'Roboto', sans-serif;
+    align-content: center;
+    justify-content: center;
+    padding: 20px;
+
+}
 
 .mapcontainer{
     display: flex;
