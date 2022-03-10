@@ -220,7 +220,7 @@ app.post('/login', function (req, res) {
 
         if (result.length == 0) {
             console.log("User does not exist!!");
-            res.send(`${username} does not exist!!`)
+            res.send(`${username} does not exist!!`);
         } else {
             const hashedPassword = result[0].password
             //get the hashedPassword from result
