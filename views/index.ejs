@@ -37,11 +37,13 @@
 
 <div class="apicontainer2">
     <div class="apidisplay">
-        <button onclick=selector("gdp")>   GDP   </button>
-        <button onclick=selector("happiness")> Happiness </button>
-        <button onclick=selector("corruption")> Corruption </button>
-        <button onclick=selector("health")>  Health  </button>
-        <button>Refresh Graph</button>
+        <p>
+            <button onclick=selector("gdp")>   GDP   </button>
+            <button onclick=selector("happiness")> Happiness </button>
+            <button onclick=selector("corruption")> Corruption </button>
+            <button onclick=selector("health")>  Health  </button>
+            <button onclick="destroyandRender()">Refresh Graph</button><br><br>
+        </p>
         <p id="infoheader"></p>
     </div>
 </div>
@@ -76,6 +78,7 @@
     let chart;
     let CasesTotal = 0;
     let trigger = 0;
+    let buttonBool = false;
     let selectedItem;
 
     // Call Chart Function to build chart
@@ -133,19 +136,22 @@
             .attr("fill", "#348C31") // Color Of Country
             .attr("d", d3.geoPath().projection(projection))
             .on('click', function (d, i) {
-                //weatherHandler(i);
-                //covHandler(i);
-                gdpHandler(i);
 
-                if (countriesSelected.includes(i.properties.name) === true) {
-                    countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
-                    d3.select(this).style("fill", '#348C31');
+                if(buttonBool === true) {
+                    //weatherHandler(i);
+                    //covHandler(i);
+                    gdpHandler(i);
+
+                    if (countriesSelected.includes(i.properties.name) === true) {
+                        countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
+                        d3.select(this).style("fill", '#348C31');
+                    } else if (countriesSelected.includes(i.properties.name) === false) {
+                        countriesSelected.push(i.properties.name);
+                        d3.select(this).style("fill", '#03a5fd');
+                        document.getElementById("countryclicked").innerHTML = "Countries Selected : " + countriesSelected[0] + " , " + countriesSelected[1] + " , " + countriesSelected[2];
+                    }
                 }
-                else if (countriesSelected.includes(i.properties.name) === false) {
-                    countriesSelected.push(i.properties.name);
-                    d3.select(this).style("fill", '#03a5fd');
-                    document.getElementById("countryclicked").innerHTML = "Countries Selected : " + countriesSelected[0] + " , " + countriesSelected[1] + " , " + countriesSelected[2];
-                }
+                else window.alert("Please Select a Data Value from the Buttons below")
             })
     })
 
@@ -202,6 +208,7 @@
 
     function selector(input){
         selectedItem = input;
+        buttonBool = true;
     }
     function gdpHandler(i){
         countryName = i.properties.name;
@@ -259,12 +266,6 @@
             graphdata.push(apidata[0].health);
             labeldata.push(countryName);
         }
-        if(selectedItem === "refresh"){
-            document.getElementById("infoheader").innerHTML = "Graph Data is now refreshed";
-            graphdata = [];
-            labeldata = [];
-            chart.update;
-        }
         chart.update();
         console.log(apidata);
     }
@@ -278,6 +279,15 @@
             trigger++;
         } else getCurrentCovid(i.properties.name,3);
         chart.update();
+    }
+
+    function destroyandRender(){
+        document.getElementById("infoheader").innerHTML = "Graph Data is now refreshed";
+        chart.destroy();
+        graphdata = [];
+        labeldata = [];
+        chartIT();
+        chart.update;
     }
 
     function weatherHandler(i) {
