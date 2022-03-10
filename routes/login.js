@@ -2,27 +2,21 @@ var express = require('express');
 const session = require("express-session");
 var router = express.Router();
 
-const redirectHome = (req, res, next) => {
-    if (!req.session.username) {
-        res.redirect('/')
-    } else {
-        next()
-    }
-}
-/* GET home page. */
+// const redirectHome = (req, res, next) => {
+//     if (!req.session.username) {
+//         res.redirect('/')
+//     } else {
+//         next()
+//     }
+// }
+
 router.get('/', function (req, res, next) {
-    //
-    // if(!req.session.username){
-    //     req.session.username = false;
-    // }
-    // const {userId} = req.session;
-    // const {username} = req.session;
+
     res.render('login', {
         title: 'Login',
-        username: req.session.username
-        // validSession: req.session.username
+        username: req.session.username,
+        // firstname: req.session.firstname
     });
-    // console.log(username);
 });
 
 module.exports = router;

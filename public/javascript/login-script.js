@@ -17,7 +17,7 @@ $("#login-button").click(function () {
             firstname: firstn
         })
             .done(function (data) {
-
+                // window.location = "/";
                 alert(data);
             });
     }

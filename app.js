@@ -21,7 +21,6 @@ const TWO_HOURS = 1000 * 60 * 60 * 2
 
 const {
     NODE_ENV = 'development',
-
     SESS_NAME = 'sid',
     SESS_SECRET = 'keyboard cat',
     SESS_LIFETIME = TWO_HOURS
@@ -58,12 +57,6 @@ app.use(session({
         secure: IN_PROD
     }
 }))
-// app.use(session({
-//     secret: 'keyboard cat',
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {secure: false} // this bit is important or it will keep making a new session by accident!
-// }));
 
 app.use('/', indexRouter);
 app.use('/register', registerRouter);
@@ -146,18 +139,6 @@ app.post('/register', function (req, res) {
 
     password = hashPass;
 
-
-    // Print it out to the NodeJS console just to see if we got the variable.
-    // console.log("first name = " + firstname);
-    // console.log("last name = " + lastname);
-    // console.log("User name = " + username);
-    // console.log("pass = " + password);
-    // console.log("email = " + email);
-    // console.log("phone = " + phone);
-    // console.log("gender = " + gender);
-    // console.log("country = " + country);
-    // console.log("city = " + city);
-
     //if the length of the error is > than 0 send back the error
     if (errorMessage.length > 0) {
         res.send(errorMessage);
@@ -168,7 +149,7 @@ app.post('/register', function (req, res) {
 
         var response = validator.isEmail(email);
 
-        if (response = false) {
+        if (response == false) {
             valid = false;
         }
 
@@ -179,7 +160,7 @@ app.post('/register', function (req, res) {
         var connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: '2194',
+            password: 'Database2001',
             database: 'majorproject'
         });
         // This is the actual SQL query part
@@ -189,8 +170,9 @@ app.post('/register', function (req, res) {
         });
         connection.end();
         res.send("Registered!");
-        return res.redirect('/');
+        // res.redirect('/');
     }
+
 });
 
 
@@ -207,7 +189,7 @@ app.post('/login', function (req, res) {
     var connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        password: '2194',
+        password: 'Database2001',
         database: 'majorproject'
     });
 
@@ -218,24 +200,21 @@ app.post('/login', function (req, res) {
     connection.query("SELECT * FROM users WHERE username = ?", [username], function (error, result) {
         if (error) throw error;
 
-        if (result.length == 0) {
+        if (result.length === 0) {
             console.log("User does not exist!!");
             res.send(`${username} does not exist!!`);
         } else {
             const hashedPassword = result[0].password
             //get the hashedPassword from result
             var finalResult = bcrypt.compareSync(password, hashedPassword);
-            // console.log("final result" + finalResult);
 
-            if (finalResult == true) {
-                // console.log("Login Successful");
+            if (finalResult === true) {
                 // res.redirect('/');
-                // res.send(`${username} is logged in!`);
                 req.session.username = username;
                 console.log(req.session.username);
-                res.redirect('/');
+                res.send(`${username} is logged in!`);
+                // res.redirect('/');
             } else {
-                // console.log("Password Incorrect")
                 res.send("Username or Password incorrect!")
                 // res.redirect('/login');
             }

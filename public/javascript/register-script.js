@@ -50,7 +50,7 @@ $("#register-button").click(function () {
         city: city
     })
         .done(function (data) {
-            // window.location = "/";
+            // window.location = "/login";
             alert(data);
         });
 });
