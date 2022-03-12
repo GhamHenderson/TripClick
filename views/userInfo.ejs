@@ -8,6 +8,39 @@
 <h1>Your profile</h1>
 
 <div class="register-page" id="userInfo">
+    <div class="table-box">
+        <h1 class="title">The details of your account are listed below.</h1>
+        <hr>
+        <table class="info-table">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Email Address</th>
+                <th>Phone</th>
+                <th>Gender</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Date Register</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="active-row">
+                <td><%= firstname %></td>
+                <td><%= lastname %></td>
+                <td><%= username %></td>
+                <td><%= email %></td>
+                <td><%= phone %></td>
+                <td><%= gender %></td>
+                <td><%= country %></td>
+                <td><%= city %></td>
+                <td><%= dateRegister %></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 <!--<%- include('common/footer') %>-->

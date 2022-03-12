@@ -13,7 +13,15 @@ router.get('/', redirectLogin, function (req, res, next) {
 
     res.render('customs', {
         title: 'Custom Graphs',
-        username: req.session.username
+        username: req.session.username,
+        firstname: req.session.firstname,
+        lastname: req.session.lastname,
+        email: req.session.email,
+        phone: req.session.phone,
+        gender: req.session.gender,
+        country: req.session.country,
+        city: req.session.city,
+        dateRegister: req.session.dateRegister
     });
 });
 

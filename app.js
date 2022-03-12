@@ -164,7 +164,7 @@ app.post('/register', function (req, res) {
             database: 'majorproject'
         });
         // This is the actual SQL query part
-        connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phonenum`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', " + username + ", '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {
+        connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phone`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', " + username + ", '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {
             if (error) throw error;
 
         });
@@ -211,7 +211,17 @@ app.post('/login', function (req, res) {
             if (finalResult === true) {
                 // res.redirect('/');
                 req.session.username = username;
-                console.log(req.session.username);
+                req.session.firstname = result[0].firstname;
+                req.session.lastname = result[0].lastname;
+                req.session.email = result[0].email;
+                // req.session.password = result[0].password;
+                req.session.phone = result[0].phone;
+                req.session.gender = result[0].gender;
+                req.session.country = result[0].country;
+                req.session.city = result[0].city;
+                req.session.dateRegister = result[0].dateRegister;
+
+                console.log(req.session.firstname);
                 res.send(`${username} is logged in!`);
                 // res.redirect('/');
             } else {

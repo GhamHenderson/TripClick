@@ -5,3 +5,21 @@
     list-style: none;
     font-family: 'Montserrat', sans-serif;
 }
+
+.table-box {
+    border-radius: 10px;
+    border: 1px solid #009879;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.table-box .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: cadetblue;
+    text-transform: uppercase;
+    text-align: center;
+}
