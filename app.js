@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const nodeMailer = require('nodemailer');
+const sendGridTransport = require('nodemailer-sendgrid-transport');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -83,6 +85,13 @@ const redirectLogin = (req, res, next) => {
     }
 }
 
+//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
+
+const transporter = nodeMailer.createTransport(sendGridTransport({
+    auth: {
+        api_key: "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"
+    }
+}))
 app.post('/register', function (req, res) {
 
     // catch the username that was sent to us from the jQuery POST on the index.ejs page
@@ -183,6 +192,12 @@ app.post('/register', function (req, res) {
         connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phone`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', " + username + ", '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {
             if (error) throw error;
 
+            transporter.sendMail({
+                to: email,
+                from: "iacobedy2001@gmail.com",
+                subject: "Account created succesfull!",
+                html: "<h1>Welcome to our app!</h1>"
+            })
             res.send("Registered!");
             // res.redirect('/');
         });
