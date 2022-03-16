@@ -48,7 +48,7 @@ $("#updateInfo-button").click(function () {
         city: city
     })
         .done(function (data) {
-            // window.location = "/login";
-            // alert(data);
+            // window.location = "/userInfo?userId=<%= userId %>";
+            alert(data);
         });
 });

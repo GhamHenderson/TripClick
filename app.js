@@ -24,13 +24,13 @@ const sqlString = require("sqlstring");
 
 var app = express();
 
-const TWO_HOURS = 1000 * 60 * 60 * 2
+const HALF_HOUR = 1000 * 60 * 30
 
 const {
     NODE_ENV = 'development',
     SESS_NAME = 'sid',
     SESS_SECRET = 'keyboard cat',
-    SESS_LIFETIME = TWO_HOURS
+    SESS_LIFETIME = HALF_HOUR
 } = process.env
 
 const IN_PROD = NODE_ENV === 'production'
@@ -183,12 +183,11 @@ app.post('/register', function (req, res) {
         connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phone`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', " + username + ", '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {
             if (error) throw error;
 
+            res.send("Registered!");
+            // res.redirect('/');
         });
         connection.end();
-        res.send("Registered!");
-        // res.redirect('/');
     }
-
 });
 
 
@@ -235,13 +234,13 @@ app.post('/login', function (req, res) {
                 req.session.dateRegister = result[0].dateRegister;
 
                 console.log(req.session.firstname);
-                res.send(`${username} is logged in!`);
+                res.send('Success');
                 // if (req.session.username) {
                 //     res.redirect('/');
                 // }
             } else {
                 res.send("Username or Password incorrect!")
-                // res.redirect('/login');
+                // res.redirect('/');
             }
         }
     });
@@ -297,7 +296,6 @@ app.post('/editDetails', function (req, res) {
     var cleanedUsername = sqlString.escape(username);
 
     username = cleanedUsername;
-    console.log("im here");
     //if the length of the error is > than 0 send back the error
     if (errorMessage.length > 0) {
         res.send(errorMessage);
@@ -323,16 +321,18 @@ app.post('/editDetails', function (req, res) {
             database: 'majorproject'
         });
         // This is the actual SQL query part
-        connection.query("UPDATE `majorproject`.`users` SET  `firstname` = '" + firstname + "', `lastname` = '" + lastname + "', `username` = " + username + ", `email` = '" + email + "', `phone` = '" + phone + "', `gender` = '" + gender + "', `country` = '" + country + "', `city` = '" + city + "' WHERE `userId` = '" + userId + "';", function (error, results, fields) {
+        connection.query("UPDATE `majorproject`.`users` SET  `firstname` = '" + firstname + "', `lastname` = '" + lastname + "', `username` = " + username + ", `email` = '" + email + "', `phone` = '" + phone + "', `gender` = '" + gender + "', `country` = '" + country + "', `city` = '" + city + "' WHERE `userId` = '" + userId + "';", function (error, result, fields) {
             if (error) throw error;
+
+            console.log("im here");
+
 
         });
         connection.end();
-        console.log("im here");
-
-        req.session.destroy();
-        res.redirect('login');
     }
+
+    req.session.update();
+    res.redirect('login');
 });
 
 app.post('/deleteAccount', function (req, res) {
@@ -352,6 +352,8 @@ app.post('/deleteAccount', function (req, res) {
     });
     connection.end();
 
+    req.session.destroy();
+    res.redirect('login');
 });
 
 
