@@ -171,6 +171,8 @@ and (max-device-width: 1024px) {
     /* Force table to not be like tables anymore */
     table, thead, tbody, th, td, tr {
         display: block;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 
     /*!* Hide table headers (but not display: none;, for accessibility) *!*/
@@ -180,15 +182,19 @@ and (max-device-width: 1024px) {
         left: -9999px;
     }
 
-    /*tr:nth-child(odd) {*/
-    /*    background: #ccc;*/
-    /*}*/
+    tr:nth-child(odd) {
+        background: #e6e6e6;
+    }
+
     td {
         /* Behave  like a "row" */
         border: none;
         border-bottom: 1px solid #eee;
         position: relative;
         padding-left: 50%;
+        color: #000080;
+        font-weight: bold;
+        font-size: 16px;
     }
 
     td:before {
@@ -196,13 +202,12 @@ and (max-device-width: 1024px) {
         position: absolute;
         /* Top/left values mimic padding */
         top: 0;
-        left: 6px;
+        left: 20px;
         width: 45%;
     }
 
     /*
     Label the data
-You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
     */
     td:nth-of-type(1):before {
         content: "First Name";
@@ -238,6 +243,30 @@ You could also use a data-* attribute and content for this. That way "bloats" th
 
     td:nth-of-type(9):before {
         content: "Date Register";
+    }
+
+    .account-title .myaccount {
+        font-size: 33px;
+    }
+
+    .title {
+        font-size: 21px;
+    }
+
+    .edit-button .edit {
+        font-size: 19px;
+    }
+
+    .delete-button .delete {
+        font-size: 19px;
+    }
+
+    .done-button .done-btn {
+        font-size: 19px;
+    }
+
+    .user-info hr {
+        width: 98%;
     }
 }
 

@@ -16,6 +16,11 @@ var userInfoRouter = require('./routes/userInfo');
 var editDetailsRouter = require('./routes/editDetails');
 
 const mysql = require("mysql");
+const bcrypt = require("bcrypt");
+const validator = require("validator");
+const xss = require("xss");
+const emojiStrip = require("emoji-strip");
+const sqlString = require("sqlstring");
 
 var app = express();
 
@@ -85,6 +90,7 @@ app.post('/register', function (req, res) {
     var lastname = req.body.lastname;
     var username = req.body.username;
     var password = req.body.password;
+    var confirmPassword = req.body.confirm_password;
     var email = req.body.email;
     var phone = req.body.phone;
     var gender = req.body.gender;
@@ -140,8 +146,14 @@ app.post('/register', function (req, res) {
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const hashPass = bcrypt.hashSync(password, salt);
+    const hashConfirmPass = bcrypt.hashSync(confirmPassword, salt);
 
     password = hashPass;
+    confirmPassword = hashConfirmPass;
+
+    if (password !== confirmPassword) {
+        errorMessage += 'Passwords do not match!';
+    }
 
     //if the length of the error is > than 0 send back the error
     if (errorMessage.length > 0) {
@@ -181,10 +193,8 @@ app.post('/register', function (req, res) {
 
 
 app.post('/login', function (req, res) {
-    // catch the username that was sent to us from the jQuery POST on the index.ejs page
     var username = req.body.username;
     var password = req.body.password;
-    var firstname = req.body.firstname;
 
     var errorMessage = '';
 
@@ -213,12 +223,11 @@ app.post('/login', function (req, res) {
             var finalResult = bcrypt.compareSync(password, hashedPassword);
 
             if (finalResult === true) {
-                // res.redirect('/');
                 req.session.username = username;
+                req.session.userId = result[0].userId;
                 req.session.firstname = result[0].firstname;
                 req.session.lastname = result[0].lastname;
                 req.session.email = result[0].email;
-                // req.session.password = result[0].password;
                 req.session.phone = result[0].phone;
                 req.session.gender = result[0].gender;
                 req.session.country = result[0].country;
@@ -227,7 +236,9 @@ app.post('/login', function (req, res) {
 
                 console.log(req.session.firstname);
                 res.send(`${username} is logged in!`);
-                // res.redirect('/');
+                // if (req.session.username) {
+                //     res.redirect('/');
+                // }
             } else {
                 res.send("Username or Password incorrect!")
                 // res.redirect('/login');
@@ -239,6 +250,111 @@ app.post('/login', function (req, res) {
 
 });
 
+app.post('/editDetails', function (req, res) {
+    var userId = req.session.userId;
+    var firstname = req.body.firstname;
+    var lastname = req.body.lastname;
+    var username = req.body.username;
+    var email = req.body.email;
+    var phone = req.body.phone;
+    var gender = req.body.gender;
+    var country = req.body.country;
+    var city = req.body.city;
+
+    var errorMessage = '';
+
+    //get the library
+    var validator = require('validator');
+    //run the validator
+    var emailValid = validator.isEmail(email); //true
+    //check the response
+    console.log(emailValid);
+
+    if (email.length === '') {
+        errorMessage += 'Please enter a valid email address!!<br>';
+    } else if (emailValid === false) {
+        errorMessage += 'Email address is not valid. Please enter a valid email address!!<br>';
+    } else if (email.length > 40) {
+        errorMessage += 'Email address is too long. Maximum length allowed it 40 characters!<br>';
+    }
+
+
+    if (username.length === '') {
+        errorMessage += 'Please enter a username! <br>';
+    } else if (username.length < 6) {
+        errorMessage += 'Username too short. Minimum characters should be 6! <br>';
+    } else if (username.length > 15) {
+        errorMessage += 'Username too long. Maximum length allowed is 15 characters! <br>';
+    }
+
+    var xss = require("xss");
+    username = xss(username);
+
+    var emojiStrip = require('emoji-strip');
+    username = emojiStrip(username);
+
+    var sqlString = require('sqlstring');
+    var cleanedUsername = sqlString.escape(username);
+
+    username = cleanedUsername;
+    console.log("im here");
+    //if the length of the error is > than 0 send back the error
+    if (errorMessage.length > 0) {
+        res.send(errorMessage);
+    } else {
+
+        var valid = true;
+        var validator = require('validator');
+
+        var response = validator.isEmail(email);
+
+        if (response == false) {
+            valid = false;
+        }
+
+        // Remember to check what database you are connecting to and if the
+        // values are correct.
+        const bcrypt = require('bcrypt');
+        var mysql = require('mysql');
+        var connection = mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'Database2001',
+            database: 'majorproject'
+        });
+        // This is the actual SQL query part
+        connection.query("UPDATE `majorproject`.`users` SET  `firstname` = '" + firstname + "', `lastname` = '" + lastname + "', `username` = " + username + ", `email` = '" + email + "', `phone` = '" + phone + "', `gender` = '" + gender + "', `country` = '" + country + "', `city` = '" + city + "' WHERE `userId` = '" + userId + "';", function (error, results, fields) {
+            if (error) throw error;
+
+        });
+        connection.end();
+        console.log("im here");
+
+        req.session.destroy();
+        res.redirect('login');
+    }
+});
+
+app.post('/deleteAccount', function (req, res) {
+    var userId = req.session.userId;
+
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'Database2001',
+        database: 'majorproject'
+    });
+    // This is the actual SQL query part
+    connection.query("DELETE FROM `majorproject`.`users` WHERE  `userId`= '" + userId + "';", function (error, results, fields) {
+        if (error) throw error;
+
+    });
+    connection.end();
+
+});
+
+
 app.post('/logout', function (req, res) {
     req.session.destroy(error => {
         if (error) {
@@ -248,6 +364,7 @@ app.post('/logout', function (req, res) {
         res.redirect('/login');
     });
 });
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

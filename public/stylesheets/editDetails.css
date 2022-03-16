@@ -104,7 +104,7 @@
     padding-top: 5px;
 }
 
-.wrapper .form .button-div .register-button {
+.wrapper .form .button-div .updateInfo-button {
     padding: 6px 12px;
     font-size: 22px;
     border: 0px;
@@ -115,7 +115,7 @@
     outline: none;
 }
 
-.wrapper .form .button-div .register-button:hover {
+.wrapper .form .button-div .updateInfo-button:hover {
     background: #ffd658;
 }
 

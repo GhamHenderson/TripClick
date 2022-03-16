@@ -13,6 +13,7 @@ router.get('/', redirectLogin, function (req, res, next) {
 
     res.render('customs', {
         title: 'Custom Graphs',
+        userId: req.session.userId,
         username: req.session.username,
         firstname: req.session.firstname,
         lastname: req.session.lastname,

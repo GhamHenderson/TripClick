@@ -1,5 +1,4 @@
 //list of countries in the world
-
 document.addEventListener('DOMContentLoaded', () => {
     const selectDropCountry = document.querySelector('#country');
 
@@ -8,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }).then(data => {
         let output = "";
         data.forEach(country => {
+
             output += `
-      
       <option value="${country.name}">${country.name}</option>`;
         })
         selectDropCountry.innerHTML = output;
@@ -18,16 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 });
 
-
 //script to send data into database when registering
-$("#register-button").click(function () {
+$("#updateInfo-button").click(function () {
 
     // get the values
+    // var userId = $('#userId').val();
     var fname = $('#firstname').val();
     var lname = $('#lastname').val();
     var uname = $('#username').val();
-    var pass = $('#password').val();
-    var confirmPass = $('#confirm_password').val();
     var email = $('#email').val();
     var phone = $('#phone').val();
     var gender = $('#gender').val();
@@ -39,12 +36,11 @@ $("#register-button").click(function () {
     // } else {
 
     //send data
-    $.post("/register", {
+    $.post("/editDetails", {
+        // userId: userId,
         firstname: fname,
         lastname: lname,
         username: uname,
-        password: pass,
-        confirm_password: confirmPass,
         email: email,
         phone: phone,
         gender: gender,
@@ -53,6 +49,6 @@ $("#register-button").click(function () {
     })
         .done(function (data) {
             // window.location = "/login";
-            alert(data);
+            // alert(data);
         });
 });

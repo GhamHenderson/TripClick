@@ -13,10 +13,10 @@ router.get('/', redirectLogin, function (req, res, next) {
 
     res.render('editDetails', {
         title: 'Edit Details',
+        userId: req.session.userId,
         username: req.session.username,
         firstname: req.session.firstname,
         lastname: req.session.lastname,
-        // password: req.session.password,
         email: req.session.email,
         phone: req.session.phone,
         gender: req.session.gender,

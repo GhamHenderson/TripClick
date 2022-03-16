@@ -14,6 +14,7 @@ router.get('/', function (req, res, next) {
 
     res.render('login', {
         title: 'Login',
+        userId: req.session.userId,
         username: req.session.username,
         firstname: req.session.firstname,
         lastname: req.session.lastname,
