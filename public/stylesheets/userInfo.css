@@ -1,25 +1,244 @@
 * {
-    padding: 0;
-    margin: 0;
     text-decoration: none;
     list-style: none;
     font-family: 'Montserrat', sans-serif;
 }
 
-.table-box {
-    border-radius: 10px;
-    border: 1px solid #009879;
-    margin-top: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.account-title {
+    width: 100%;
+    margin-bottom: 30px;
+    text-align: center;
 }
 
-.table-box .title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: cadetblue;
+.account-title .myaccount {
+    font-size: 40px;
     text-transform: uppercase;
     text-align: center;
 }
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    color: #000080;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.delete-button {
+    float: right;
+    padding-right: 30px;
+}
+
+.edit-button {
+    padding-left: 30px;
+}
+
+.delete-button .delete {
+    padding: 6px 8px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #e60000;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 3px #b3b3b3;
+}
+
+.delete-button .delete:hover {
+    background-color: #ff1a1a;
+}
+
+.delete-button .delete:active {
+    background-color: #ff1a1a;
+    box-shadow: 0 1px #b3b3b3;
+    transform: translateY(4px);
+}
+
+
+.edit-button .edit {
+    padding: 6px 8px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #000080;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 3px #b3b3b3;
+}
+
+.edit-button .edit:hover {
+    background-color: #0000ff;
+}
+
+.edit-button .edit:active {
+    background-color: #0000ff;
+    box-shadow: 0 1px #b3b3b3;
+    transform: translateY(4px);
+}
+
+.done-button {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.done-button .done-btn {
+    padding: 6px 50px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #006680;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 3px #b3b3b3;
+}
+
+.done-btn:hover {
+    background-color: #00b8e6;
+
+}
+
+.done-btn:active {
+    background-color: #00b8e6;
+    box-shadow: 0 1px #b3b3b3;
+    transform: translateY(4px);
+}
+
+
+@media (min-width: 1167px) {
+    .userInfo-page {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .user-info {
+        border: 1px solid #4d4dff;
+        border-radius: 10px;
+        margin-left: 80px;
+        margin-right: 80px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .user-info table.center {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .user-info table thead tr {
+        background-color: #000080;
+        color: white;
+        text-align: center;
+    }
+
+    .user-info table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+
+    .user-info table tbody tr:last-of-type {
+        border-bottom: 3px solid #000080;
+    }
+
+    .user-info table tbody tr {
+        text-align: center;
+        font-weight: bold;
+        color: #000080;
+    }
+
+    .user-info table th, .user-info table td {
+        padding: 10px 10px;
+    }
+
+    .user-info hr {
+        width: 95%;
+    }
+}
+
+@media only screen
+and (max-width: 1167px), (min-device-width: 768px)
+and (max-device-width: 1024px) {
+    .user-info {
+        margin: 0;
+    }
+
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    /*!* Hide table headers (but not display: none;, for accessibility) *!*/
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    /*tr:nth-child(odd) {*/
+    /*    background: #ccc;*/
+    /*}*/
+    td {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 0;
+        left: 6px;
+        width: 45%;
+    }
+
+    /*
+    Label the data
+You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
+    */
+    td:nth-of-type(1):before {
+        content: "First Name";
+    }
+
+    td:nth-of-type(2):before {
+        content: "Last Name";
+    }
+
+    td:nth-of-type(3):before {
+        content: "Username";
+    }
+
+    td:nth-of-type(4):before {
+        content: "Email";
+    }
+
+    td:nth-of-type(5):before {
+        content: "Phone";
+    }
+
+    td:nth-of-type(6):before {
+        content: "Gender";
+    }
+
+    td:nth-of-type(7):before {
+        content: "Country";
+    }
+
+    td:nth-of-type(8):before {
+        content: "City";
+    }
+
+    td:nth-of-type(9):before {
+        content: "Date Register";
+    }
+}
+
+

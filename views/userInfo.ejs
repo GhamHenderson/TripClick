@@ -5,42 +5,56 @@
 </head>
 
 <body>
-<h1>Your profile</h1>
 
-<div class="register-page" id="userInfo">
-    <div class="table-box">
-        <h1 class="title">The details of your account are listed below.</h1>
-        <hr>
-        <table class="info-table">
-            <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-                <th>Email Address</th>
-                <th>Phone</th>
-                <th>Gender</th>
-                <th>Country</th>
-                <th>City</th>
-                <th>Date Register</th>
+<div class="userInfo-page" id="userInfo">
+    <div class="account-title">
+        <h1 class="myaccount">My Account</h1>
+    </div>
+    <div class="user-info">
+        <table class="center">
+            <h2 class="title">The details of your account are listed below.</h2>
+            <hr>
+            <thead role="rowgroup">
+            <tr role="row">
+                <th role="columnheader">First Name</th>
+                <th role="columnheader">Last Name</th>
+                <th role="columnheader">Username</th>
+                <th role="columnheader">Email Address</th>
+                <th role="columnheader">Phone</th>
+                <th role="columnheader">Gender</th>
+                <th role="columnheader">Country</th>
+                <th role="columnheader">City</th>
+                <th role="columnheader">Date Register</th>
             </tr>
             </thead>
-            <tbody>
-            <tr class="active-row">
-                <td><%= firstname %></td>
-                <td><%= lastname %></td>
-                <td><%= username %></td>
-                <td><%= email %></td>
-                <td><%= phone %></td>
-                <td><%= gender %></td>
-                <td><%= country %></td>
-                <td><%= city %></td>
-                <td><%= dateRegister %></td>
+            <tbody role="rowgroup">
+            <tr role="row">
+                <td role="cell"><%= firstname %></td>
+                <td role="cell"><%= lastname %></td>
+                <td role="cell"><%= username %></td>
+                <td role="cell"><%= email %></td>
+                <td role="cell"><%= phone %></td>
+                <td role="cell"><%= gender %></td>
+                <td role="cell"><%= country %></td>
+                <td role="cell"><%= city %></td>
+                <td role="cell"><%= dateRegister %></td>
             </tr>
             </tbody>
         </table>
+        <hr>
+        <div class="buttons-container">
+            <div class="delete-button">
+                <button class="delete">Delete Account</button>
+            </div>
+            <div class="edit-button">
+                <button class="edit" onclick="location.href = 'editDetails';">Edit Details</button>
+            </div>
+        </div>
+        <hr>
+        <div class="done-button">
+            <button class="done-btn" onclick="location.href = '/';">Done</button>
+        </div>
     </div>
-
 </div>
 
 <!--<%- include('common/footer') %>-->

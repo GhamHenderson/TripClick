@@ -1,0 +1,135 @@
+* {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+}
+
+.wrapper {
+    max-width: 800px;
+    width: 100%;
+    margin: 15px auto;
+    box-shadow: 2px 1px 20px rgba(0, 0, 0, 0.125);
+    padding: 20px;
+}
+
+.wrapper .title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: cadetblue;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.wrapper .form {
+    padding: 18px;
+    border: 2px solid cadetblue;
+    width: 100%;
+}
+
+.wrapper .form .input-field {
+    margin-bottom: 10px;
+    align-items: center;
+    position: relative;
+    width: 100%;
+}
+
+.wrapper .form .input-field label {
+    width: 150px;
+    color: #757575;
+    /*margin-right: 10px;*/
+    font-size: 17px;
+    margin-bottom: 2px;
+}
+
+.wrapper .form .input-field .input {
+    width: 100%;
+    outline: none;
+    border: 1px solid #d5dbd9;
+    font-size: 15px;
+    padding: 8px 10px;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.wrapper .form .input-field {
+    width: 100%;
+    resize: none;
+}
+
+.wrapper .form .input-field .custom_select {
+    position: relative;
+    width: 100%;
+    height: 37px;
+}
+
+.wrapper .form .input-field .custom_select:before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    border: 8px solid;
+    border-color: #d5dbd9 transparent transparent transparent;
+    pointer-events: none;
+}
+
+.wrapper .form .input-field .custom_select select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    padding: 8px 10px;
+    font-size: 15px;
+    border: 1px solid #d5dbd9;
+    border-radius: 3px;
+}
+
+.wrapper .form .input-field .input:focus,
+.wrapper .form .input-field .custom_select select:focus {
+    border: 1px solid cadetblue;
+}
+
+.wrapper .form .input-field {
+    font-size: 14px;
+
+}
+
+.wrapper .form .button-div {
+    text-align: center;
+    padding-top: 5px;
+}
+
+.wrapper .form .button-div .register-button {
+    padding: 6px 12px;
+    font-size: 22px;
+    border: 0px;
+    background: cadetblue;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: none;
+}
+
+.wrapper .form .button-div .register-button:hover {
+    background: #ffd658;
+}
+
+.wrapper .form .input-field:last-child {
+    margin-bottom: 0;
+}
+
+@media (max-width: 500px) {
+    .wrapper .form .input-field {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .wrapper .form .input-field label {
+        margin-bottom: 5px;
+    }
+}

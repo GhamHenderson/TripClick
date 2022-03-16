@@ -11,8 +11,8 @@ const redirectLogin = (req, res, next) => {
 router.get('/', redirectLogin, function (req, res, next) {
     // var {firstname} = req.session.firstname;
 
-    res.render('userInfo', {
-        title: 'Personal Profile',
+    res.render('editDetails', {
+        title: 'Edit Details',
         username: req.session.username,
         firstname: req.session.firstname,
         lastname: req.session.lastname,

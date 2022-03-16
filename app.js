@@ -13,6 +13,8 @@ var loginRouter = require('./routes/login');
 var customsRouter = require('./routes/customs');
 var graphRouter = require('./routes/graph');
 var userInfoRouter = require('./routes/userInfo');
+var editDetailsRouter = require('./routes/editDetails');
+
 const mysql = require("mysql");
 
 var app = express();
@@ -65,6 +67,8 @@ app.use('/customs', customsRouter);
 app.use('/users', usersRouter);
 app.use('/graph', graphRouter);
 app.use('/userInfo', userInfoRouter);
+app.use('/editDetails', editDetailsRouter);
+
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.username) {
