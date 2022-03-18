@@ -3,67 +3,104 @@
 <title><%= title %></title>
 <script src="https://d3js.org/d3.v6.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+<link rel="stylesheet" href="stylesheets/customs.css">
+
 <script>
-    let graphType;
+    let graphType = "pie";
     let custChart1;
+    let label1 = "";
+    let label2 = "";
+    let label3 = "";
+    let labeldata1 = 5;
+    let labeldata2 = 10;
+    let labeldata3 = 15;
+
+
     let $ = require('jquery');
     window.$ = $;
     require('bootstrap');
 </script>
-<link rel="stylesheet" href="stylesheets/customs.css">
-<script src="javascript/customs-script.js" defer></script>
-
 </head>
 
 <body>
 <!--start of login page-->
-<div class="customs-page" id="customs">
+<form id="myForm">
+    <div class="customs-page" id="customs">
 
-    <label for="graphs">Choose a graph type:</label>
-    <select name="graphs" id="graphs">
-        <option id="bar" value="bar">bar</option>
-        <option value="line">line</option>
-        <option value="pie">pie</option>
-        <option value="scatter">scatter</option>
-        <option value="radar">radar</option>
-    </select>
 
-    <div class="inputContainer">
-        <div class="TitleInput">
-            <label class="form-label" for="form12">Graph Title</label>
-            <input type="text" id="form12" class="form-control"/>
+        <label for="graphs">Choose a graph type:</label>
+        <select name="graphs" id="graphs">
+            <option id="bar" value="bar">bar</option>
+            <option value="line">line</option>
+            <option value="pie">pie</option>
+            <option value="scatter">scatter</option>
+            <option value="radar">radar</option>
+        </select>
+
+        <div class="inputContainer">
+            <div class="lable1Input">
+                <label class="form-label" for="form12">Label1</label>
+                <input type="text" id="form12" class="form-control" name="label1"/>
+            </div>
+            <div class="lable2Input">
+                <label class="form-label" for="form12">Label2</label>
+                <input type="text" id="form12" class="form-control" name="label2"/>
+            </div>
+            <div class="lable3Input">
+                <label class="form-label" for="form12">Label3</label>
+                <input type="text" id="form12" class="form-control" name="label3"/>
+            </div>
+
+        </div>
+        <div class="inputContainer">
+            <div class="dataInput1">
+                <label class="form-label" for="form12">Data 1</label>
+                <input type="text" id="form12" class="form-control"/>
+            </div>
+
+            <div class="dataInput2">
+                <label class="form-label" for="form12">Data 2</label>
+                <input type="text" id="form12" class="form-control"/>
+            </div>
+
+            <div class="dataInput2">
+                <label class="form-label" for="form12">Data 3</label>
+                <input type="text" id="form12" class="form-control"/>
+            </div>
+
         </div>
 
-        <div class="FieldInput">
-            <label class="form-label" for="form12">Field Labels</label>
-            <input type="text" id="form12" class="form-control"/>
+        <button type="button" class="btn btn-secondary" onclick="generate()" value="submitForm">Generate</button>
+
+
+
+        <div class="custGraph1">
+            <canvas id="chart" width="200" height="200"></canvas>
         </div>
     </div>
-
-    <button type="button" class="btn btn-secondary" onclick="generate()">Generate</button>
-
-    <div class="custGraph1">
-        <canvas id="chart" width="200" height="200"></canvas>
-    </div>
-</div>
+</form>
 
 <script>
     function generate()
     {
         window.alert("graph will generate");
 
-        graphType = document.getElementById("customs").value;
+        document.getElementById("myForm").submit();
+
         custChart1.update();
+
+        console.log(label1);
     }
 
     const ctx = document.getElementById('chart').getContext('2d');
+
     custChart1 = new Chart(ctx, {
         type: graphType,
         data: {
-            labels: ['2010', '2011', '2012', '2013', '2014'],
+            labels: [label1, label2, label3],
             datasets: [{
-                label: 'Users Choice',
-                data: [100, 234, 200, 400, 70],
+                label: ["","",""],
+                data: [labeldata1,labeldata2,labeldata3],
                 backgroundColor: [
                     'rgba(255, 99, 50, 0.7)',
                     'rgba(25, 10, 255, 0.7)',
