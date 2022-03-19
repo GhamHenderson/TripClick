@@ -17,27 +17,12 @@
         </div>
     </div>
 
-    <div class="mapcontainer">
-        <div class="infobox">
-            <p id="countryclicked">Country clicked displays here.</p>
-            <p id="errorcountryclicked"></p>
-            <p id="apidata"></p>
-            <p id="apidata2"></p>
-        </div>
-    </div>
-
-    <div class="apicontainer">
-        <div class="apidisplay">
-            <p id="apitemp"></p>
-            <p id="apitemp2"></p>
-            <p id="apitemp3"></p>
-        </div>
-    </div>
-
 
 <div class="apicontainer2">
     <div class="apidisplay">
         <p>
+            <button onclick=selector("covid")>     Covid Data     </button>
+            <button onclick=selector("weather")>     Weather     </button>
             <button onclick=selector("gdp")>   GDP   </button>
             <button onclick=selector("happiness")> Happiness </button>
             <button onclick=selector("corruption")> Corruption </button>
@@ -64,6 +49,7 @@
 <!--This Script Will be moved to a Script.Js File after testing.-->
 
 <script>
+    let dataCount;
     let countryName;
     let countriesSelected = [];
     let graphdata = [];
@@ -138,8 +124,9 @@
             .on('click', function (d, i) {
 
                 if(buttonBool === true) {
-                    //weatherHandler(i);
-                    //covHandler(i);
+
+         //           weatherHandler(i);
+           //         covHandler(i);
                     gdpHandler(i);
 
                     if (countriesSelected.includes(i.properties.name) === true) {
@@ -155,6 +142,10 @@
             })
     })
 
+
+    function buttonHandling(){
+
+    }
 
     async function getCurrentCovid(countryName, counter) {
         let countryID = isCovidDataAvailable(countryName);
@@ -214,36 +205,15 @@
     function gdpHandler(i){
         countryName = i.properties.name;
 
-        if (trigger === 0) {
-            getGDP(countryName,selectedItem);
+        if (trigger < 10) {
+            getGDP(countryName, selectedItem, i);
             trigger++;
-        } else if (trigger === 1) {
-            getGDP(countryName,selectedItem);
-            trigger++;
-        } else if(trigger === 2){
-            getGDP(countryName,selectedItem);
-            trigger++;
-        }else if(trigger === 3){
-            getGDP(countryName,selectedItem);
-            trigger++;
-        }
-        else if(trigger === 4){
-            getGDP(countryName,selectedItem);
-            trigger++
-        }
-        else if(trigger === 5){
-            getGDP(countryName,selectedItem);
-            trigger++
-        }
-        else if(trigger === 6){
-            getGDP(countryName,selectedItem);
-            trigger++
         }
         chart.update();
     }
 
 
-    async function getGDP(countryName,selectedItem) { // Api Info -> https://world-happiness-database.herokuapp.com/
+    async function getGDP(countryName,selectedItem, i) { // Api Info -> https://world-happiness-database.herokuapp.com/
         let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/"+countryName+"";
         const response = await fetch(url);
         let apidata = await response.json();
@@ -266,6 +236,14 @@
             document.getElementById("infoheader").innerHTML = "Average Health score per country 2020";
             graphdata.push(apidata[0].health);
             labeldata.push(countryName);
+        }
+        if(selectedItem === "covid"){
+            document.getElementById("infoheader").innerHTML = "Covid Numbers - Warning Covid Numbers arent fact checked ";
+            covHandler(i);
+        }
+        if(selectedItem === "weather"){
+            document.getElementById("infoheader").innerHTML = "Average Temperature today";
+            weatherHandler(i);
         }
         chart.update();
         console.log(apidata);
@@ -292,6 +270,7 @@
     }
 
     function weatherHandler(i) {
+        selectedItem = true;
         if (trigger === 0) {
             getCurrentWeather(i.properties.name, 1);
             trigger++;

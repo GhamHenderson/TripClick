@@ -3,67 +3,83 @@
 <title><%= title %></title>
 <script src="https://d3js.org/d3.v6.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
-<script>
-    let graphType;
-    let custChart1;
-    let $ = require('jquery');
-    window.$ = $;
-    require('bootstrap');
-</script>
 <link rel="stylesheet" href="stylesheets/customs.css">
-<script src="javascript/customs-script.js" defer></script>
 
+<script>
+    let graphType = "pie";
+    let g;
+    let custChart1;
+    let labels=[];
+    let l, l2, l3;
+    let data=[]
+    let d, d2, d3;
+
+</script>
 </head>
 
 <body>
-<!--start of login page-->
-<div class="customs-page" id="customs">
+<!--form for user entry, implement post!-->
+<form id="myForm">
+    <div class="customs-page" id="customs">
 
-    <label for="graphs">Choose a graph type:</label>
-    <select name="graphs" id="graphs">
-        <option id="bar" value="bar">bar</option>
-        <option value="line">line</option>
-        <option value="pie">pie</option>
-        <option value="scatter">scatter</option>
-        <option value="radar">radar</option>
-    </select>
+        <label>Choose a graph type:</label>
+        <select name="graphType" id="graphType">
+            <option id="bar" value="bar">bar</option>
+            <option value="line">line</option>
+            <option value="pie">pie</option>
+            <option value="scatter">scatter</option>
+            <option value="radar">radar</option>
+        </select>
 
-    <div class="inputContainer">
-        <div class="TitleInput">
-            <label class="form-label" for="form12">Graph Title</label>
-            <input type="text" id="form12" class="form-control"/>
+        <div class="inputContainer">
+            <div class="lable1Input">
+                <label class="form-label" for="form12">Label1</label>
+                <input type="text" id="label1" class="form-control" name="label1" value = "label1"/>
+            </div>
+            <div class="lable2Input">
+                <label class="form-label" for="form12">Label2</label>
+                <input type="text" id="label2" class="form-control" name="label2" value = "label2"/>
+            </div>
+            <div class="lable3Input">
+                <label class="form-label" for="form12">Label3</label>
+                <input type="text" id="label3" class="form-control" name="label3" value = "label3"/>
+            </div>
+
+        </div>
+        <div class="inputContainer">
+            <div class="dataInput1">
+                <label class="form-label" for="form12">Data 1</label>
+                <input type="text" id="data1" class="form-control"/>
+            </div>
+
+            <div class="dataInput2">
+                <label class="form-label" for="form12">Data 2</label>
+                <input type="text" id="data2" class="form-control"/>
+            </div>
+
+            <div class="dataInput2">
+                <label class="form-label" for="form12">Data 3</label>
+                <input type="text" id="data3" class="form-control"/>
+            </div>
         </div>
 
-        <div class="FieldInput">
-            <label class="form-label" for="form12">Field Labels</label>
-            <input type="text" id="form12" class="form-control"/>
+        <button type="button" class="btn btn-secondary" onclick="generate()" value="submit">Generate</button>
+
+        <div class="custGraph1">
+            <canvas id="chart" width="200" height="200"></canvas>
         </div>
     </div>
-
-    <button type="button" class="btn btn-secondary" onclick="generate()">Generate</button>
-
-    <div class="custGraph1">
-        <canvas id="chart" width="200" height="200"></canvas>
-    </div>
-</div>
+</form>
 
 <script>
-    function generate()
-    {
-        window.alert("graph will generate");
-
-        graphType = document.getElementById("customs").value;
-        custChart1.update();
-    }
-
     const ctx = document.getElementById('chart').getContext('2d');
     custChart1 = new Chart(ctx, {
         type: graphType,
         data: {
-            labels: ['2010', '2011', '2012', '2013', '2014'],
+            labels: labels,
             datasets: [{
-                label: 'Users Choice',
-                data: [100, 234, 200, 400, 70],
+                label: ["","",""],
+                data: data,
                 backgroundColor: [
                     'rgba(255, 99, 50, 0.7)',
                     'rgba(25, 10, 255, 0.7)',
@@ -75,10 +91,51 @@
                     'rgb(0,0,0)'
 
                 ],
-                borderWidth: 1.5
+                borderWidth: 1.5,
+                options: {
+                    maintainAspectRatio: false,
+                }
             }]
         }
     });
+
+    function generate()
+    {
+
+        <!-- Use post method to store the user entry into the variables and then update the graph with the new variables -->
+
+        /* remove all previous inputs from the arrays */
+        labels.pop();
+        labels.pop();
+        labels.pop();
+        data.pop();
+        data.pop();
+        data.pop();
+
+        graphType=(document.getElementById("graphType").value);
+
+        l = document.getElementById("label1").value;
+        labels.push(l);
+        l2 = document.getElementById("label2").value;
+        labels.push(l2);
+        l3 = document.getElementById("label3").value;
+        labels.push(l3);
+
+        d = document.getElementById("data1").value;
+        data.push(d);
+        d2 = document.getElementById("data2").value;
+        data.push(d2);
+        d3 = document.getElementById("data3").value;
+        data.push(d3);
+
+        console.log(labels);
+        console.log(data);
+        console.log(graphType);
+        window.alert("graph will generate");
+
+
+        custChart1.update();
+    }
 
 </script>
 <%- include('common/footer') %>
