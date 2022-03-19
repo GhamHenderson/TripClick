@@ -1,3 +1,4 @@
+// import {config} from "./configHide";
 var createError = require('http-errors');
 const express = require('express');
 const session = require('express-session');
@@ -84,8 +85,6 @@ const redirectLogin = (req, res, next) => {
         next()
     }
 }
-
-//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
 
 const transporter = nodeMailer.createTransport(sendGridTransport({
     auth: {
