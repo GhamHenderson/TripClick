@@ -49,6 +49,8 @@
 <!--This Script Will be moved to a Script.Js File after testing.-->
 
 <script>
+    let utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+    let titleHeader = "Todays Date : " + utc;
     let dataCount;
     let countryName;
     let countriesSelected = [];
@@ -73,6 +75,31 @@
     async function chartIT() {
         const ctx = document.getElementById('chart1').getContext('2d')
         chart = new Chart(ctx, {
+            options:{
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: titleHeader
+                    },
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: "Country Name"
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'VARIABLE TO SHOW VALUE'
+                        },
+                    }
+                }
+            },
             type: 'line',
             data: {
                 labels: labeldata,
@@ -143,10 +170,6 @@
     })
 
 
-    function buttonHandling(){
-
-    }
-
     async function getCurrentCovid(countryName, counter) {
         let countryID = isCovidDataAvailable(countryName);
         const response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=10");
@@ -164,6 +187,7 @@
             namedata.push(countryName);
             console.log(graphdata);
             console.log(labeldata);
+            chart.update();
             chart.update();
         }
         if (counter === 2) {
@@ -218,31 +242,36 @@
         const response = await fetch(url);
         let apidata = await response.json();
         if(selectedItem === "gdp"){
-            document.getElementById("infoheader").innerHTML = "GDP Per Capita 2022";
+            titleHeader = "GDP Per Capita 2022";
+
             graphdata.push(apidata[0].gdpPerCap);
             labeldata.push(countryName);
         }
         if(selectedItem === "happiness"){
-            document.getElementById("infoheader").innerHTML = "Happiness Score in Index 2020";
+            titleHeader = "Happiness Score in Index 2020";
+
             graphdata.push(apidata[0].happiness);
             labeldata.push(countryName);
         }
         if(selectedItem === "corruption"){
-            document.getElementById("infoheader").innerHTML = "Country Corruption Score";
+            titleHeader = "Country Corruption Score";
             graphdata.push(apidata[0].corruption);
             labeldata.push(countryName);
         }
         if(selectedItem === "health"){
-            document.getElementById("infoheader").innerHTML = "Average Health score per country 2020";
+            titleHeader = "Average Health score per country 2020";
+
             graphdata.push(apidata[0].health);
             labeldata.push(countryName);
         }
         if(selectedItem === "covid"){
-            document.getElementById("infoheader").innerHTML = "Covid Numbers - Warning Covid Numbers arent fact checked ";
+            titleHeader = "Covid Numbers - Warning Covid Numbers arent fact checked ";
+
             covHandler(i);
         }
         if(selectedItem === "weather"){
-            document.getElementById("infoheader").innerHTML = "Average Temperature today";
+
+            titleHeader = "Average Temperature today"
             weatherHandler(i);
         }
         chart.update();
@@ -257,6 +286,11 @@
             getCurrentCovid(i.properties.name,2);
             trigger++;
         } else getCurrentCovid(i.properties.name,3);
+        chart.update();
+    }
+
+    function Destroy(){
+        chart.destroy();
         chart.update();
     }
 
