@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="stylesheets/customs.css">
 
 <script>
+
     let graphType = "pie";
     let g;
     let custChart1;
@@ -72,47 +73,49 @@
 </form>
 
 <script>
-    const ctx = document.getElementById('chart').getContext('2d');
-    custChart1 = new Chart(ctx, {
-        type: graphType,
-        data: {
-            labels: labels,
-            datasets: [{
-                label: ["","",""],
-                data: data,
-                backgroundColor: [
-                    'rgba(255, 99, 50, 0.7)',
-                    'rgba(25, 10, 255, 0.7)',
-                    'rgba(10, 200, 50, 0.7)',
-                    'rgba(100, 100, 100, 0.7)',
-                    'rgba(150, 0, 150, 0.7)',
-                ],
-                borderColor: [
-                    'rgb(0,0,0)'
 
-                ],
-                borderWidth: 1.5,
-                options: {
-                    maintainAspectRatio: false,
-                }
-            }]
-        }
-    });
+    buildChart();
+
+    function buildChart()
+    {
+        const ctx = document.getElementById('chart').getContext('2d');
+        custChart1 = new Chart(ctx, {
+            type: graphType,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: ["","",""],
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 50, 0.7)',
+                        'rgba(25, 10, 255, 0.7)',
+                        'rgba(10, 200, 50, 0.7)',
+                        'rgba(100, 100, 100, 0.7)',
+                        'rgba(150, 0, 150, 0.7)',
+                    ],
+                    borderColor: [
+                        'rgb(0,0,0)'
+
+                    ],
+                    borderWidth: 1.5,
+                    options: {
+                        maintainAspectRatio: false,
+                    }
+                }]
+            }
+        });
+    }
+
 
     function generate()
     {
-
         <!-- Use post method to store the user entry into the variables and then update the graph with the new variables -->
 
         /* remove all previous inputs from the arrays */
-        labels.pop();
-        labels.pop();
-        labels.pop();
-        data.pop();
-        data.pop();
-        data.pop();
 
         graphType=(document.getElementById("graphType").value);
+        custChart1.destroy();
+        buildChart();
 
         l = document.getElementById("label1").value;
         labels.push(l);
