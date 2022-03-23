@@ -1,4 +1,3 @@
-// import {config} from "./configHide";
 var createError = require('http-errors');
 const express = require('express');
 const session = require('express-session');
@@ -8,6 +7,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const nodeMailer = require('nodemailer');
 const sendGridTransport = require('nodemailer-sendgrid-transport');
+const mysql = require("mysql");
+const dotenv = require('dotenv');
+
+dotenv.config({path: './.env'});
+
+const app = express();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -18,14 +23,12 @@ var graphRouter = require('./routes/graph');
 var userInfoRouter = require('./routes/userInfo');
 var editDetailsRouter = require('./routes/editDetails');
 
-const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
 const xss = require("xss");
 const emojiStrip = require("emoji-strip");
 const sqlString = require("sqlstring");
 
-var app = express();
 
 const HALF_HOUR = 1000 * 60 * 30
 
@@ -77,6 +80,20 @@ app.use('/graph', graphRouter);
 app.use('/userInfo', userInfoRouter);
 app.use('/editDetails', editDetailsRouter);
 
+const connection = mysql.createConnection({
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
+});
+
+connection.connect((err) => {
+    if (err) {
+        console.log(err)
+    } else {
+        console.log("connected!")
+    }
+})
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.username) {
@@ -105,103 +122,103 @@ app.post('/register', function (req, res) {
     var country = req.body.country;
     var city = req.body.city;
 
-    var errorMessage = '';
-
-    //get the library
-    var validator = require('validator');
-    //run the validator
-    var emailValid = validator.isEmail(email); //true
-    //check the response
-    console.log(emailValid);
-
-    if (email.length == '') {
-        errorMessage += 'Please enter a valid email address!!<br>';
-    } else if (emailValid == false) {
-        errorMessage += 'Email address is not valid. Please enter a valid email address!!<br>';
-    } else if (email.length > 40) {
-        errorMessage += 'Email address is too long. Maximum length allowed it 40 characters!<br>';
-    }
-
-    if (password.length == '') {
-        errorMessage += 'Please enter a password! <br>';
-    } else if (password.length < 8) {
-        errorMessage += 'Password too short. Minimum characters should be 8! <br>';
-    } else if (password.length > 25) {
-        errorMessage += 'Password too long. Maximum length allowed is 25 characters! <br>';
-    }
-
-
-    if (username.length == '') {
-        errorMessage += 'Please enter a username! <br>';
-    } else if (username.length < 6) {
-        errorMessage += 'Username too short. Minimum characters should be 6! <br>';
-    } else if (username.length > 15) {
-        errorMessage += 'Username too long. Maximum length allowed is 15 characters! <br>';
-    }
-
-    var xss = require("xss");
-    username = xss(username);
-
-    var emojiStrip = require('emoji-strip');
-    username = emojiStrip(username);
-
-    var sqlString = require('sqlstring');
-    var cleanedUsername = sqlString.escape(username);
-
-    username = cleanedUsername;
-
-    const bcrypt = require('bcrypt');
-    const saltRounds = 10;
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const hashPass = bcrypt.hashSync(password, salt);
-    const hashConfirmPass = bcrypt.hashSync(confirmPassword, salt);
-
-    password = hashPass;
-    confirmPassword = hashConfirmPass;
-
-    if (password !== confirmPassword) {
-        errorMessage += 'Passwords do not match!';
-    }
-
-    //if the length of the error is > than 0 send back the error
-    if (errorMessage.length > 0) {
-        res.send(errorMessage);
-    } else {
-
-        var valid = true;
-        var validator = require('validator');
-
-        var response = validator.isEmail(email);
-
-        if (response == false) {
-            valid = false;
-        }
-
-        // Remember to check what database you are connecting to and if the
-        // values are correct.
-        const bcrypt = require('bcrypt');
-        var mysql = require('mysql');
-        var connection = mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: 'Database2001',
-            database: 'majorproject'
-        });
-        // This is the actual SQL query part
-        connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phone`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', " + username + ", '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {
-            if (error) throw error;
-
-            transporter.sendMail({
-                to: email,
-                from: "iacobedy2001@gmail.com",
-                subject: "Account created succesfull!",
-                html: "<h1>Welcome to our app!</h1>"
-            })
-            res.send("Registered!");
-            // res.redirect('/');
-        });
-        connection.end();
-    }
+    // var errorMessage = '';
+    //
+    // //get the library
+    // var validator = require('validator');
+    // //run the validator
+    // var emailValid = validator.isEmail(email); //true
+    // //check the response
+    // console.log(emailValid);
+    //
+    // if (email.length == '') {
+    //     errorMessage += 'Please enter a valid email address!!<br>';
+    // } else if (emailValid == false) {
+    //     errorMessage += 'Email address is not valid. Please enter a valid email address!!<br>';
+    // } else if (email.length > 40) {
+    //     errorMessage += 'Email address is too long. Maximum length allowed it 40 characters!<br>';
+    // }
+    //
+    // if (password.length == '') {
+    //     errorMessage += 'Please enter a password! <br>';
+    // } else if (password.length < 8) {
+    //     errorMessage += 'Password too short. Minimum characters should be 8! <br>';
+    // } else if (password.length > 25) {
+    //     errorMessage += 'Password too long. Maximum length allowed is 25 characters! <br>';
+    // }
+    //
+    //
+    // if (username.length == '') {
+    //     errorMessage += 'Please enter a username! <br>';
+    // } else if (username.length < 6) {
+    //     errorMessage += 'Username too short. Minimum characters should be 6! <br>';
+    // } else if (username.length > 15) {
+    //     errorMessage += 'Username too long. Maximum length allowed is 15 characters! <br>';
+    // }
+    //
+    // var xss = require("xss");
+    // username = xss(username);
+    //
+    // var emojiStrip = require('emoji-strip');
+    // username = emojiStrip(username);
+    //
+    // var sqlString = require('sqlstring');
+    // var cleanedUsername = sqlString.escape(username);
+    //
+    // username = cleanedUsername;
+    //
+    // const bcrypt = require('bcrypt');
+    // const saltRounds = 10;
+    // const salt = bcrypt.genSaltSync(saltRounds);
+    // const hashPass = bcrypt.hashSync(password, salt);
+    // const hashConfirmPass = bcrypt.hashSync(confirmPassword, salt);
+    //
+    // password = hashPass;
+    // confirmPassword = hashConfirmPass;
+    //
+    // if (password !== confirmPassword) {
+    //     errorMessage += 'Passwords do not match!';
+    // }
+    //
+    // //if the length of the error is > than 0 send back the error
+    // if (errorMessage.length > 0) {
+    //     res.send(errorMessage);
+    // } else {
+    //
+    //     var valid = true;
+    //     var validator = require('validator');
+    //
+    //     var response = validator.isEmail(email);
+    //
+    //     if (response == false) {
+    //         valid = false;
+    //     }
+    //
+    //     // Remember to check what database you are connecting to and if the
+    //     // values are correct.
+    //     const bcrypt = require('bcrypt');
+    //     var mysql = require('mysql');
+    //     var connection = mysql.createConnection({
+    //         host: 'localhost',
+    //         user: 'root',
+    //         password: 'Database2001',
+    //         database: 'majorproject'
+    //     });
+    //     // This is the actual SQL query part
+    //     connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phone`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', " + username + ", '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {
+    //         if (error) throw error;
+    //
+    //         transporter.sendMail({
+    //             to: email,
+    //             from: "iacobedy2001@gmail.com",
+    //             subject: "Account created succesfull!",
+    //             html: "<h1>Welcome to our app!</h1>"
+    //         })
+    //         res.send("Registered!");
+    //         // res.redirect('/');
+    //     });
+    //     connection.end();
+    // }
 });
 
 
