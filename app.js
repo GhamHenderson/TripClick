@@ -18,7 +18,6 @@ const sqlString = require("sqlstring");
 const {JWT_SECRET, SENDMAIL_KEY} = require('./configHide');
 const {connection} = require('./dbConnection');
 
-
 dotenv.config({path: './.env'});
 
 const app = express();
@@ -86,7 +85,8 @@ const transporter = nodeMailer.createTransport(sendGridTransport({
     auth: {
         api_key: SENDMAIL_KEY
     }
-}))
+}));
+
 app.post('/register', (req, res) => {
 
     // catch the username that was sent to us from the jQuery POST on the index.ejs page
@@ -275,7 +275,6 @@ app.post('/login', function (req, res) {
                     return res.status(422).json({error: "Wrong username or password!"});
                 }
             }
-            connection.end();
         });
     }
 });
@@ -329,7 +328,7 @@ app.post('/editDetails', function (req, res) {
     username = cleanedUsername;
     //if the length of the error is > than 0 send back the error
     if (errorMessage.length > 0) {
-        res.send(errorMessage);
+        return res.status(422).json({error: errorMessage});
     } else {
 
         var valid = true;
@@ -340,17 +339,19 @@ app.post('/editDetails', function (req, res) {
         if (response == false) {
             valid = false;
         }
-
         // This is the actual SQL query part
         connection.query("UPDATE `majorproject`.`users` SET  `firstname` = '" + firstname + "', `lastname` = '" + lastname + "', `username` = " + username + ", `email` = '" + email + "', `phone` = '" + phone + "', `gender` = '" + gender + "', `country` = '" + country + "', `city` = '" + city + "' WHERE `userId` = '" + userId + "';", function (error, result, fields) {
             if (error) throw error;
 
         });
-        connection.end();
+        req.session.reload(function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.redirect('/');
+            }
+        })
     }
-
-    req.session.update();
-    res.redirect('login');
 });
 
 app.post('/deleteAccount', function (req, res) {
