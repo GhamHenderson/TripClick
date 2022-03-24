@@ -20,39 +20,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 //script to send data into database when registering
-$("#register-button").click(function () {
-
-    // get the values
-    var fname = $('#firstname').val();
-    var lname = $('#lastname').val();
-    var uname = $('#username').val();
-    var pass = $('#password').val();
-    var confirmPass = $('#confirm_password').val();
-    var email = $('#email').val();
-    var phone = $('#phone').val();
-    var gender = $('#gender').val();
-    var country = $('#country').val();
-    var city = $('#city').val();
-
-    // if (fname == '' && pass == '') {
-    //     alert("too short");
-    // } else {
-
-    //send data
-    $.post("/register", {
-        firstname: fname,
-        lastname: lname,
-        username: uname,
-        password: pass,
-        confirm_password: confirmPass,
-        email: email,
-        phone: phone,
-        gender: gender,
-        country: country,
-        city: city
-    })
-        .done(function (data) {
-            // window.location = "/login";
-            alert(data);
-        });
-});
+// $("#register-button").click(function () {
+//
+//     // get the values
+//     var fname = $('#firstname').val();
+//     var lname = $('#lastname').val();
+//     var uname = $('#username').val();
+//     var pass = $('#password').val();
+//     var confirmPass = $('#confirm_password').val();
+//     var email = $('#email').val();
+//     var phone = $('#phone').val();
+//     var gender = $('#gender').val();
+//     var country = $('#country').val();
+//     var city = $('#city').val();
+//
+//     // if (fname == '' && pass == '') {
+//     //     alert("too short");
+//     // } else {
+//
+//     //send data
+//     $.post("/register", {
+//         firstname: fname,
+//         lastname: lname,
+//         username: uname,
+//         password: pass,
+//         confirm_password: confirmPass,
+//         email: email,
+//         phone: phone,
+//         gender: gender,
+//         country: country,
+//         city: city
+//     })
+//         .done(function (data) {
+//             // window.location = "/login";
+//             alert(data);
+//         });
+// });

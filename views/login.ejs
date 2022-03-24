@@ -16,19 +16,20 @@
             LOGIN
         </div>
         <div class="login-form">
+            <form action="/login" method="POST">
+                <div class="input-field-login">
+                    <label>Username</label>
+                    <input type="text" id="username" name="username" class="input" required>
+                </div>
+                <div class="input-field-login">
+                    <label>Password</label>
+                    <input type="password" id="password" name="password" class="input" required>
+                </div>
 
-            <div class="input-field-login">
-                <label>Username</label>
-                <input type="text" id="username" name="username" class="input" required>
-            </div>
-            <div class="input-field-login">
-                <label>Password</label>
-                <input type="password" id="password" name="password" class="input" required>
-            </div>
-
-            <div class="button-div">
-                <input type="submit" id="login-button" value="Login" class="login-btn">
-            </div>
+                <div class="button-div">
+                    <input type="submit" id="login-button" value="Login" class="login-btn">
+                </div>
+            </form>
         </div>
     </div>
 

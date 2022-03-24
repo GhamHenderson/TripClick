@@ -5,6 +5,8 @@ var router = express.Router();
 router.get('/', function (req, res, next) {
     res.render('graph', {
         title: 'Graph',
+        message: '',
+        error: '',
         userId: req.session.userId,
         username: req.session.username,
         firstname: req.session.firstname,

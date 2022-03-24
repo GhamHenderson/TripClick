@@ -10,6 +10,8 @@ var router = express.Router();
 // }
 
 router.get('/', function (req, res, next) {
+    var message;
+    var error;
 
     res.render('register', {
         title: 'Register',
@@ -22,7 +24,9 @@ router.get('/', function (req, res, next) {
         gender: req.session.gender,
         country: req.session.country,
         city: req.session.city,
-        dateRegister: req.session.dateRegister
+        dateRegister: req.session.dateRegister,
+        message: message,
+        error: error
     });
 });
 

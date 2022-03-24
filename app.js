@@ -9,6 +9,15 @@ const nodeMailer = require('nodemailer');
 const sendGridTransport = require('nodemailer-sendgrid-transport');
 const mysql = require("mysql");
 const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
+const bcryptjs = require('bcryptjs');
+const validator = require("validator");
+const xss = require("xss");
+const emojiStrip = require("emoji-strip");
+const sqlString = require("sqlstring");
+const {JWT_SECRET, SENDMAIL_KEY} = require('./configHide');
+const {connection} = require('./dbConnection');
+
 
 dotenv.config({path: './.env'});
 
@@ -22,13 +31,6 @@ var customsRouter = require('./routes/customs');
 var graphRouter = require('./routes/graph');
 var userInfoRouter = require('./routes/userInfo');
 var editDetailsRouter = require('./routes/editDetails');
-
-const bcrypt = require("bcrypt");
-const validator = require("validator");
-const xss = require("xss");
-const emojiStrip = require("emoji-strip");
-const sqlString = require("sqlstring");
-
 
 const HALF_HOUR = 1000 * 60 * 30
 
@@ -48,15 +50,15 @@ app.use(express.json())
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
+app.use(express.urlencoded({extended: false}));
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('trust proxy', 1);// trust first proxy
 app.use(session({
@@ -80,48 +82,63 @@ app.use('/graph', graphRouter);
 app.use('/userInfo', userInfoRouter);
 app.use('/editDetails', editDetailsRouter);
 
-const connection = mysql.createConnection({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE
-});
-
-connection.connect((err) => {
-    if (err) {
-        console.log(err)
-    } else {
-        console.log("connected!")
-    }
-})
-
-const redirectLogin = (req, res, next) => {
-    if (!req.session.username) {
-        res.redirect('/login')
-    } else {
-        next()
-    }
-}
-
 const transporter = nodeMailer.createTransport(sendGridTransport({
     auth: {
-        api_key: "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"
+        api_key: SENDMAIL_KEY
     }
 }))
-app.post('/register', function (req, res) {
+app.post('/register', (req, res) => {
 
     // catch the username that was sent to us from the jQuery POST on the index.ejs page
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
     var username = req.body.username;
     var password = req.body.password;
-    var confirmPassword = req.body.confirm_password;
+    var confirmPassword = req.body.passwordConfirm;
     var email = req.body.email;
     var phone = req.body.phone;
     var gender = req.body.gender;
     var country = req.body.country;
     var city = req.body.city;
 
+    if (!firstname || !lastname || !username || !password || !confirmPassword || !email || !phone || !gender || !country || !city) {
+        return res.status(422).json({error: "Please fill in all the fields!"});
+    } else {
+        connection.query('SELECT email from users WHERE email = ?', [email], async (error, result) => {
+            if (error) {
+                console.log(error);
+            }
+
+            if (result.length > 0) {
+                return res.status(422).json({error: "This email is already associated with an account!"});
+            } else if (password !== confirmPassword) {
+                return res.status(422).json({error: "Passwords do not match!"});
+            }
+
+            let hashedPassword = await bcryptjs.hash(password, 10);
+
+            password = hashedPassword;
+            console.log(password);
+
+            connection.query('INSERT INTO users SET ?', {
+                firstname: firstname,
+                lastname: lastname,
+                username: username,
+                password: password,
+                email: email,
+                phone: phone,
+                gender: gender,
+                country: country,
+                city: city
+            }, (error, results) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    res.redirect('/login');
+                }
+            });
+        });
+    }
     // var errorMessage = '';
     //
     // //get the library
@@ -226,58 +243,41 @@ app.post('/login', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
 
-    var errorMessage = '';
-
-    const bcrypt = require('bcrypt');
-    var mysql = require('mysql');
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'Database2001',
-        database: 'majorproject'
-    });
-
-    connection.connect();
-
     // This is the actual SQL query part
-    // if (username && password) {
-    connection.query("SELECT * FROM users WHERE username = ?", [username], function (error, result) {
-        if (error) throw error;
+    if (!username || !password) {
+        return res.status(422).json({error: "Please enter your username and password!"});
+    } else {
+        connection.query("SELECT * FROM users WHERE username = ?", [username], function (error, result) {
+            if (error) throw error;
 
-        if (result.length === 0) {
-            console.log("User does not exist!!");
-            res.send(`${username} does not exist!!`);
-        } else {
-            const hashedPassword = result[0].password
-            //get the hashedPassword from result
-            var finalResult = bcrypt.compareSync(password, hashedPassword);
-
-            if (finalResult === true) {
-                req.session.username = username;
-                req.session.userId = result[0].userId;
-                req.session.firstname = result[0].firstname;
-                req.session.lastname = result[0].lastname;
-                req.session.email = result[0].email;
-                req.session.phone = result[0].phone;
-                req.session.gender = result[0].gender;
-                req.session.country = result[0].country;
-                req.session.city = result[0].city;
-                req.session.dateRegister = result[0].dateRegister;
-
-                console.log(req.session.firstname);
-                res.send('Success');
-                // if (req.session.username) {
-                //     res.redirect('/');
-                // }
+            if (result.length === 0) {
+                return res.status(422).json({error: "Wrong username or password!"});
             } else {
-                res.send("Username or Password incorrect!")
-                // res.redirect('/');
+                const hashedPassword = result[0].password
+                //get the hashedPassword from result
+                var finalResult = bcryptjs.compareSync(password, hashedPassword);
+
+                if (finalResult === true) {
+                    req.session.username = username;
+                    req.session.userId = result[0].userId;
+                    req.session.firstname = result[0].firstname;
+                    req.session.lastname = result[0].lastname;
+                    req.session.email = result[0].email;
+                    req.session.phone = result[0].phone;
+                    req.session.gender = result[0].gender;
+                    req.session.country = result[0].country;
+                    req.session.city = result[0].city;
+                    req.session.dateRegister = result[0].dateRegister;
+                    // const token = jwt.sign({_userId: result[0].userId}, JWT_SECRET);
+                    // res.json({token});
+                    res.redirect('/');
+                } else {
+                    return res.status(422).json({error: "Wrong username or password!"});
+                }
             }
-        }
-    });
-
-    connection.end();
-
+            connection.end();
+        });
+    }
 });
 
 app.post('/editDetails', function (req, res) {
@@ -341,22 +341,9 @@ app.post('/editDetails', function (req, res) {
             valid = false;
         }
 
-        // Remember to check what database you are connecting to and if the
-        // values are correct.
-        const bcrypt = require('bcrypt');
-        var mysql = require('mysql');
-        var connection = mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: 'Database2001',
-            database: 'majorproject'
-        });
         // This is the actual SQL query part
         connection.query("UPDATE `majorproject`.`users` SET  `firstname` = '" + firstname + "', `lastname` = '" + lastname + "', `username` = " + username + ", `email` = '" + email + "', `phone` = '" + phone + "', `gender` = '" + gender + "', `country` = '" + country + "', `city` = '" + city + "' WHERE `userId` = '" + userId + "';", function (error, result, fields) {
             if (error) throw error;
-
-            console.log("im here");
-
 
         });
         connection.end();
@@ -369,14 +356,6 @@ app.post('/editDetails', function (req, res) {
 app.post('/deleteAccount', function (req, res) {
     var userId = req.session.userId;
 
-    var mysql = require('mysql');
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'Database2001',
-        database: 'majorproject'
-    });
-    // This is the actual SQL query part
     connection.query("DELETE FROM `majorproject`.`users` WHERE  `userId`= '" + userId + "';", function (error, results, fields) {
         if (error) throw error;
 
