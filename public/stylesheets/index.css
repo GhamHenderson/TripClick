@@ -23,13 +23,23 @@ a {
     display: flex;
 }
 
-.apidisplay{
+.apidisplay2{
     display: flex;
     justify-content: space-evenly;
     padding: 30px;
     width: 800px;
     background-color: #AADAFF;
-    height: 100px;
+    height: 150px;
+
+}
+
+.apidisplay1{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 30px;
+    width: 800px;
+    background-color: #AADAFF;
+    height: 150px;
 
 }
 
@@ -48,7 +58,8 @@ a {
     font-family: 'Roboto', sans-serif;
     align-content: center;
     justify-content: center;
-    padding: 20px;
+    flex-direction: column;
+    padding: 50px;
 
 }
 
@@ -106,8 +117,8 @@ path:hover {
 .graph1 {
     display: flex;
     background-color: #ffffff;
-    height: 30%;
-    width: 30%;
+    height: 50%;
+    width: 50%;
     padding: 20px;
     justify-content: center;
     align-items: center;
