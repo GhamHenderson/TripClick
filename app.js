@@ -7,7 +7,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const nodeMailer = require('nodemailer');
 const sendGridTransport = require('nodemailer-sendgrid-transport');
-const mysql = require("mysql");
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
@@ -54,23 +53,21 @@ app.use(logger('dev'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
 app.set('trust proxy', 1);// trust first proxy
 app.use(session({
     name: SESS_NAME,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     secret: SESS_SECRET,
     cookie: {
         maxAge: SESS_LIFETIME,
         samSite: true,
         secure: IN_PROD
     }
-}))
+}));
 
 app.use('/', indexRouter);
 app.use('/register', registerRouter);
@@ -101,141 +98,97 @@ app.post('/register', (req, res) => {
     var country = req.body.country;
     var city = req.body.city;
 
-    if (!firstname || !lastname || !username || !password || !confirmPassword || !email || !phone || !gender || !country || !city) {
-        return res.status(422).json({error: "Please fill in all the fields!"});
+    var errorMessage = '';
+
+    var valid = true;
+    var emailValid = validator.isEmail(email); //true
+
+    if (emailValid == false) {
+        valid = false;
+    }
+    // console.log(emailValid);
+
+    if (email.length === '') {
+        errorMessage += 'Please enter a valid email address!!';
+    } else if (emailValid === false) {
+        errorMessage += 'Email address is not valid. Please enter a valid email address!!';
+    } else if (email.length > 40) {
+        errorMessage += 'Email address is too long. Maximum length allowed it 40 characters!';
+    }
+
+    if (password.length === '') {
+        errorMessage += 'Please enter a password!';
+    } else if (password.length < 8) {
+        errorMessage += 'Password too short. Minimum characters should be 8!';
+    } else if (password.length > 25) {
+        errorMessage += 'Password too long. Maximum length allowed is 25 characters!';
+    }
+
+
+    if (username.length === '') {
+        errorMessage += 'Please enter a username!';
+    } else if (username.length < 6) {
+        errorMessage += 'Username too short. Minimum characters should be 6!';
+    } else if (username.length > 15) {
+        errorMessage += 'Username too long. Maximum length allowed is 15 characters!';
+    }
+
+    username = xss(username);
+
+    username = emojiStrip(username);
+
+    // var cleanedUsername = sqlString.escape(username);
+
+
+    if (errorMessage.length > 0) {
+        res.status(422).json({error: errorMessage});
     } else {
-        connection.query('SELECT email from users WHERE email = ?', [email], async (error, result) => {
-            if (error) {
-                console.log(error);
-            }
-
-            if (result.length > 0) {
-                return res.status(422).json({error: "This email is already associated with an account!"});
-            } else if (password !== confirmPassword) {
-                return res.status(422).json({error: "Passwords do not match!"});
-            }
-
-            let hashedPassword = await bcryptjs.hash(password, 10);
-
-            password = hashedPassword;
-            console.log(password);
-
-            connection.query('INSERT INTO users SET ?', {
-                firstname: firstname,
-                lastname: lastname,
-                username: username,
-                password: password,
-                email: email,
-                phone: phone,
-                gender: gender,
-                country: country,
-                city: city
-            }, (error, results) => {
+        if (!firstname || !lastname || !username || !password || !confirmPassword || !email || !phone || !gender || !country || !city) {
+            return res.status(422).json({error: "Please fill in all the fields!"});
+        } else {
+            connection.query('SELECT email from users WHERE email = ?', [email], async (error, result) => {
                 if (error) {
                     console.log(error);
-                } else {
-                    res.redirect('/login');
                 }
+
+                if (result.length > 0) {
+                    return res.status(422).json({error: "This email is already associated with an account!"});
+                } else if (password !== confirmPassword) {
+                    return res.status(422).json({error: "Passwords do not match!"});
+                }
+
+                let hashedPassword = await bcryptjs.hash(password, 10);
+
+                password = hashedPassword;
+                console.log(password);
+
+                connection.query('INSERT INTO users SET ?', {
+                    firstname: firstname,
+                    lastname: lastname,
+                    username: username,
+                    password: password,
+                    email: email,
+                    phone: phone,
+                    gender: gender,
+                    country: country,
+                    city: city
+                }, (error, results) => {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        transporter.sendMail({
+                            to: email,
+                            from: "iacobedy2001@gmail.com",
+                            subject: "Account created successfully!",
+                            html: "<h1>Welcome to our website. Please log in using your username and password!</h1>"
+                        });
+                        req.session.save();
+                        res.redirect('/login');
+                    }
+                });
             });
-        });
+        }
     }
-    // var errorMessage = '';
-    //
-    // //get the library
-    // var validator = require('validator');
-    // //run the validator
-    // var emailValid = validator.isEmail(email); //true
-    // //check the response
-    // console.log(emailValid);
-    //
-    // if (email.length == '') {
-    //     errorMessage += 'Please enter a valid email address!!<br>';
-    // } else if (emailValid == false) {
-    //     errorMessage += 'Email address is not valid. Please enter a valid email address!!<br>';
-    // } else if (email.length > 40) {
-    //     errorMessage += 'Email address is too long. Maximum length allowed it 40 characters!<br>';
-    // }
-    //
-    // if (password.length == '') {
-    //     errorMessage += 'Please enter a password! <br>';
-    // } else if (password.length < 8) {
-    //     errorMessage += 'Password too short. Minimum characters should be 8! <br>';
-    // } else if (password.length > 25) {
-    //     errorMessage += 'Password too long. Maximum length allowed is 25 characters! <br>';
-    // }
-    //
-    //
-    // if (username.length == '') {
-    //     errorMessage += 'Please enter a username! <br>';
-    // } else if (username.length < 6) {
-    //     errorMessage += 'Username too short. Minimum characters should be 6! <br>';
-    // } else if (username.length > 15) {
-    //     errorMessage += 'Username too long. Maximum length allowed is 15 characters! <br>';
-    // }
-    //
-    // var xss = require("xss");
-    // username = xss(username);
-    //
-    // var emojiStrip = require('emoji-strip');
-    // username = emojiStrip(username);
-    //
-    // var sqlString = require('sqlstring');
-    // var cleanedUsername = sqlString.escape(username);
-    //
-    // username = cleanedUsername;
-    //
-    // const bcrypt = require('bcrypt');
-    // const saltRounds = 10;
-    // const salt = bcrypt.genSaltSync(saltRounds);
-    // const hashPass = bcrypt.hashSync(password, salt);
-    // const hashConfirmPass = bcrypt.hashSync(confirmPassword, salt);
-    //
-    // password = hashPass;
-    // confirmPassword = hashConfirmPass;
-    //
-    // if (password !== confirmPassword) {
-    //     errorMessage += 'Passwords do not match!';
-    // }
-    //
-    // //if the length of the error is > than 0 send back the error
-    // if (errorMessage.length > 0) {
-    //     res.send(errorMessage);
-    // } else {
-    //
-    //     var valid = true;
-    //     var validator = require('validator');
-    //
-    //     var response = validator.isEmail(email);
-    //
-    //     if (response == false) {
-    //         valid = false;
-    //     }
-    //
-    //     // Remember to check what database you are connecting to and if the
-    //     // values are correct.
-    //     const bcrypt = require('bcrypt');
-    //     var mysql = require('mysql');
-    //     var connection = mysql.createConnection({
-    //         host: 'localhost',
-    //         user: 'root',
-    //         password: 'Database2001',
-    //         database: 'majorproject'
-    //     });
-    //     // This is the actual SQL query part
-    //     connection.query("INSERT INTO `majorproject`.`users` (`firstname`, `lastname`, `username`, `password`, `email`, `phone`, `gender`, `country`, `city`) VALUES ('" + firstname + "', '" + lastname + "', " + username + ", '" + password + "', '" + email + "', '" + phone + "', '" + gender + "', '" + country + "', '" + city + "');", function (error, results, fields) {
-    //         if (error) throw error;
-    //
-    //         transporter.sendMail({
-    //             to: email,
-    //             from: "iacobedy2001@gmail.com",
-    //             subject: "Account created succesfull!",
-    //             html: "<h1>Welcome to our app!</h1>"
-    //         })
-    //         res.send("Registered!");
-    //         // res.redirect('/');
-    //     });
-    //     connection.end();
-    // }
 });
 
 
@@ -279,7 +232,7 @@ app.post('/login', function (req, res) {
     }
 });
 
-app.post('/editDetails', function (req, res) {
+app.post('/editDetails', function (req, res, next) {
     var userId = req.session.userId;
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
@@ -300,20 +253,20 @@ app.post('/editDetails', function (req, res) {
     console.log(emailValid);
 
     if (email.length === '') {
-        errorMessage += 'Please enter a valid email address!!<br>';
+        errorMessage += 'Please enter a valid email address!!';
     } else if (emailValid === false) {
-        errorMessage += 'Email address is not valid. Please enter a valid email address!!<br>';
+        errorMessage += 'Email address is not valid. Please enter a valid email address!!';
     } else if (email.length > 40) {
-        errorMessage += 'Email address is too long. Maximum length allowed it 40 characters!<br>';
+        errorMessage += 'Email address is too long. Maximum length allowed it 40 characters!';
     }
 
 
     if (username.length === '') {
-        errorMessage += 'Please enter a username! <br>';
+        errorMessage += 'Please enter a username!';
     } else if (username.length < 6) {
-        errorMessage += 'Username too short. Minimum characters should be 6! <br>';
+        errorMessage += 'Username too short. Minimum characters should be 6!';
     } else if (username.length > 15) {
-        errorMessage += 'Username too long. Maximum length allowed is 15 characters! <br>';
+        errorMessage += 'Username too long. Maximum length allowed is 15 characters!';
     }
 
     var xss = require("xss");
@@ -343,15 +296,12 @@ app.post('/editDetails', function (req, res) {
         connection.query("UPDATE `majorproject`.`users` SET  `firstname` = '" + firstname + "', `lastname` = '" + lastname + "', `username` = " + username + ", `email` = '" + email + "', `phone` = '" + phone + "', `gender` = '" + gender + "', `country` = '" + country + "', `city` = '" + city + "' WHERE `userId` = '" + userId + "';", function (error, result, fields) {
             if (error) throw error;
 
+
         });
-        req.session.reload(function (err) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.redirect('/');
-            }
-        })
     }
+
+    req.session.destroy();
+    res.redirect('/login');
 });
 
 app.post('/deleteAccount', function (req, res) {
@@ -361,7 +311,6 @@ app.post('/deleteAccount', function (req, res) {
         if (error) throw error;
 
     });
-    connection.end();
 
     req.session.destroy();
     res.redirect('login');
