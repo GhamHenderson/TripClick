@@ -19,17 +19,28 @@
 
 
 <div class="apicontainer2">
-    <div class="apidisplay">
-        <p>
-            <button onclick=selector("covid")>     Covid Data     </button>
-            <button onclick=selector("weather")>     Weather     </button>
-            <button onclick=selector("gdp")>   GDP   </button>
-            <button onclick=selector("happiness")> Happiness </button>
-            <button onclick=selector("corruption")> Corruption </button>
-            <button onclick=selector("health")>  Health  </button>
-            <button onclick=destroyandRender("reset")>Refresh Graph</button><br><br>
-        </p>
-        <p id="infoheader"></p>
+
+    <div class="apidisplay2">
+            <button type="button" class="btn btn-primary" onclick=selector("covid")>Covid Data</button>
+            <button type="button" class="btn btn-primary" onclick=selector("weather")>Weather</button>
+            <button type="button" class="btn btn-primary" onclick=selector("gdp")>GDP</button>
+            <button type="button" class="btn btn-primary" onclick=selector("happiness")>Happiness</button>
+            <button type="button" class="btn btn-primary" onclick=selector("corruption")>Corruption</button>
+            <button type="button" class="btn btn-primary" onclick=selector("health")>Health</button>
+            <button type="button" class="btn btn-primary" onclick=destroyandRender("reset")>Reset</button>
+            <br><br><br>
+    </div>
+    <br>
+    <div class="apidisplay1">
+            <label>Choose a graph type:</label>
+            <select name="graphType" id="graphType">
+                <option id="bar" value="bar">bar</option>
+                <option value="line">line</option>
+                <option value="pie">pie</option>
+                <option value="scatter">scatter</option>
+                <option value="radar">radar</option>
+            </select>
+            <button type="button" class="btn btn-primary" onclick=changeGraphType(document.getElementById("graphType").value)>Change graph type</button>
     </div>
 </div>
     <div class='apicontainer'>
@@ -64,6 +75,7 @@
     let namedata2 = [];
     let namedata3 = [];
     let chart;
+    let chartType = "bar";
     let CasesTotal = 0;
     let timesClicked = 0;
     let buttonBool = false;
@@ -101,7 +113,7 @@
                     }
                 }
             },
-            type: 'line',
+            type: chartType,
             data: {
                 labels: labeldata,
                 datasets: [{
@@ -187,6 +199,7 @@
         let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/"+countryName+"";
         const response = await fetch(url);
         let apidata = await response.json();
+
         if(selectedItem === "gdp"){
             titleHeader = "GDP Per Capita 2022";
             graphdata.push(apidata[0].gdpPerCap);
@@ -279,5 +292,12 @@
     function selector(input){
         selectedItem = input;
         buttonBool = true;
+    }
+
+    function changeGraphType(input)
+    {
+        chartType = input;
+        chart.destroy();
+        chartIT();
     }
 </script>
