@@ -27,7 +27,7 @@
             <button onclick=selector("happiness")> Happiness </button>
             <button onclick=selector("corruption")> Corruption </button>
             <button onclick=selector("health")>  Health  </button>
-            <button onclick="destroyandRender()">Refresh Graph</button><br><br>
+            <button onclick=destroyandRender("reset")>Refresh Graph</button><br><br>
         </p>
         <p id="infoheader"></p>
     </div>
@@ -65,9 +65,10 @@
     let namedata3 = [];
     let chart;
     let CasesTotal = 0;
-    let trigger = 0;
+    let timesClicked = 0;
     let buttonBool = false;
     let selectedItem;
+    let clickcount = 0;
 
     // Call Chart Function to build chart
     chartIT();
@@ -95,7 +96,7 @@
                         display: true,
                         title: {
                             display: true,
-                            text: 'VARIABLE TO SHOW VALUE'
+                            text: 'Value'
                         },
                     }
                 }
@@ -107,17 +108,17 @@
                     label: namedata,
                     data: graphdata,
                     backgroundColor: ['rgba(0,100,255,0.27)'],
-                    borderColor: ['rgb(0,0,0)',],
+                    borderColor: ['rgb(33,119,232)',],
                     borderWidth: 2,
                     hoverOffset: 4,
-                }, {
+                },{
                     label: namedata2,
                     data: graphdata2,
                     backgroundColor: ['rgba(255,0,0,0.37)'],
                     borderColor: ['rgb(0,0,0)',],
                     borderWidth: 2,
                     hoverOffset: 4,
-                }, {
+                },{
                     label: namedata3,
                     data: graphdata3,
                     backgroundColor: ['rgba(255,0,200,0.37)'],
@@ -149,12 +150,8 @@
             .attr("fill", "#348C31") // Color Of Country
             .attr("d", d3.geoPath().projection(projection))
             .on('click', function (d, i) {
-
                 if(buttonBool === true) {
-
-         //           weatherHandler(i);
-           //         covHandler(i);
-                    gdpHandler(i);
+                    clickHandling(i);
 
                     if (countriesSelected.includes(i.properties.name) === true) {
                         countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
@@ -162,94 +159,41 @@
                     } else if (countriesSelected.includes(i.properties.name) === false) {
                         countriesSelected.push(i.properties.name);
                         d3.select(this).style("fill", '#03a5fd');
-                        document.getElementById("countryclicked").innerHTML = "Countries Selected : " + countriesSelected[0] + " , " + countriesSelected[1] + " , " + countriesSelected[2];
                     }
                 }
                 else window.alert("Please Select a Data Value from the Buttons below")
             })
     })
 
-
-    async function getCurrentCovid(countryName, counter) {
-        let countryID = isCovidDataAvailable(countryName);
-        const response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=10");
-        const data = await response.json();
-
-        if (counter === 1) {
-            for (let j = 0; j < data.length; j++) {
-                let dailytotal = 0;
-                for (let i = 0; i < data[j].records.length; i++) {
-                    dailytotal = (data[j].records[i].cases + dailytotal);
-                }
-                graphdata.push(dailytotal);
-                labeldata.push(data[j].date);
-            }
-            namedata.push(countryName);
-            console.log(graphdata);
-            console.log(labeldata);
-            chart.update();
-            chart.update();
-        }
-        if (counter === 2) {
-            for (let j = 0; j < data.length; j++) {
-                let dailytotal = 0;
-                for (let i = 0; i < data[j].records.length; i++) {
-                    dailytotal = (data[j].records[i].cases + dailytotal);
-                }
-                graphdata2.push(dailytotal);
-                labeldata2.push(data[j].date);
-            }
-            namedata2.push(countryName);
-            console.log(graphdata);
-            console.log(labeldata);
-            chart.update();
-        }
-        if (counter === 3) {
-            for (let j = 0; j < data.length; j++) {
-                let dailytotal = 0;
-                for (let i = 0; i < data[j].records.length; i++) {
-                    dailytotal = (data[j].records[i].cases + dailytotal);
-                }
-                graphdata3.push(dailytotal);
-                labeldata3.push(data[j].date);
-            }
-            namedata3.push(countryName);
-            console.log(graphdata);
-            console.log(labeldata);
-            chart.update();
-        }
-
-    }
-
-    function selector(input){
-        selectedItem = input;
-        buttonBool = true;
-    }
-
-    function gdpHandler(i){
+    function clickHandling(i){
         countryName = i.properties.name;
-
-        if (trigger < 10) {
-            getGDP(countryName, selectedItem, i);
-            trigger++;
+        if (timesClicked < 10) {
+            if(selectedItem === "covid") {
+                //LOAD COVID
+            }
+            else if(selectedItem === "weather"){
+                weatherHandler(i);
+            }
+            else {
+                buttonClicked(countryName, selectedItem, i);
+            }
+            timesClicked++;
         }
         chart.update();
     }
 
 
-    async function getGDP(countryName,selectedItem, i) { // Api Info -> https://world-happiness-database.herokuapp.com/
+    async function buttonClicked(countryName,selectedItem, i) { // Api Info -> https://world-happiness-database.herokuapp.com/
         let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/"+countryName+"";
         const response = await fetch(url);
         let apidata = await response.json();
         if(selectedItem === "gdp"){
             titleHeader = "GDP Per Capita 2022";
-
             graphdata.push(apidata[0].gdpPerCap);
             labeldata.push(countryName);
         }
         if(selectedItem === "happiness"){
             titleHeader = "Happiness Score in Index 2020";
-
             graphdata.push(apidata[0].happiness);
             labeldata.push(countryName);
         }
@@ -260,57 +204,18 @@
         }
         if(selectedItem === "health"){
             titleHeader = "Average Health score per country 2020";
-
             graphdata.push(apidata[0].health);
             labeldata.push(countryName);
         }
-        if(selectedItem === "covid"){
-            titleHeader = "Covid Numbers - Warning Covid Numbers arent fact checked ";
-
-            covHandler(i);
-        }
-        if(selectedItem === "weather"){
-
-            titleHeader = "Average Temperature today"
-            weatherHandler(i);
-        }
-        chart.update();
-        console.log(apidata);
-    }
-
-    function covHandler(i) {
-        if (trigger === 0) {
-            getCurrentCovid(i.properties.name,1);
-            trigger++;
-        } else if (trigger === 1) {
-            getCurrentCovid(i.properties.name,2);
-            trigger++;
-        } else getCurrentCovid(i.properties.name,3);
-        chart.update();
-    }
-
-    function Destroy(){
-        chart.destroy();
-        chart.update();
-    }
-
-    function destroyandRender(){
-        document.getElementById("infoheader").innerHTML = "Graph Data is now refreshed";
-        chart.destroy();
-        graphdata = [];
-        labeldata = [];
-        chartIT();
-        chart.update;
     }
 
     function weatherHandler(i) {
-        selectedItem = true;
-        if (trigger === 0) {
+        if (clickcount === 0) {
             getCurrentWeather(i.properties.name, 1);
-            trigger++;
-        } else if (trigger === 1) {
+            clickcount++;
+        } else if (clickcount === 1) {
+            clickcount++;
             getCurrentWeather(i.properties.name, 2);
-            trigger++;
         } else getCurrentWeather(i.properties.name, 3);
         chart.update();
     }
@@ -319,11 +224,10 @@
         let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
         const response = await fetch(url);
         let apidata = await response.json();
-        displayData(apidata, gd, countryName);
-        console.log(apidata);
+        displayWeatherData(apidata, gd, countryName);
     }
 
-    function displayData(apidata, gd, countryName){
+    function displayWeatherData(apidata, gd, countryName){
         if(gd === 1){
             // Data variable will store all data received from api call
             for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
@@ -355,36 +259,25 @@
             namedata3.push(countryName);
             chart.update();
         }
-        document.getElementById("apitemp").innerHTML = "Temperature in " + apidata.location.name + " Is = " + apidata.current.temp_c + " Degrees Celcius";
-        document.getElementById("apitemp2").innerHTML = "The Wind in " + apidata.location.name + " Is Blowing at = " + apidata.current.gust_mph + " MPH";
-        document.getElementById("apitemp3").innerHTML = "Todays forecast in " + apidata.location.name + " Is " + apidata.current.condition.text;
     }
 
+    function destroyandRender(todo){
+        if(todo === "refresh") {
+            chart.destroy();
+            chart.update();
+        }
+        else if(todo === "reset") {
+            document.getElementById("infoheader").innerHTML = "Graph Data is now refreshed";
+            chart.destroy();
+            graphdata = [];
+            labeldata = [];
+            chartIT();
+            chart.update;
+        }
+    }
 
-    function isCovidDataAvailable(countryName){
-        let countryID;
-        if(countryName === "Austria"){countryID = "at"}
-        else if(countryName === "Belgium") {countryID = "be"}
-        else if(countryName === "Czech Republic") {countryID = "ch"}
-        else if(countryName === "Czech Republic") {countryID = "cz"}
-        else if(countryName === "Germany") {countryID = "de"}
-        else if(countryName === "England") {countryID = "england"}
-        else if(countryName === "Estonia") {countryID = "es"}
-        else if(countryName === "Finland") {countryID = "fi"}
-        else if(countryName === "France") {countryID = "fr"}
-        else if(countryName === "Greece") {countryID = "gr"}
-        else if(countryName === "Hungary") {countryID = "hu"}
-        else if(countryName === "Ireland") {countryID = "ie"}
-        else if(countryName === "Italy") {countryID = "it"}
-        else if(countryName === "Netherlands") {countryID = "nl"}
-        else if(countryName === "Norway") {countryID = "no"}
-        else if(countryName === "Poland") {countryID = "pl"}
-        else if(countryName === "Portugal") {countryID = "pt"}
-        else if(countryName === "Scotland") {countryID = "scotland"}
-        else if(countryName === "Sweden") {countryID = "se"}
-        else if(countryName === "England") {countryID = "uk"}
-        else if(countryName === "Wales") {countryID = "wales"}
-        else if(countryName === 'Spain'){countryID = "es"}
-        return countryID;
+    function selector(input){
+        selectedItem = input;
+        buttonBool = true;
     }
 </script>
