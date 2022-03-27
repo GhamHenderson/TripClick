@@ -1,6 +1,0 @@
-username = doadmin
-password = 4xfGJCm5fmDG19rZ
-host = tripclickdatabase-do-user-11143588-0.b.db.ondigitalocean.com
-port = 25060
-database = defaultdb
-sslmode = REQUIRED
