@@ -81,7 +81,7 @@ header #menu-btn:hover {
         clip-path: polygon(100% 0, 52% 0, 0 0, 0 100%, 100% 100%);
     }
 
-    .header .navbar a {
+    .header .navbar a, .header .navbar form {
         display: block;
         margin: 20px;
         text-align: center;
