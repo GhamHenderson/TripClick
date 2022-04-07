@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Arvo&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    transition: all .3s linear;
 }
 
 header {
@@ -9,7 +12,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    background: #2B2D42;
+    background: #0a1640;
     padding: 1rem 5%;
     display: flex;
     justify-content: space-between;
@@ -71,7 +74,8 @@ header #menu-btn:hover {
         top: 99%;
         left: 0;
         right: 0;
-        background: #2B2D42;
+        height: 100vh;
+        background: #2f3640;
         border-top: 1px solid #8D99AE;
         padding: 2rem;
         clip-path: polygon(50% 0%, 50% 0, 50% 0, 50% 0, 50% 0);
