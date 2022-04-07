@@ -9,103 +9,33 @@
 
 
 <body>
-<!--<header>-->
-<!--    <nav class="sticky">-->
-<!--        <img src="images/TripClick.png" height="90px" width="180px" alt="logoImg"></a>-->
-<!--        <ul>-->
-<!--            <li><a href="/">Home</a></li>-->
-<!--            <li><a href="/customs">Custom Graphs</a></li>-->
-<!--            <li class="login"><a href="/login">Login</a></li>-->
-<!--            <li class="register"><a href="/register">Register</a></li>-->
-<!--            <li class="user-logged"><a href="/userInfo?userId=<%= userId %>" class="view-info">-->
-<!--                    <%= firstname %>-->
-<!--                </a></li>-->
-<!--            <li class="logout">-->
-<!--                <form method="post" action="/logout">-->
-<!--                    <button class="logout-button">Log out</button>-->
-<!--                </form>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--        <label id="icon">-->
-<!--            <i class="fas fa-bars"></i>-->
-<!--        </label>-->
-<!--    </nav>-->
-<!--</header>-->
 <header class="header" id="header">
-    <img src="images/TripClick.png" height="70px" width="160px" alt="logoImg"></a>
+    <img src="images/TripClick.png" height="80px" width="170px" alt="logoImg"></a>
     <nav class="navbar">
-        <a href="/">Home</a>
-        <a href="/customs">Custom Graphs</a>
+        <li>
+            <a href="/" class="nav-item">Home</a>
+        </li>
+        <li>
+            <a href="/customs" class="nav-item">Custom Graphs</a>
+        </li>
         <% if (!username) { %>
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
+            <li>
+                <a href="/login" class="nav-item">Login</a>
+            </li>
+            <li>
+                <a href="/register" class="nav-item">Register</a>
+            </li>
         <% } else if(username) { %>
-            <a href="/userInfo?userId=<%= userId %>" class="view-info"><%= firstname %></a>
-            <form method="post" action="/logout">
-                <button class="logout-button">Log out</button>
-            </form>
+            <li><a href="/userInfo?userId=<%= userId %>" class="nav-item-info"><%= firstname %></a></li>
+            <li>
+                <form method="post" action="/logout">
+                    <button class="logout-button">Log out</button>
+                </form>
+            </li>
         <% } %>
     </nav>
     <div id="menu-btn" class="fa-solid fa-bars fa-2x">
     </div>
 </header>
 
-<% if (!username) { %>
-    <style>
-        .login {
-            display: inline-block;
-        }
-
-        .register {
-            display: inline-block;
-        }
-
-        .user-logged {
-            display: none;
-        }
-
-        .logout {
-            display: none;
-        }
-
-        @media (max-width: 1200px) {
-            .login {
-                display: block;
-            }
-
-            .register {
-                display: block;
-            }
-        }
-    </style>
-<% } else if(username) { %>
-
-    <style>
-        .login {
-            display: none;
-        }
-
-        .register {
-            display: none;
-        }
-
-        .user-logged {
-            display: inline-block;
-        }
-
-        .logout {
-            display: inline-block;
-        }
-
-        @media (max-width: 1200px) {
-            .user-logged {
-                display: block;
-            }
-
-            .logout {
-                display: block;
-            }
-        }
-    </style>
-<% } %>
 <!--<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous" defer></script>-->
