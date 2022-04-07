@@ -146,46 +146,56 @@ app.post('/register', (req, res) => {
         if (!firstname || !lastname || !username || !password || !confirmPassword || !email || !phone || !gender || !country || !city) {
             return res.status(422).json({error: "Please fill in all the fields!"});
         } else {
-            connection.query('SELECT email from users WHERE email = ?', [email], async (error, result) => {
+            connection.query('SELECT email from users WHERE email = ?', [email], (error, result) => {
                 if (error) {
                     console.log(error);
                 }
 
                 if (result.length > 0) {
                     return res.status(422).json({error: "This email is already associated with an account!"});
-                } else if (password !== confirmPassword) {
-                    return res.status(422).json({error: "Passwords do not match!"});
-                }
+                } else {
+                    connection.query('SELECT username from users WHERE username = ?', [username], async (error, result) => {
+                        if (error) {
+                            console.log(error);
+                        }
 
-                let hashedPassword = await bcryptjs.hash(password, 10);
+                        if (result.length > 0) {
+                            return res.status(422).json({error: "This username is already in use!"});
+                        } else if (password !== confirmPassword) {
+                            return res.status(422).json({error: "Passwords do not match!"});
+                        }
 
-                password = hashedPassword;
-                console.log(password);
+                        let hashedPassword = await bcryptjs.hash(password, 10);
 
-                connection.query('INSERT INTO users SET ?', {
-                    firstname: firstname,
-                    lastname: lastname,
-                    username: username,
-                    password: password,
-                    email: email,
-                    phone: phone,
-                    gender: gender,
-                    country: country,
-                    city: city
-                }, (error, results) => {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        transporter.sendMail({
-                            to: email,
-                            from: "iacobedy2001@gmail.com",
-                            subject: "Account created successfully!",
-                            html: "<h1>Welcome to our website. Please log in using your username and password!</h1>"
+                        password = hashedPassword;
+                        console.log(password);
+
+                        connection.query('INSERT INTO users SET ?', {
+                            firstname: firstname,
+                            lastname: lastname,
+                            username: username,
+                            password: password,
+                            email: email,
+                            phone: phone,
+                            gender: gender,
+                            country: country,
+                            city: city
+                        }, (error, results) => {
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                transporter.sendMail({
+                                    to: email,
+                                    from: "iacobedy2001@gmail.com",
+                                    subject: "Account created successfully!",
+                                    html: "<h1>Welcome to our website. Please log in using your username and password!</h1>"
+                                });
+                                req.session.save();
+                                res.redirect('/login');
+                            }
                         });
-                        req.session.save();
-                        res.redirect('/login');
-                    }
-                });
+                    });
+                }
             });
         }
     }
