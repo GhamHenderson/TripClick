@@ -14,7 +14,7 @@ const validator = require("validator");
 const xss = require("xss");
 const emojiStrip = require("emoji-strip");
 const sqlString = require("sqlstring");
-const {JWT_SECRET, SENDMAIL_KEY} = require('./configHide');
+// const {JWT_SECRET, SENDMAIL_KEY} = require('./configHide');
 const {connection} = require('./dbConnection');
 
 dotenv.config({path: './.env'});
@@ -80,7 +80,7 @@ app.use('/editDetails', editDetailsRouter);
 
 const transporter = nodeMailer.createTransport(sendGridTransport({
     auth: {
-        api_key: SENDMAIL_KEY
+        api_key: process.env.SENDMAIL_KEY
     }
 }));
 
@@ -188,7 +188,7 @@ app.post('/register', (req, res) => {
                                     to: email,
                                     from: "iacobedy2001@gmail.com",
                                     subject: "Account created successfully!",
-                                    html: "<h1>Welcome to our website. Please log in using your username and password!</h1>"
+                                    html: "<p>Welcome to our website. Please log in using your username and password!<>https://tripclick.live/login</p>"
                                 });
                                 req.session.save();
                                 res.redirect('/login');
