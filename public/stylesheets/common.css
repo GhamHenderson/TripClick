@@ -1,83 +1,173 @@
-nav {
-    height: 90px;
-    width: 100%;
-    background: #0a1640;
-}
-
-nav ul {
-    float: right;
-    margin-right: 40px;
-}
-
-nav li {
-    display: inline-block;
-    margin: 0 8px;
-    line-height: 90px;
-}
-
-nav a {
-    color: white;
-    font-size: 18px;
-    text-transform: uppercase;
-    border: 1px solid transparent;
-    padding: 7px 10px;
-    border-radius: 3px;
-}
-
-a:hover {
-    border: 1px solid white;
-    transition: .5s;
-}
-
-nav #icon {
-    color: white;
-    font-size: 30px;
-    line-height: 80px;
-    float: right;
-    margin-right: 40px;
-    cursor: pointer;
-    display: none;
-}
-
-.logout {
-    background-color: #008CBA;
-    border: 1px solid transparent;
-    border-radius: 3px;
-    line-height: 30px;
-}
-
-.logout-button {
-    background-color: #008CBA;
-    font-size: 18px;
-    text-transform: uppercase;
-    padding: 4px 8px;
-    border: 1px solid #008CBA;
-    text-align: center;
-    transition-duration: 0.4s;
-    cursor: pointer;
-}
-
-.logout-button:hover {
-    color: red;
-    border: 1px solid red;
-}
-
-.view-info {
-    color: #00cc00;
-}
-
-.view-info:hover {
-    border: none;
-    color: #00cc00;
-    /*text-decoration: none;*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 header {
-    position: -webkit-sticky;
     position: sticky;
-    z-index: 1;
     top: 0;
+    left: 0;
+    right: 0;
+    background: #2B2D42;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    font-family: 'Arvo', serif;
 }
+
+header .logo {
+    color: #8D99AE;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+header .logo i {
+    color: #EF233C;
+    margin-right: .5rem;
+}
+
+header .navbar a {
+    color: #EDF2F4;
+    text-transform: uppercase;
+    font-size: .8rem;
+    border-radius: .5rem;
+    padding: .5rem 1.5rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header .navbar a:hover {
+    color: #D90429;
+    background: #EDF2F4;
+    transition: all .3s linear;
+}
+
+header #menu-btn {
+    display: none;
+    color: #EF233C;
+    cursor: pointer;
+}
+
+header #menu-btn:hover {
+    color: #EDF2F4;
+}
+
+@media (max-width: 950px) {
+    header #menu-btn {
+        display: inline-block;
+    }
+
+    header #menu-btn.fa-times {
+        transform: rotate(180deg);
+    }
+
+    .header .navbar {
+        position: absolute;
+        display: block;
+        top: 99%;
+        left: 0;
+        right: 0;
+        background: #2B2D42;
+        border-top: 1px solid #8D99AE;
+        padding: 2rem;
+        clip-path: polygon(50% 0%, 50% 0, 50% 0, 50% 0, 50% 0);
+    }
+
+    .header .navbar.active {
+        clip-path: polygon(100% 0, 52% 0, 0 0, 0 100%, 100% 100%);
+    }
+
+    .header .navbar a {
+        display: block;
+        margin: 20px;
+        text-align: center;
+    }
+}
+
+/*nav {*/
+/*    height: 90px;*/
+/*    width: 100%;*/
+/*    background: #0a1640;*/
+/*}*/
+
+/*nav ul {*/
+/*    float: right;*/
+/*    margin-right: 40px;*/
+/*}*/
+
+/*nav li {*/
+/*    display: inline-block;*/
+/*    margin: 0 8px;*/
+/*    line-height: 90px;*/
+/*}*/
+
+/*nav a {*/
+/*    color: white;*/
+/*    font-size: 18px;*/
+/*    text-transform: uppercase;*/
+/*    border: 1px solid transparent;*/
+/*    padding: 7px 10px;*/
+/*    border-radius: 3px;*/
+/*}*/
+
+/*a:hover {*/
+/*    border: 1px solid white;*/
+/*    transition: .5s;*/
+/*}*/
+
+/*nav #icon {*/
+/*    color: white;*/
+/*    font-size: 30px;*/
+/*    line-height: 80px;*/
+/*    float: right;*/
+/*    margin-right: 40px;*/
+/*    cursor: pointer;*/
+/*    display: none;*/
+/*}*/
+
+/*.logout {*/
+/*    background-color: #008CBA;*/
+/*    border: 1px solid transparent;*/
+/*    border-radius: 3px;*/
+/*    line-height: 30px;*/
+/*}*/
+
+/*.logout-button {*/
+/*    background-color: #008CBA;*/
+/*    font-size: 18px;*/
+/*    text-transform: uppercase;*/
+/*    padding: 4px 8px;*/
+/*    border: 1px solid #008CBA;*/
+/*    text-align: center;*/
+/*    transition-duration: 0.4s;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.logout-button:hover {*/
+/*    color: red;*/
+/*    border: 1px solid red;*/
+/*}*/
+
+/*.view-info {*/
+/*    color: #00cc00;*/
+/*}*/
+
+/*.view-info:hover {*/
+/*    border: none;*/
+/*    color: #00cc00;*/
+/*    !*text-decoration: none;*!*/
+/*}*/
+
+/*header {*/
+/*    position: -webkit-sticky;*/
+/*    position: sticky;*/
+/*    z-index: 1;*/
+/*    top: 0;*/
+/*}*/
 
 .footer {
     background-color: #26272b;
@@ -114,65 +204,65 @@ hr {
     text-align: center;
 }
 
-@media (max-width: 1048px) {
-    label.logo {
-        font-size: 32px;
-        padding-left: 60px;
-    }
+/*@media (max-width: 1048px) {*/
+/*    label.logo {*/
+/*        font-size: 32px;*/
+/*        padding-left: 60px;*/
+/*    }*/
 
-    nav ul {
-        margin-right: 20px;
-    }
+/*    nav ul {*/
+/*        margin-right: 20px;*/
+/*    }*/
 
-    nav a {
-        font-size: 17px;
-    }
-}
+/*    nav a {*/
+/*        font-size: 17px;*/
+/*    }*/
+/*}*/
 
-@media (max-width: 1200px) {
-    nav #icon {
-        display: block;
-    }
+/*@media (max-width: 1200px) {*/
+/*    nav #icon {*/
+/*        display: block;*/
+/*    }*/
 
-    nav ul {
-        position: fixed;
-        width: 100%;
-        height: 100vh;
-        background: #2f3640;
-        top: 80px;
-        left: -100%;
-        text-align: center;
-        transition: all .5s;
-    }
+/*    nav ul {*/
+/*        position: fixed;*/
+/*        width: 100%;*/
+/*        height: 100vh;*/
+/*        background: #2f3640;*/
+/*        top: 80px;*/
+/*        left: -100%;*/
+/*        text-align: center;*/
+/*        transition: all .5s;*/
+/*    }*/
 
-    nav li {
-        display: block;
-        margin: 40px 0;
-        line-height: 20px;
-    }
+/*    nav li {*/
+/*        display: block;*/
+/*        margin: 40px 0;*/
+/*        line-height: 20px;*/
+/*    }*/
 
-    .logout {
-        margin-right: 180px;
-        margin-left: 180px;
-    }
+/*    .logout {*/
+/*        margin-right: 180px;*/
+/*        margin-left: 180px;*/
+/*    }*/
 
-    .logout-button {
-        width: 100%;
-    }
+/*    .logout-button {*/
+/*        width: 100%;*/
+/*    }*/
 
-    nav a {
-        font-size: 20px;
-    }
+/*    nav a {*/
+/*        font-size: 20px;*/
+/*    }*/
 
-    a:hover {
-        border: none;
-        color: #3498db;
-    }
+/*    a:hover {*/
+/*        border: none;*/
+/*        color: #3498db;*/
+/*    }*/
 
-    nav ul.show {
-        left: 0;
-    }
-}
+/*    nav ul.show {*/
+/*        left: 0;*/
+/*    }*/
+/*}*/
 
 @media (max-width: 1220px) {
     .container-footer {
