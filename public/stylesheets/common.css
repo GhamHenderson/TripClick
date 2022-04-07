@@ -110,7 +110,7 @@ hr {
     text-align: center;
 }
 
-@media (max-width: 950px) {
+@media (max-width: 1050px) {
     header #menu-btn {
         display: inline-block;
     }
