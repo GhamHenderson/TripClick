@@ -14,6 +14,7 @@
     <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
     <div class="col-lg-6 mx-auto">
         <div class="d-grid mr-1 d-sm-flex justify-content-sm-center">
+            <button type="button" class="btn btn-primary mr-1" onclick=newData()>New</button><BR>
             <button type="button" class="btn btn-primary mr-1" onclick=selector("covid")>Covid</button><BR>
             <button type="button" class="btn btn-primary mr-1" onclick=selector("weather")>Weather</button>
             <button type="button" class="btn btn-primary mr-1" onclick=selector("gdp")>GDP</button>
@@ -22,14 +23,13 @@
             <button type="button" class="btn btn-primary mr-1" onclick=selector("health")>Health</button>
         </div><br>
         <label for="graphType"></label><select name="graphType" id="graphType">
-            <option id="bar" value="bar">bar</option>
-            <option value="line">line</option>
-            <option value="pie">pie</option>
-            <option value="scatter">scatter</option>
-            <option value="radar">radar</option>
+            <option id="bar" value="bar">Bar Chart (Default)</option>
+            <option value="line">Line Graph</option>
+            <option value="pie">Pie Chart</option>
+            <option value="radar">Radar Chart</option>
         </select>
         <button type="button" class="btn btn-primary" onclick=changeGraphType(document.getElementById("graphType").value)>Change graph type</button>
-        <button type="button" class="btn btn-primary" onclick=destroyandRender("reset")>Refresh Graph</button>
+        <button type="button" class="btn btn-primary" onclick=destroyandRender("refresh")>Refresh Graph</button>
 
     </div>
     <div class='apicontainer'>
@@ -46,12 +46,12 @@
 
 <!--This is a D3.Js Map Created By Graham,Eduard and James-->
 <!--as part of the Major Group Project.-->
-
+#
 <!--This Script Will be moved to a Script.Js File after testing.-->
 
 <script>
     let utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-    let titleHeader = "Todays Date : " + utc;
+    let titleHeader;
     let dataCount;
     let countryName;
     let countriesSelected = [];
@@ -163,9 +163,9 @@
             data: {
                 labels: labeldata,
                 datasets: [{
-                    label: namedata,
+                    label: selectedItem,
                     data: graphdata,
-                    backgroundColor: ['rgba(0,100,255,0.27)'],
+                    backgroundColor: ['rgba(0,100,255,0.27)','rgba(94,255,0,0.27)','rgb(109,234,17)','rgba(255,0,0,0.66)','rgba(0,100,255,0.27)'],
                     borderColor: ['rgb(33,119,232)',],
                 }],
             },
@@ -221,11 +221,12 @@
         let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/"+countryName+"";
         const response = await fetch(url);
         let apidata = await response.json();
+
         if(selectedItem === "gdp"){
             titleHeader = "GDP Per Capita 2022";
             addData(chart,countryName,apidata[0].gdpPerCap);
-            graphdata.push(apidata[0].gdpPerCap);
-            labeldata.push(countryName);
+            // graphdata.push(apidata[0].gdpPerCap);
+            // labeldata.push(countryName);
         }
         if(selectedItem === "happiness"){
             titleHeader = "Happiness Score in Index 2020";
@@ -295,6 +296,7 @@
     function destroyandRender(todo){
         if(todo === "refresh") {
             chart.destroy();
+            chartIT();
             chart.update();
         }
         else if(todo === "reset") {
@@ -316,19 +318,28 @@
         chart.destroy();
         chartIT();
     }
-
-
-    function addData(chart, label, data) {
-        color = randColor();
-        console.table(chart.data.datasets);
-        chart.data.datasets.push({
-            label: label,
-            backgroundColor: color,
-            data: data
-        });
-        console.table(chart.data.datasets);
+    function newData(){
+        const newDataset= {
+            label: "Dataset Data",
+            data: [1,2,3,4,5,4,3,2,1],
+            backgroundColor: ['rgb(161,70,111)'],
+            borderColor: ['rgb(0,0,0)',],
+        }
+        chart.data.datasets.push(newDataset);
         chart.update();
     }
+
+    // function addData(chart, label, data) {
+    //     color = randColor();
+    //     console.table(chart.data.datasets);
+    //     chart.data.datasets.push({
+    //         label: label,
+    //         backgroundColor: color,
+    //         data: data
+    //     });
+    //     console.table(chart.data.datasets);
+    //     chart.update();
+    // }
 
     const randColor = () =>  {
         return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
