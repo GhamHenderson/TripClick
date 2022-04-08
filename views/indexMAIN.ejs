@@ -10,52 +10,45 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 
 <body>
-<div class="px-4 py-5 my-5 text-center">
-    <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
-    <div class="col-lg-6 mx-auto">
-        <div class="d-grid mr-1 d-sm-flex justify-content-sm-center">
-            <button type="button" class="btn btn-primary mr-1" onclick=selector("covid")>Covid</button><BR>
-            <button type="button" class="btn btn-primary mr-1" onclick=selector("weather")>Weather</button>
-            <button type="button" class="btn btn-primary mr-1" onclick=selector("gdp")>GDP</button>
-            <button type="button" class="btn btn-primary mr-1" onclick=selector("happiness")>Happiness</button>
-            <button type="button" class="btn btn-primary mr-1" onclick=selector("corruption")>Corruption</button>
-            <button type="button" class="btn btn-primary mr-1" onclick=selector("health")>Health</button>
-        </div><br>
-        <select name="graphType" id="graphType">
-            <option id="bar" value="bar">bar</option>
-            <option value="line">line</option>
-            <option value="pie">pie</option>
-            <option value="scatter">scatter</option>
-            <option value="radar">radar</option>
-        </select>
-        <button type="button" class="btn btn-primary" onclick=changeGraphType(document.getElementById("graphType").value)>Change graph type</button>
-        <button type="button" class="btn btn-primary" onclick=destroyandRender("reset")>Refresh Graph</button>
-
+<div class="home-page" id="home">
+    <div class="mapcontainer">
+        <div class="euro">
+            <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
+        </div>
     </div>
-<<<<<<< Updated upstream
-    <br>
+
+
+<div class="apicontainer2">
+    <div class="apidisplay2">
+            <button type="button" class="btn btn-primary" onclick=selector("covid")>Covid</button>
+            <button type="button" class="btn btn-primary" onclick=selector("weather")>Weather</button>
+            <button type="button" class="btn btn-primary" onclick=selector("gdp")>GDP</button>
+            <button type="button" class="btn btn-primary" onclick=selector("happiness")>Happiness</button>
+            <button type="button" class="btn btn-primary" onclick=selector("corruption")>Corruption</button>
+            <button type="button" class="btn btn-primary" onclick=selector("health")>Health</button>
+            <br><br><br>
+    </div>
+    <br>githh
     <div class="apidisplay1">
             <label>Choose a graph type:</label>
             <select name="graphType" id="graphType">
                 <option id="bar" value="bar">bar</option>
                 <option value="line">line</option>
                 <option value="pie">pie</option>
+                <option value="scatter">scatter</option>
                 <option value="radar">radar</option>
             </select>
             <button type="button" class="btn btn-primary" onclick=changeGraphType(document.getElementById("graphType").value)>Change graph type</button>
     </div>
 </div>
-=======
->>>>>>> Stashed changes
     <div class='apicontainer'>
         <div class="graph1">
             <canvas id="chart1" width="200" height="200"></canvas>
         </div>
     </div>
-    </div>
+
 </div>
 
-<div class="b-example-divider"></div>
 
 <%- include('common/footer') %>
 
@@ -66,7 +59,7 @@
 
 <script>
     let utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-    let titleHeader = "";
+    let titleHeader = "Todays Date : " + utc;
     let dataCount;
     let countryName;
     let countriesSelected = [];
@@ -87,57 +80,10 @@
     let selectedItem;
     let clickcount = 0;
 
-    if(document.getElementById("graphType") === "pie"){
-        chartIT()
-    }
-    else
-    chartIT2();
+    // Call Chart Function to build chart
+    chartIT();
 
     async function chartIT() {
-        const ctx = document.getElementById('chart1').getContext('2d')
-        chart = new Chart(ctx, {
-            options:{
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: titleHeader
-                    },
-                },
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Country Name"
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Value'
-                        },
-                    }
-                }
-            },
-            type: chartType,
-            data: {
-                labels: labeldata,
-                datasets: [{
-                    label: namedata,
-                    data: graphdata,
-                    backgroundColor: ['rgba(0,100,255,0.27)'],
-                    borderColor: ['rgb(33,119,232)',],
-                    borderWidth: 2,
-                    hoverOffset: 4,
-                }
-                ],
-            },
-        });
-    }
-
-    async function chartIT2() {
         const ctx = document.getElementById('chart1').getContext('2d')
         chart = new Chart(ctx, {
             options:{
@@ -256,25 +202,21 @@
             titleHeader = "GDP Per Capita 2022";
             graphdata.push(apidata[0].gdpPerCap);
             labeldata.push(countryName);
-            chart.update();
         }
         if(selectedItem === "happiness"){
             titleHeader = "Happiness Score in Index 2020";
             graphdata.push(apidata[0].happiness);
             labeldata.push(countryName);
-            chart.update();
         }
         if(selectedItem === "corruption"){
             titleHeader = "Country Corruption Score";
             graphdata.push(apidata[0].corruption);
             labeldata.push(countryName);
-            chart.update();
         }
         if(selectedItem === "health"){
             titleHeader = "Average Health score per country 2020";
             graphdata.push(apidata[0].health);
             labeldata.push(countryName);
-            chart.update();
         }
     }
 
@@ -333,9 +275,10 @@
     function destroyandRender(todo){
         if(todo === "refresh") {
             chart.destroy();
-            chartIT();
+            chart.update();
         }
         else if(todo === "reset") {
+            document.getElementById("infoheader").innerHTML = "Graph Data is now refreshed";
             chart.destroy();
             graphdata = [];
             labeldata = [];
