@@ -91,7 +91,7 @@ const transporter = nodeMailer.createTransport(sendGridTransport({
 
 app.post('/register', (req, res) => {
 
-    // catch the username that was sent to us from the jQuery POST on the index.ejs page
+    // catch the username that was sent to us from the jQuery POST on the indexMAIN.ejs page
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
     var username = req.body.username;

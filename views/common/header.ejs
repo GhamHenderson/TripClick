@@ -15,9 +15,6 @@
         <li>
             <a href="/" class="nav-item">Home</a>
         </li>
-        <li>
-            <a href="/customs" class="nav-item">Custom Graphs</a>
-        </li>
         <% if (!username) { %>
             <li>
                 <a href="/login" class="nav-item">Login</a>
@@ -26,7 +23,7 @@
                 <a href="/register" class="nav-item">Register</a>
             </li>
         <% } else if(username) { %>
-            <li><a href="/userInfo?userId=<%= userId %>" class="nav-item-info"><%= firstname %></a></li>
+            <li><a href="/userInfo?userId=<%= userId %>" class="nav-item-info"><%= username %></a></li>
             <li>
                 <form method="post" action="/logout">
                     <button class="logout-button">Log out</button>
