@@ -26,7 +26,9 @@ router.get('/', function (req, res, next) {
         city: req.session.city,
         dateRegister: req.session.dateRegister,
         message: message,
-        error: error
+        error: error,
+        role: req.session.role
+
     });
 });
 

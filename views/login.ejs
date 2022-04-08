@@ -9,17 +9,6 @@
 
 <!--start of login page-->
 <div class="login-page" id="login">
-
-    <% if(message){ %>
-        <h4 class="alert alert-danger mt-4">
-            <%= message %>
-        </h4>
-    <% } else if(error) { %>
-        <h4 class="alert alert-danger mt-4">
-            <%= error %>
-        </h4>
-    <% } %>
-
     <!--    start of login form-->
     <div class="wrapper-login">
         <div class="title">
@@ -47,5 +36,5 @@
     </div>
 
 </div>
-
-<%- include('common/footer') %>
+</body>
+</html>

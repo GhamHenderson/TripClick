@@ -16,6 +16,7 @@ const emojiStrip = require("emoji-strip");
 const sqlString = require("sqlstring");
 // const {JWT_SECRET, SENDMAIL_KEY} = require('./configHide');
 const {connection} = require('./dbConnection');
+const {ROLE} = require('./roles');
 
 dotenv.config({path: './.env'});
 
@@ -28,7 +29,9 @@ var loginRouter = require('./routes/login');
 var customsRouter = require('./routes/customs');
 var graphRouter = require('./routes/graph');
 var userInfoRouter = require('./routes/userInfo');
-var editDetailsRouter = require('./routes/editDetails');
+var editDetailsRouter = require('./routes/editDetails')
+var adminRouter = require('./routes/admin');
+
 
 const HALF_HOUR = 1000 * 60 * 30
 
@@ -77,6 +80,8 @@ app.use('/users', usersRouter);
 app.use('/graph', graphRouter);
 app.use('/userInfo', userInfoRouter);
 app.use('/editDetails', editDetailsRouter);
+app.use('/admin', adminRouter);
+
 
 const transporter = nodeMailer.createTransport(sendGridTransport({
     auth: {
@@ -127,8 +132,8 @@ app.post('/register', (req, res) => {
 
     if (username.length === '') {
         errorMessage += 'Please enter a username!';
-    } else if (username.length < 6) {
-        errorMessage += 'Username too short. Minimum characters should be 6!';
+    } else if (username.length < 4) {
+        errorMessage += 'Username too short. Minimum characters should be 4!';
     } else if (username.length > 15) {
         errorMessage += 'Username too long. Maximum length allowed is 15 characters!';
     }
@@ -179,7 +184,8 @@ app.post('/register', (req, res) => {
                             phone: phone,
                             gender: gender,
                             country: country,
-                            city: city
+                            city: city,
+                            role: ROLE.USER
                         }, (error, results) => {
                             if (error) {
                                 console.log(error);
@@ -231,9 +237,14 @@ app.post('/login', function (req, res) {
                     req.session.country = result[0].country;
                     req.session.city = result[0].city;
                     req.session.dateRegister = result[0].dateRegister;
+                    req.session.role = result[0].role;
                     // const token = jwt.sign({_userId: result[0].userId}, JWT_SECRET);
                     // res.json({token});
-                    res.redirect('/');
+                    if (req.session.role === ROLE.ADMIN) {
+                        return res.redirect('/admin');
+                    } else if (req.session.role === ROLE.USER) {
+                        res.redirect('/');
+                    }
                 } else {
                     return res.status(422).json({error: "Wrong username or password!"});
                 }
@@ -273,8 +284,8 @@ app.post('/editDetails', function (req, res, next) {
 
     if (username.length === '') {
         errorMessage += 'Please enter a username!';
-    } else if (username.length < 6) {
-        errorMessage += 'Username too short. Minimum characters should be 6!';
+    } else if (username.length < 4) {
+        errorMessage += 'Username too short. Minimum characters should be 4!';
     } else if (username.length > 15) {
         errorMessage += 'Username too long. Maximum length allowed is 15 characters!';
     }
@@ -336,7 +347,6 @@ app.post('/logout', function (req, res) {
         res.redirect('/login');
     });
 });
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

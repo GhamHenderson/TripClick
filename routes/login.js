@@ -25,7 +25,9 @@ router.get('/', function (req, res, next) {
         gender: req.session.gender,
         country: req.session.country,
         city: req.session.city,
-        dateRegister: req.session.dateRegister
+        dateRegister: req.session.dateRegister,
+        role: req.session.role
+
     });
 });
 
