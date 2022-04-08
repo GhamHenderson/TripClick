@@ -21,7 +21,7 @@
             <button type="button" class="btn btn-primary mr-1" onclick=selector("corruption")>Corruption</button>
             <button type="button" class="btn btn-primary mr-1" onclick=selector("health")>Health</button>
         </div><br>
-        <select name="graphType" id="graphType">
+        <label for="graphType"></label><select name="graphType" id="graphType">
             <option id="bar" value="bar">bar</option>
             <option value="line">line</option>
             <option value="pie">pie</option>
@@ -32,28 +32,13 @@
         <button type="button" class="btn btn-primary" onclick=destroyandRender("reset")>Refresh Graph</button>
 
     </div>
-<<<<<<< Updated upstream
-    <br>
-    <div class="apidisplay1">
-            <label>Choose a graph type:</label>
-            <select name="graphType" id="graphType">
-                <option id="bar" value="bar">bar</option>
-                <option value="line">line</option>
-                <option value="pie">pie</option>
-                <option value="radar">radar</option>
-            </select>
-            <button type="button" class="btn btn-primary" onclick=changeGraphType(document.getElementById("graphType").value)>Change graph type</button>
-    </div>
-</div>
-=======
->>>>>>> Stashed changes
     <div class='apicontainer'>
         <div class="graph1">
             <canvas id="chart1" width="200" height="200"></canvas>
         </div>
     </div>
     </div>
-</div>
+</body>
 
 <div class="b-example-divider"></div>
 
@@ -66,6 +51,7 @@
 
 <script>
     let utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+    let data = [];
     let titleHeader = "";
     let dataCount;
     let countryName;
@@ -87,11 +73,8 @@
     let selectedItem;
     let clickcount = 0;
 
-    if(document.getElementById("graphType") === "pie"){
-        chartIT()
-    }
-    else
-    chartIT2();
+    chartIT();
+
 
     async function chartIT() {
         const ctx = document.getElementById('chart1').getContext('2d')
@@ -124,73 +107,6 @@
             type: chartType,
             data: {
                 labels: labeldata,
-                datasets: [{
-                    label: namedata,
-                    data: graphdata,
-                    backgroundColor: ['rgba(0,100,255,0.27)'],
-                    borderColor: ['rgb(33,119,232)',],
-                    borderWidth: 2,
-                    hoverOffset: 4,
-                }
-                ],
-            },
-        });
-    }
-
-    async function chartIT2() {
-        const ctx = document.getElementById('chart1').getContext('2d')
-        chart = new Chart(ctx, {
-            options:{
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: titleHeader
-                    },
-                },
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Country Name"
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Value'
-                        },
-                    }
-                }
-            },
-            type: chartType,
-            data: {
-                labels: labeldata,
-                datasets: [{
-                    label: namedata,
-                    data: graphdata,
-                    backgroundColor: ['rgba(0,100,255,0.27)'],
-                    borderColor: ['rgb(33,119,232)',],
-                    borderWidth: 2,
-                    hoverOffset: 4,
-                },{
-                    label: namedata2,
-                    data: graphdata2,
-                    backgroundColor: ['rgba(255,0,0,0.37)'],
-                    borderColor: ['rgb(0,0,0)',],
-                    borderWidth: 2,
-                    hoverOffset: 4,
-                },{
-                    label: namedata3,
-                    data: graphdata3,
-                    backgroundColor: ['rgba(255,0,200,0.37)'],
-                    borderColor: ['rgb(0,0,0)',],
-                    borderWidth: 2,
-                    hoverOffset: 4,
-                }
-                ],
             },
         });
     }
@@ -229,6 +145,22 @@
             })
     })
 
+    function addData(chart, label, data) {
+        color = randColor();
+        console.table(chart.data.datasets);
+        chart.data.datasets.push({
+            label: label,
+            backgroundColor: color,
+            data: data
+        });
+        console.table(chart.data.datasets);
+        chart.update();
+    }
+
+    const randColor = () =>  {
+        return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
+    }
+
     function clickHandling(i){
         countryName = i.properties.name;
         if (timesClicked < 10) {
@@ -247,7 +179,7 @@
     }
 
 
-    async function buttonClicked(countryName,selectedItem, i) { // Api Info -> https://world-happiness-database.herokuapp.com/
+    async function buttonClicked(countryName,selectedItem) { // Api Info -> https://world-happiness-database.herokuapp.com/
         let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/"+countryName+"";
         const response = await fetch(url);
         let apidata = await response.json();
@@ -260,14 +192,16 @@
         }
         if(selectedItem === "happiness"){
             titleHeader = "Happiness Score in Index 2020";
-            graphdata.push(apidata[0].happiness);
-            labeldata.push(countryName);
+            data = apidata[0].happiness;
+            addData(chart,countryName,'#a000ff',data)
             chart.update();
         }
         if(selectedItem === "corruption"){
             titleHeader = "Country Corruption Score";
-            graphdata.push(apidata[0].corruption);
-            labeldata.push(countryName);
+            data = apidata[0].corruption;
+            addData(chart,countryName,'#9986a6',data)
+            // graphdata.push(apidata[0].corruption);
+            // labeldata.push(countryName);
             chart.update();
         }
         if(selectedItem === "health"){
