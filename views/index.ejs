@@ -51,8 +51,7 @@
 
 <script>
     let utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-    let data = [];
-    let titleHeader = "";
+    let titleHeader = "Todays Date : " + utc;
     let dataCount;
     let countryName;
     let countriesSelected = [];
@@ -72,9 +71,65 @@
     let buttonBool = false;
     let selectedItem;
     let clickcount = 0;
-
+    // Call Chart Function to build chart
     chartIT();
-
+    async function chartIT2() {
+        const ctx = document.getElementById('chart1').getContext('2d')
+        chart = new Chart(ctx, {
+            options:{
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: titleHeader
+                    },
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: "Country Name"
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        },
+                    }
+                }
+            },
+            type: chartType,
+            data: {
+                labels: labeldata,
+                datasets: [{
+                    label: namedata,
+                    data: graphdata,
+                    backgroundColor: ['rgba(0,100,255,0.27)'],
+                    borderColor: ['rgb(33,119,232)',],
+                    borderWidth: 2,
+                    hoverOffset: 4,
+                },{
+                    label: namedata2,
+                    data: graphdata2,
+                    backgroundColor: ['rgba(255,0,0,0.37)'],
+                    borderColor: ['rgb(0,0,0)',],
+                    borderWidth: 2,
+                    hoverOffset: 4,
+                },{
+                    label: namedata3,
+                    data: graphdata3,
+                    backgroundColor: ['rgba(255,0,200,0.37)'],
+                    borderColor: ['rgb(0,0,0)',],
+                    borderWidth: 2,
+                    hoverOffset: 4,
+                }
+                ],
+            },
+        });
+    }
 
     async function chartIT() {
         const ctx = document.getElementById('chart1').getContext('2d')
@@ -107,19 +162,22 @@
             type: chartType,
             data: {
                 labels: labeldata,
+                datasets: [{
+                    label: namedata,
+                    data: graphdata,
+                    backgroundColor: ['rgba(0,100,255,0.27)'],
+                    borderColor: ['rgb(33,119,232)',],
+                }],
             },
         });
     }
-
     // Create an Svg variable
     const svg = d3.select("svg"),
         width = +svg.attr("width")
-
     // Map and projection
     const projection = d3.geoNaturalEarth1()
         .scale(width / 1.9) // Lower the num closer the zoom
         .translate([200, 550])  // (Horizontal, Vertical)
-
     // Load external data from geographic api and use data to project path info from map.
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function (data) {
         svg.append("g")
@@ -132,7 +190,6 @@
             .on('click', function (d, i) {
                 if(buttonBool === true) {
                     clickHandling(i);
-
                     if (countriesSelected.includes(i.properties.name) === true) {
                         countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
                         d3.select(this).style("fill", '#348C31');
@@ -144,23 +201,6 @@
                 else window.alert("Please Select a Data Value from the Buttons below")
             })
     })
-
-    function addData(chart, label, data) {
-        color = randColor();
-        console.table(chart.data.datasets);
-        chart.data.datasets.push({
-            label: label,
-            backgroundColor: color,
-            data: data
-        });
-        console.table(chart.data.datasets);
-        chart.update();
-    }
-
-    const randColor = () =>  {
-        return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
-    }
-
     function clickHandling(i){
         countryName = i.properties.name;
         if (timesClicked < 10) {
@@ -177,41 +217,32 @@
         }
         chart.update();
     }
-
-
-    async function buttonClicked(countryName,selectedItem) { // Api Info -> https://world-happiness-database.herokuapp.com/
+    async function buttonClicked(countryName,selectedItem, i) { // Api Info -> https://world-happiness-database.herokuapp.com/
         let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/"+countryName+"";
         const response = await fetch(url);
         let apidata = await response.json();
-
         if(selectedItem === "gdp"){
             titleHeader = "GDP Per Capita 2022";
+            addData(chart,countryName,apidata[0].gdpPerCap);
             graphdata.push(apidata[0].gdpPerCap);
             labeldata.push(countryName);
-            chart.update();
         }
         if(selectedItem === "happiness"){
             titleHeader = "Happiness Score in Index 2020";
-            data = apidata[0].happiness;
-            addData(chart,countryName,'#a000ff',data)
-            chart.update();
+            graphdata.push(apidata[0].happiness);
+            labeldata.push(countryName);
         }
         if(selectedItem === "corruption"){
             titleHeader = "Country Corruption Score";
-            data = apidata[0].corruption;
-            addData(chart,countryName,'#9986a6',data)
-            // graphdata.push(apidata[0].corruption);
-            // labeldata.push(countryName);
-            chart.update();
+            graphdata.push(apidata[0].corruption);
+            labeldata.push(countryName);
         }
         if(selectedItem === "health"){
             titleHeader = "Average Health score per country 2020";
             graphdata.push(apidata[0].health);
             labeldata.push(countryName);
-            chart.update();
         }
     }
-
     function weatherHandler(i) {
         if (clickcount === 0) {
             getCurrentWeather(i.properties.name, 1);
@@ -222,14 +253,12 @@
         } else getCurrentWeather(i.properties.name, 3);
         chart.update();
     }
-
     async function getCurrentWeather(countryName, gd) { // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
         let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
         const response = await fetch(url);
         let apidata = await response.json();
         displayWeatherData(apidata, gd, countryName);
     }
-
     function displayWeatherData(apidata, gd, countryName){
         if(gd === 1){
             // Data variable will store all data received from api call
@@ -263,13 +292,13 @@
             chart.update();
         }
     }
-
     function destroyandRender(todo){
         if(todo === "refresh") {
             chart.destroy();
-            chartIT();
+            chart.update();
         }
         else if(todo === "reset") {
+            document.getElementById("infoheader").innerHTML = "Graph Data is now refreshed";
             chart.destroy();
             graphdata = [];
             labeldata = [];
@@ -277,16 +306,31 @@
             chart.update;
         }
     }
-
     function selector(input){
         selectedItem = input;
         buttonBool = true;
     }
-
     function changeGraphType(input)
     {
         chartType = input;
         chart.destroy();
         chartIT();
+    }
+
+
+    function addData(chart, label, data) {
+        color = randColor();
+        console.table(chart.data.datasets);
+        chart.data.datasets.push({
+            label: label,
+            backgroundColor: color,
+            data: data
+        });
+        console.table(chart.data.datasets);
+        chart.update();
+    }
+
+    const randColor = () =>  {
+        return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
     }
 </script>
