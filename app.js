@@ -535,7 +535,7 @@ app.post('/newPassword/:token', function (req, res) {
         } else {
             let hashedNewPassword = await bcryptjs.hash(newPassword, 10);
 
-            connection.query("UPDATE `majorproject`.`users` SET `password` = '" + hashedNewPassword + "' WHERE `resetToken` = '" + sentToken + "';", function (error, results, fields) {
+            connection.query("UPDATE `majorproject`.`users` SET `password` = '" + hashedNewPassword + "', `resetToken` = 'undefined' WHERE `resetToken` = '" + sentToken + "';", function (error, results, fields) {
                 if (error) {
                     console.log(error);
                 } else {

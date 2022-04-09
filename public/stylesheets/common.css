@@ -7,7 +7,7 @@
     transition: all .3s linear;
 }
 
-body{
+body {
     min-height: 100vh;
 }
 
@@ -88,6 +88,8 @@ header #menu-btn:hover {
     color: #737373;
     flex-shrink: 0;
     margin-top: auto;
+    height: 230px;
+    position: absolute;
 }
 
 .container-footer {

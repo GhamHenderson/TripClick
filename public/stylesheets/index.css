@@ -6,9 +6,11 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+
 body {
     font-family: montserrat;
     background-image: url("../images/map.jpg");
+    margin-bottom: -230px;
 }
 
 .home-page {
