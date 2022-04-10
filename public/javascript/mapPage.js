@@ -1,7 +1,5 @@
-<script src="../javascript/mapPage.js"></script>
-
 let utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-let titleHeader = "Todays Date : " + utc;
+let titleHeader = "";
 let dataCount;
 let countryName;
 let countriesSelected = [];
@@ -15,14 +13,131 @@ let namedata = [];
 let namedata2 = [];
 let namedata3 = [];
 let chart;
+let chartType = "bar";
 let CasesTotal = 0;
 let timesClicked = 0;
 let buttonBool = false;
 let selectedItem;
 let clickcount = 0;
-
+let trigger = 0;
 // Call Chart Function to build chart
 chartIT();
+
+async function chartIT3() {
+    const ctx = document.getElementById('chart1').getContext('2d')
+    chart = new Chart(ctx, {
+        options:{
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: "Total Coronavirus Cases 21/22"
+                },
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: "Date"
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Total Covid Cases 21/22'
+                    },
+                }
+            }
+        },
+        type: chartType,
+        data: {
+            labels: labeldata,
+            datasets: [{
+                label: namedata,
+                data: graphdata,
+                backgroundColor: ['rgba(0,100,255,0.27)'],
+                borderColor: ['rgb(33,119,232)',],
+                borderWidth: 2,
+                hoverOffset: 4,
+            },{
+                label: namedata2,
+                data: graphdata2,
+                backgroundColor: ['rgba(255,0,0,0.37)'],
+                borderColor: ['rgb(0,0,76)',],
+                borderWidth: 2,
+                hoverOffset: 4,
+            },{
+                label: namedata3,
+                data: graphdata3,
+                backgroundColor: ['rgba(255,0,200,0.37)'],
+                borderColor: ['rgba(0,0,0,0.76)',],
+                borderWidth: 2,
+                hoverOffset: 4,
+            }
+            ],
+        },
+    });
+}
+
+async function chartIT2() {
+    const ctx = document.getElementById('chart1').getContext('2d')
+    chart = new Chart(ctx, {
+        options:{
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: titleHeader
+                },
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: "Date"
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Temperature °C'
+                    },
+                }
+            }
+        },
+        type: chartType,
+        data: {
+            labels: labeldata,
+            datasets: [{
+                label: namedata,
+                data: graphdata,
+                backgroundColor: ['rgba(0,100,255,0.27)'],
+                borderColor: ['rgb(33,119,232)',],
+                borderWidth: 2,
+                hoverOffset: 4,
+            },{
+                label: namedata2,
+                data: graphdata2,
+                backgroundColor: ['rgba(255,0,0,0.37)'],
+                borderColor: ['rgb(0,0,76)',],
+                borderWidth: 2,
+                hoverOffset: 4,
+            },{
+                label: namedata3,
+                data: graphdata3,
+                backgroundColor: ['rgba(255,0,200,0.37)'],
+                borderColor: ['rgba(0,0,0,0.76)',],
+                borderWidth: 2,
+                hoverOffset: 4,
+            }
+            ],
+        },
+    });
+}
 
 async function chartIT() {
     const ctx = document.getElementById('chart1').getContext('2d')
@@ -52,45 +167,25 @@ async function chartIT() {
                 }
             }
         },
-        type: 'line',
+        type: chartType,
         data: {
             labels: labeldata,
             datasets: [{
-                label: namedata,
+                label: titleHeader,
                 data: graphdata,
-                backgroundColor: ['rgba(0,100,255,0.27)'],
-                borderColor: ['rgb(0,0,0)',],
-                borderWidth: 2,
-                hoverOffset: 4,
-            }, {
-                label: namedata2,
-                data: graphdata2,
-                backgroundColor: ['rgba(255,0,0,0.37)'],
-                borderColor: ['rgb(0,0,0)',],
-                borderWidth: 2,
-                hoverOffset: 4,
-            }, {
-                label: namedata3,
-                data: graphdata3,
-                backgroundColor: ['rgba(255,0,200,0.37)'],
-                borderColor: ['rgb(0,0,0)',],
-                borderWidth: 2,
-                hoverOffset: 4,
-            }
-            ],
+                backgroundColor: ['rgba(0,100,255,0.27)','rgba(94,255,0,0.27)','rgb(109,234,17)','rgba(255,0,0,0.66)','rgba(0,100,255,0.27)'],
+                borderColor: ['rgba(0,0,0,0.83)',],
+            }],
         },
     });
 }
-
 // Create an Svg variable
 const svg = d3.select("svg"),
     width = +svg.attr("width")
-
 // Map and projection
 const projection = d3.geoNaturalEarth1()
     .scale(width / 1.9) // Lower the num closer the zoom
     .translate([200, 550])  // (Horizontal, Vertical)
-
 // Load external data from geographic api and use data to project path info from map.
 d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function (data) {
     svg.append("g")
@@ -101,9 +196,10 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
         .attr("fill", "#348C31") // Color Of Country
         .attr("d", d3.geoPath().projection(projection))
         .on('click', function (d, i) {
+            console.log(graphdata + " : " + labeldata);
             if(buttonBool === true) {
                 clickHandling(i);
-
+                chart.update();
                 if (countriesSelected.includes(i.properties.name) === true) {
                     countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
                     d3.select(this).style("fill", '#348C31');
@@ -115,14 +211,18 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
             else window.alert("Please Select a Data Value from the Buttons below")
         })
 })
-
 function clickHandling(i){
     countryName = i.properties.name;
     if (timesClicked < 10) {
         if(selectedItem === "covid") {
-            //LOAD COVID
+            covHandler(i);
+            chart.destroy();
+            chartIT3();
+            chart.update();
         }
         else if(selectedItem === "weather"){
+            chart.destroy();
+            chartIT2();
             weatherHandler(i);
         }
         else {
@@ -132,12 +232,11 @@ function clickHandling(i){
     }
     chart.update();
 }
-
-
-async function buttonClicked(countryName,selectedItem, i) { // Api Info -> https://world-happiness-database.herokuapp.com/
+async function buttonClicked(countryName,selectedItem) { // Api Info -> https://world-happiness-database.herokuapp.com/
     let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/"+countryName+"";
     const response = await fetch(url);
     let apidata = await response.json();
+
     if(selectedItem === "gdp"){
         titleHeader = "GDP Per Capita 2022";
         graphdata.push(apidata[0].gdpPerCap);
@@ -159,10 +258,10 @@ async function buttonClicked(countryName,selectedItem, i) { // Api Info -> https
         labeldata.push(countryName);
     }
 }
-
 function weatherHandler(i) {
     if (clickcount === 0) {
         getCurrentWeather(i.properties.name, 1);
+        titleHeader = "Average Temp for Last 3 Days"
         clickcount++;
     } else if (clickcount === 1) {
         clickcount++;
@@ -170,7 +269,6 @@ function weatherHandler(i) {
     } else getCurrentWeather(i.properties.name, 3);
     chart.update();
 }
-
 async function getCurrentWeather(countryName, gd) { // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
     let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
     const response = await fetch(url);
@@ -211,14 +309,13 @@ function displayWeatherData(apidata, gd, countryName){
         chart.update();
     }
 }
-
 function destroyandRender(todo){
     if(todo === "refresh") {
         chart.destroy();
+        chartIT();
         chart.update();
     }
     else if(todo === "reset") {
-        document.getElementById("infoheader").innerHTML = "Graph Data is now refreshed";
         chart.destroy();
         graphdata = [];
         labeldata = [];
@@ -230,4 +327,109 @@ function destroyandRender(todo){
 function selector(input){
     selectedItem = input;
     buttonBool = true;
+}
+
+function changeGraphType(input)
+{
+    //if weather selected
+    chartType = input;
+    chart.destroy();
+    chartIT3();
+    // else
+    //     chartType = input;
+    //     chart.destroy();
+    //     chartIT();
+}
+
+const randColor = () =>  {
+    return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
+}
+
+function covHandler(i) {
+    if (trigger === 0) {
+        getCurrentCovid(i.properties.name,1);
+        trigger++;
+    } else if (trigger === 1) {
+        getCurrentCovid(i.properties.name,2);
+        trigger++;
+    } else getCurrentCovid(i.properties.name,3);
+    chart.update();
+}
+
+async function getCurrentCovid(countryName, counter) {
+    let countryID = isCovidDataAvailable(countryName);
+    const response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=10");
+    const data = await response.json();
+
+    if (counter === 1) {
+        for (let j = 0; j < data.length; j++) {
+            let dailytotal = 0;
+            for (let i = 0; i < data[j].records.length; i++) {
+                dailytotal = (data[j].records[i].cases + dailytotal);
+            }
+            graphdata.push(dailytotal);
+            labeldata.push(data[j].date);
+        }
+        namedata.push(countryName);
+        console.log(graphdata);
+        console.log(labeldata);
+        chart.update();
+        chart.update();
+    }
+    if (counter === 2) {
+        for (let j = 0; j < data.length; j++) {
+            let dailytotal = 0;
+            for (let i = 0; i < data[j].records.length; i++) {
+                dailytotal = (data[j].records[i].cases + dailytotal);
+            }
+            graphdata2.push(dailytotal);
+            labeldata2.push(data[j].date);
+        }
+        namedata2.push(countryName);
+        console.log(graphdata);
+        console.log(labeldata);
+        chart.update();
+    }
+    if (counter === 3) {
+        for (let j = 0; j < data.length; j++) {
+            let dailytotal = 0;
+            for (let i = 0; i < data[j].records.length; i++) {
+                dailytotal = (data[j].records[i].cases + dailytotal);
+            }
+            graphdata3.push(dailytotal);
+            labeldata3.push(data[j].date);
+        }
+        namedata3.push(countryName);
+        console.log(graphdata);
+        console.log(labeldata);
+        chart.update();
+    }
+
+}
+
+function isCovidDataAvailable(countryName){
+    let countryID;
+    if(countryName === "Austria"){countryID = "at"}
+    else if(countryName === "Belgium") {countryID = "be"}
+    else if(countryName === "Czech Republic") {countryID = "ch"}
+    else if(countryName === "Czech Republic") {countryID = "cz"}
+    else if(countryName === "Germany") {countryID = "de"}
+    else if(countryName === "England") {countryID = "england"}
+    else if(countryName === "Estonia") {countryID = "es"}
+    else if(countryName === "Finland") {countryID = "fi"}
+    else if(countryName === "France") {countryID = "fr"}
+    else if(countryName === "Greece") {countryID = "gr"}
+    else if(countryName === "Hungary") {countryID = "hu"}
+    else if(countryName === "Ireland") {countryID = "ie"}
+    else if(countryName === "Italy") {countryID = "it"}
+    else if(countryName === "Netherlands") {countryID = "nl"}
+    else if(countryName === "Norway") {countryID = "no"}
+    else if(countryName === "Poland") {countryID = "pl"}
+    else if(countryName === "Portugal") {countryID = "pt"}
+    else if(countryName === "Scotland") {countryID = "scotland"}
+    else if(countryName === "Sweden") {countryID = "se"}
+    else if(countryName === "England") {countryID = "uk"}
+    else if(countryName === "Wales") {countryID = "wales"}
+    else if(countryName === 'Spain'){countryID = "es"}
+    return countryID;
 }

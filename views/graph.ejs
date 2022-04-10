@@ -1,78 +1,48 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Document</title>
-</head>
+<%- include('common/header') %>
+<title><%= title %></title>
+<script src="https://d3js.org/d3.v6.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheets/index.css">
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+<script src="javascript/mapPage.js" defer></script>
+
+
+<!--Map Page-->
+<!--as part of the Major Group Project.-->
 <body>
-
-<div>
-    <canvas id="myChart"></canvas>
-</div>
-
-<button type="button" class="btn btn-primary mr-1" onclick=getData()>getData</button>
-<button type="button" class="btn btn-primary mr-1" onclick=getData2()>getData2</button>
-<button type="button" class="btn btn-primary mr-1" onclick=refresh()>refresh</button>
+<div class="px-4 py-5 my-5 text-center">
+    <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
+    <div class="col-lg-6 mx-auto">
+        <div class="d-grid mr-1 d-sm-flex justify-content-sm-center">
+            <button type="button" class="btn btn-primary mr-1" onclick=selector("covid")>Covid</button><BR>
+            <button type="button" class="btn btn-primary mr-1" onclick=selector("weather")>Weather</button>
+            <button type="button" class="btn btn-primary mr-1" onclick=selector("gdp")>GDP</button>
+            <button type="button" class="btn btn-primary mr-1" onclick=selector("happiness")>Happiness</button>
+            <button type="button" class="btn btn-primary mr-1" onclick=selector("corruption")>Corruption</button>
+            <button type="button" class="btn btn-primary mr-1" onclick=selector("health")>Health</button>
+        </div><br>
+        <label for="graphType"></label><select name="graphType" id="graphType">
+            <option id="" value="">Please Select Graph type</option>
+            <option id="bar" value="bar">Bar Chart</option>
+            <option value="line">Line Graph</option>
+            <option value="pie">Pie Chart</option>
+            <option value="radar">Radar Chart</option>
+        </select>
+        <button type="button" class="btn btn-primary" onclick=changeGraphType(document.getElementById("graphType").value)>Change graph type</button>
+    </div>
+    <div class='apicontainer'>
+        <div class="graph1">
+            <canvas id="chart1" width="200" height="200"></canvas>
+        </div>
+    </div>
+    </div>
 </body>
-</html>
 
-<script>
+<div class="b-example-divider"></div>
 
-    let labels = [];
-    let graphData = [];
+<%- include('common/footer') %>
 
-    function chartIT() {
-        getData();
-        const data = {
-            labels: labels,
-            datasets: [{
-                label: 'Data Num 1',
-                backgroundColor: ['rgb(109,234,17)','rgba(255,0,0,0.66)','rgb(161,70,111)','rgb(0,100,255)'],
-                borderColor: ['rgb(109,234,17)','rgba(255,0,0,0.66)','rgb(161,70,111)','rgb(0,100,255)'],
-                data: graphData,
-            }]
-        };
-
-        const config = {
-            type: 'line',
-            data: data,
-            options: {}
-        };
-
-        const myChart = new Chart(
-            document.getElementById('myChart'),
-            config
-        );
-    }
-
-    async function getData() {
-        let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/Ireland";
-        const response = await fetch(url);
-        let data = await response.json();
-
-        const dataset = data[0].happiness;
-        graphData.push(dataset);
-        labels.push("Ireland")
-        chart.update();
-    }
-    async function getData2() {
-        let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/Germany";
-        const response = await fetch(url);
-        let data = await response.json();
-        const dataset = data[0].happiness;
-        graphData.push(dataset);
-        labels.push("Germany")
-        chart.update();
-    }
-    function refresh(){
-        chart.destroy();
-        chartIT();
-        chart.update();
-    }
-
-    chartIT();
-</script>
