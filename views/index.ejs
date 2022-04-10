@@ -14,7 +14,6 @@
     <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
     <div class="col-lg-6 mx-auto">
         <div class="d-grid mr-1 d-sm-flex justify-content-sm-center">
-            <button type="button" class="btn btn-primary mr-1" onclick=newData()>New</button><BR>
             <button type="button" class="btn btn-primary mr-1" onclick=selector("covid")>Covid</button><BR>
             <button type="button" class="btn btn-primary mr-1" onclick=selector("weather")>Weather</button>
             <button type="button" class="btn btn-primary mr-1" onclick=selector("gdp")>GDP</button>
@@ -29,8 +28,6 @@
             <option value="radar">Radar Chart</option>
         </select>
         <button type="button" class="btn btn-primary" onclick=changeGraphType(document.getElementById("graphType").value)>Change graph type</button>
-        <button type="button" class="btn btn-primary" onclick=destroyandRender("refresh")>Refresh Graph</button>
-
     </div>
     <div class='apicontainer'>
         <div class="graph1">
@@ -51,7 +48,7 @@
 
 <script>
     let utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-    let titleHeader;
+    let titleHeader = "";
     let dataCount;
     let countryName;
     let countriesSelected = [];
@@ -71,8 +68,10 @@
     let buttonBool = false;
     let selectedItem;
     let clickcount = 0;
+
     // Call Chart Function to build chart
     chartIT();
+
     async function chartIT2() {
         const ctx = document.getElementById('chart1').getContext('2d')
         chart = new Chart(ctx, {
@@ -89,14 +88,14 @@
                         display: true,
                         title: {
                             display: true,
-                            text: "Country Name"
+                            text: "Date"
                         }
                     },
                     y: {
                         display: true,
                         title: {
                             display: true,
-                            text: 'Value'
+                            text: 'Temperature °C'
                         },
                     }
                 }
@@ -115,14 +114,14 @@
                     label: namedata2,
                     data: graphdata2,
                     backgroundColor: ['rgba(255,0,0,0.37)'],
-                    borderColor: ['rgb(0,0,0)',],
+                    borderColor: ['rgb(0,0,76)',],
                     borderWidth: 2,
                     hoverOffset: 4,
                 },{
                     label: namedata3,
                     data: graphdata3,
                     backgroundColor: ['rgba(255,0,200,0.37)'],
-                    borderColor: ['rgb(0,0,0)',],
+                    borderColor: ['rgba(0,0,0,0.76)',],
                     borderWidth: 2,
                     hoverOffset: 4,
                 }
@@ -163,10 +162,10 @@
             data: {
                 labels: labeldata,
                 datasets: [{
-                    label: selectedItem,
+                    label: titleHeader,
                     data: graphdata,
                     backgroundColor: ['rgba(0,100,255,0.27)','rgba(94,255,0,0.27)','rgb(109,234,17)','rgba(255,0,0,0.66)','rgba(0,100,255,0.27)'],
-                    borderColor: ['rgb(33,119,232)',],
+                    borderColor: ['rgba(0,0,0,0.83)',],
                 }],
             },
         });
@@ -188,26 +187,31 @@
             .attr("fill", "#348C31") // Color Of Country
             .attr("d", d3.geoPath().projection(projection))
             .on('click', function (d, i) {
-                if(buttonBool === true) {
-                    clickHandling(i);
-                    if (countriesSelected.includes(i.properties.name) === true) {
-                        countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
-                        d3.select(this).style("fill", '#348C31');
-                    } else if (countriesSelected.includes(i.properties.name) === false) {
-                        countriesSelected.push(i.properties.name);
-                        d3.select(this).style("fill", '#03a5fd');
+                console.log(graphdata + " : " + labeldata);
+                    if(buttonBool === true) {
+                        clickHandling(i);
+                        chart.update();
+                        if (countriesSelected.includes(i.properties.name) === true) {
+                            countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
+                            d3.select(this).style("fill", '#348C31');
+                        } else if (countriesSelected.includes(i.properties.name) === false) {
+                            countriesSelected.push(i.properties.name);
+                            d3.select(this).style("fill", '#03a5fd');
+                        }
                     }
-                }
-                else window.alert("Please Select a Data Value from the Buttons below")
-            })
+                    else window.alert("Please Select a Data Value from the Buttons below")
+                })
     })
     function clickHandling(i){
         countryName = i.properties.name;
         if (timesClicked < 10) {
             if(selectedItem === "covid") {
-                //LOAD COVID
+                //COVID CODE GOES HERE TEMP MOVED
+                chartIT2();
             }
             else if(selectedItem === "weather"){
+                chart.destroy();
+                chartIT2();
                 weatherHandler(i);
             }
             else {
@@ -217,16 +221,15 @@
         }
         chart.update();
     }
-    async function buttonClicked(countryName,selectedItem, i) { // Api Info -> https://world-happiness-database.herokuapp.com/
+    async function buttonClicked(countryName,selectedItem) { // Api Info -> https://world-happiness-database.herokuapp.com/
         let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/"+countryName+"";
         const response = await fetch(url);
         let apidata = await response.json();
 
         if(selectedItem === "gdp"){
             titleHeader = "GDP Per Capita 2022";
-            addData(chart,countryName,apidata[0].gdpPerCap);
-            // graphdata.push(apidata[0].gdpPerCap);
-            // labeldata.push(countryName);
+            graphdata.push(apidata[0].gdpPerCap);
+            labeldata.push(countryName);
         }
         if(selectedItem === "happiness"){
             titleHeader = "Happiness Score in Index 2020";
@@ -247,6 +250,7 @@
     function weatherHandler(i) {
         if (clickcount === 0) {
             getCurrentWeather(i.properties.name, 1);
+            titleHeader = "Average Temp for Last 3 Days"
             clickcount++;
         } else if (clickcount === 1) {
             clickcount++;
@@ -260,6 +264,7 @@
         let apidata = await response.json();
         displayWeatherData(apidata, gd, countryName);
     }
+
     function displayWeatherData(apidata, gd, countryName){
         if(gd === 1){
             // Data variable will store all data received from api call
@@ -300,7 +305,6 @@
             chart.update();
         }
         else if(todo === "reset") {
-            document.getElementById("infoheader").innerHTML = "Graph Data is now refreshed";
             chart.destroy();
             graphdata = [];
             labeldata = [];
@@ -308,40 +312,26 @@
             chart.update;
         }
     }
+
     function selector(input){
         selectedItem = input;
         buttonBool = true;
     }
+
     function changeGraphType(input)
     {
-        chartType = input;
-        chart.destroy();
-        chartIT();
+        //if weather selected
+            chartType = input;
+            chart.destroy();
+            chartIT2();
+        // else
+        //     chartType = input;
+        //     chart.destroy();
+        //     chartIT();
     }
-    function newData(){
-        const newDataset= {
-            label: "Dataset Data",
-            data: [1,2,3,4,5,4,3,2,1],
-            backgroundColor: ['rgb(161,70,111)'],
-            borderColor: ['rgb(0,0,0)',],
-        }
-        chart.data.datasets.push(newDataset);
-        chart.update();
-    }
-
-    // function addData(chart, label, data) {
-    //     color = randColor();
-    //     console.table(chart.data.datasets);
-    //     chart.data.datasets.push({
-    //         label: label,
-    //         backgroundColor: color,
-    //         data: data
-    //     });
-    //     console.table(chart.data.datasets);
-    //     chart.update();
-    // }
 
     const randColor = () =>  {
         return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
     }
+
 </script>

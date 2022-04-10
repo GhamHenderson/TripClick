@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Document</title>
+</head>
+<body>
+
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+<button type="button" class="btn btn-primary mr-1" onclick=getData()>getData</button>
+<button type="button" class="btn btn-primary mr-1" onclick=getData2()>getData2</button>
+<button type="button" class="btn btn-primary mr-1" onclick=refresh()>refresh</button>
+</body>
+</html>
+
+<script>
+
+    let labels = [];
+    let graphData = [];
+
+    function chartIT() {
+        getData();
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Data Num 1',
+                backgroundColor: ['rgb(109,234,17)','rgba(255,0,0,0.66)','rgb(161,70,111)','rgb(0,100,255)'],
+                borderColor: ['rgb(109,234,17)','rgba(255,0,0,0.66)','rgb(161,70,111)','rgb(0,100,255)'],
+                data: graphData,
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {}
+        };
+
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+    }
+
+    async function getData() {
+        let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/Ireland";
+        const response = await fetch(url);
+        let data = await response.json();
+
+        const dataset = data[0].happiness;
+        graphData.push(dataset);
+        labels.push("Ireland")
+        chart.update();
+    }
+    async function getData2() {
+        let url = "https://world-happiness-database.herokuapp.com/api/happiness_explain/Germany";
+        const response = await fetch(url);
+        let data = await response.json();
+        const dataset = data[0].happiness;
+        graphData.push(dataset);
+        labels.push("Germany")
+        chart.update();
+    }
+    function refresh(){
+        chart.destroy();
+        chartIT();
+        chart.update();
+    }
+
+    chartIT();
+</script>
