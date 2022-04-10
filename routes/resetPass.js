@@ -1,22 +1,11 @@
 var express = require('express');
 const session = require("express-session");
 var router = express.Router();
-const {ROLE} = require('../roles');
-const redirectLogin = (req, res, next) => {
-    if (!req.session.username) {
-        res.redirect('/login')
-    } else {
-        next()
-    }
-}
 
+router.get('/', function (req, res, next) {
 
-router.get('/', redirectLogin, function (req, res, next) {
-
-    res.render('customs', {
-        title: 'Custom Graphs',
-        message: '',
-        error: '',
+    res.render('resetPassword', {
+        title: 'Reset Password',
         userId: req.session.userId,
         username: req.session.username,
         firstname: req.session.firstname,
@@ -26,7 +15,7 @@ router.get('/', redirectLogin, function (req, res, next) {
         gender: req.session.gender,
         country: req.session.country,
         city: req.session.city,
-        dateRegister: req.session,
+        dateRegister: req.session.dateRegister,
         role: req.session.role
     });
 });

@@ -2,19 +2,21 @@ var express = require('express');
 const session = require("express-session");
 var router = express.Router();
 const {ROLE} = require('../roles');
-const redirectLogin = (req, res, next) => {
-    if (!req.session.username) {
-        res.redirect('/login')
-    } else {
-        next()
+
+function authRole() {
+    return (req, res, next) => {
+        if (req.session.role !== ROLE.ADMIN) {
+            res.redirect('/');
+        } else {
+            next()
+        }
     }
 }
 
+router.get('/', authRole(ROLE.ADMIN), function (req, res, next) {
 
-router.get('/', redirectLogin, function (req, res, next) {
-
-    res.render('customs', {
-        title: 'Custom Graphs',
+    res.render('admin', {
+        title: 'Admin',
         message: '',
         error: '',
         userId: req.session.userId,
