@@ -28,12 +28,15 @@
                 Please Log in or register for free to use the Map and Graph Tools.
 
             </p>
-
+            <% if (!username) { %>
             <div class="d-grid gap-2 d-md-flex justify-content-md-start">
                 <a class="btn btn-dark mr-1" href="/login" role="button">Login</a>
                 <a class="btn btn-dark" href="/register" role="button">Register</a>
             </div>
         </div>
+        <% } else if(username) { %>
+            <a class="btn btn-dark" href="/graph" role="button">Graph Tool</a>
+        <% } %>
     </div>
 </div>
 </body>
