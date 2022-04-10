@@ -22,7 +22,8 @@
             <button type="button" class="btn btn-primary mr-1" onclick=selector("health")>Health</button>
         </div><br>
         <label for="graphType"></label><select name="graphType" id="graphType">
-            <option id="bar" value="bar">Bar Chart (Default)</option>
+            <option id="" value="">Please Select Graph type</option>
+            <option id="bar" value="bar">Bar Chart</option>
             <option value="line">Line Graph</option>
             <option value="pie">Pie Chart</option>
             <option value="radar">Radar Chart</option>
@@ -68,9 +69,67 @@
     let buttonBool = false;
     let selectedItem;
     let clickcount = 0;
-
+    let trigger = 0;
     // Call Chart Function to build chart
     chartIT();
+
+    async function chartIT3() {
+        const ctx = document.getElementById('chart1').getContext('2d')
+        chart = new Chart(ctx, {
+            options:{
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Total Coronavirus Cases 21/22"
+                    },
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: "Date"
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Total Covid Cases 21/22'
+                        },
+                    }
+                }
+            },
+            type: chartType,
+            data: {
+                labels: labeldata,
+                datasets: [{
+                    label: namedata,
+                    data: graphdata,
+                    backgroundColor: ['rgba(0,100,255,0.27)'],
+                    borderColor: ['rgb(33,119,232)',],
+                    borderWidth: 2,
+                    hoverOffset: 4,
+                },{
+                    label: namedata2,
+                    data: graphdata2,
+                    backgroundColor: ['rgba(255,0,0,0.37)'],
+                    borderColor: ['rgb(0,0,76)',],
+                    borderWidth: 2,
+                    hoverOffset: 4,
+                },{
+                    label: namedata3,
+                    data: graphdata3,
+                    backgroundColor: ['rgba(255,0,200,0.37)'],
+                    borderColor: ['rgba(0,0,0,0.76)',],
+                    borderWidth: 2,
+                    hoverOffset: 4,
+                }
+                ],
+            },
+        });
+    }
 
     async function chartIT2() {
         const ctx = document.getElementById('chart1').getContext('2d')
@@ -206,8 +265,10 @@
         countryName = i.properties.name;
         if (timesClicked < 10) {
             if(selectedItem === "covid") {
-                //COVID CODE GOES HERE TEMP MOVED
-                chartIT2();
+                covHandler(i);
+                chart.destroy();
+                chartIT3();
+                chart.update();
             }
             else if(selectedItem === "weather"){
                 chart.destroy();
@@ -323,7 +384,7 @@
         //if weather selected
             chartType = input;
             chart.destroy();
-            chartIT2();
+            chartIT3();
         // else
         //     chartType = input;
         //     chart.destroy();
@@ -332,6 +393,95 @@
 
     const randColor = () =>  {
         return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();
+    }
+
+    function covHandler(i) {
+        if (trigger === 0) {
+            getCurrentCovid(i.properties.name,1);
+            trigger++;
+        } else if (trigger === 1) {
+            getCurrentCovid(i.properties.name,2);
+            trigger++;
+        } else getCurrentCovid(i.properties.name,3);
+        chart.update();
+    }
+
+    async function getCurrentCovid(countryName, counter) {
+        let countryID = isCovidDataAvailable(countryName);
+        const response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=10");
+        const data = await response.json();
+
+        if (counter === 1) {
+            for (let j = 0; j < data.length; j++) {
+                let dailytotal = 0;
+                for (let i = 0; i < data[j].records.length; i++) {
+                    dailytotal = (data[j].records[i].cases + dailytotal);
+                }
+                graphdata.push(dailytotal);
+                labeldata.push(data[j].date);
+            }
+            namedata.push(countryName);
+            console.log(graphdata);
+            console.log(labeldata);
+            chart.update();
+            chart.update();
+        }
+        if (counter === 2) {
+            for (let j = 0; j < data.length; j++) {
+                let dailytotal = 0;
+                for (let i = 0; i < data[j].records.length; i++) {
+                    dailytotal = (data[j].records[i].cases + dailytotal);
+                }
+                graphdata2.push(dailytotal);
+                labeldata2.push(data[j].date);
+            }
+            namedata2.push(countryName);
+            console.log(graphdata);
+            console.log(labeldata);
+            chart.update();
+        }
+        if (counter === 3) {
+            for (let j = 0; j < data.length; j++) {
+                let dailytotal = 0;
+                for (let i = 0; i < data[j].records.length; i++) {
+                    dailytotal = (data[j].records[i].cases + dailytotal);
+                }
+                graphdata3.push(dailytotal);
+                labeldata3.push(data[j].date);
+            }
+            namedata3.push(countryName);
+            console.log(graphdata);
+            console.log(labeldata);
+            chart.update();
+        }
+
+    }
+
+    function isCovidDataAvailable(countryName){
+        let countryID;
+        if(countryName === "Austria"){countryID = "at"}
+        else if(countryName === "Belgium") {countryID = "be"}
+        else if(countryName === "Czech Republic") {countryID = "ch"}
+        else if(countryName === "Czech Republic") {countryID = "cz"}
+        else if(countryName === "Germany") {countryID = "de"}
+        else if(countryName === "England") {countryID = "england"}
+        else if(countryName === "Estonia") {countryID = "es"}
+        else if(countryName === "Finland") {countryID = "fi"}
+        else if(countryName === "France") {countryID = "fr"}
+        else if(countryName === "Greece") {countryID = "gr"}
+        else if(countryName === "Hungary") {countryID = "hu"}
+        else if(countryName === "Ireland") {countryID = "ie"}
+        else if(countryName === "Italy") {countryID = "it"}
+        else if(countryName === "Netherlands") {countryID = "nl"}
+        else if(countryName === "Norway") {countryID = "no"}
+        else if(countryName === "Poland") {countryID = "pl"}
+        else if(countryName === "Portugal") {countryID = "pt"}
+        else if(countryName === "Scotland") {countryID = "scotland"}
+        else if(countryName === "Sweden") {countryID = "se"}
+        else if(countryName === "England") {countryID = "uk"}
+        else if(countryName === "Wales") {countryID = "wales"}
+        else if(countryName === 'Spain'){countryID = "es"}
+        return countryID;
     }
 
 </script>
