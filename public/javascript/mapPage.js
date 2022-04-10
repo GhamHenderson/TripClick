@@ -14,12 +14,12 @@ let namedata2 = [];
 let namedata3 = [];
 let chart;
 let chartType = "bar";
-let CasesTotal = 0;
 let timesClicked = 0;
 let buttonBool = false;
 let selectedItem;
 let clickcount = 0;
 let trigger = 0;
+let weatherCount = 0;
 // Call Chart Function to build chart
 chartIT();
 
@@ -266,8 +266,13 @@ function weatherHandler(i) {
     } else if (clickcount === 1) {
         clickcount++;
         getCurrentWeather(i.properties.name, 2);
-    } else getCurrentWeather(i.properties.name, 3);
-    chart.update();
+    } else if (clickcount === 2){
+        getCurrentWeather(i.properties.name, 3);
+        clickcount++;
+    }
+    else {
+        window.alert("Max 3 Countries Clicked for this category.")
+    }
 }
 async function getCurrentWeather(countryName, gd) { // WeatherAPI https://www.weatherapi.com/api-explorer.aspx
     let url = "https://api.weatherapi.com/v1/forecast.json?key=687f508b47e247bdbd1113110221402&q=" + countryName + "&days=7&aqi=no&alerts=no";
@@ -329,17 +334,23 @@ function selector(input){
     buttonBool = true;
 }
 
-function changeGraphType(input)
-{
-    //if weather selected
+function changeGraphType(input) {
+
     chartType = input;
     chart.destroy();
-    chartIT3();
-    // else
-    //     chartType = input;
-    //     chart.destroy();
-    //     chartIT();
+    //if covid selected build graph with 3 areas for covid data
+    if (selectedItem === "covid") {
+        chartIT3();
+    }     //if weather selected
+    else if (selectedItem === "weather") {
+        chartIT2();
+    }
+    else {
+        chartIT();
+    }
+    chart.update();
 }
+
 
 const randColor = () =>  {
     return "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0').toUpperCase();

@@ -12,9 +12,6 @@
 <header class="header" id="header">
     <a href="/" class="nav-item"><img src="images/TripClick.png" height="80px" width="170px" alt="logoImg"></img></a>
     <nav class="navbar">
-        <li>
-            <a href="/" class="nav-item">Home</a>
-        </li>
         <% if (!username) { %>
             <li>
                 <a href="/login" class="nav-item">Login</a>
@@ -24,14 +21,14 @@
             </li>
 
         <% } else if(username) { %>
+            <li>
+                <a href="/graph" class="nav-item">Map Tool</a>
+            </li>
             <li><a href="/userInfo?userId=<%= userId %>" class="nav-item-info"><%= username %></a></li>
             <li>
                 <form method="post" action="/logout">
                     <button class="logout-button">Log out</button>
                 </form>
-            </li>
-            <li>
-                <a href="/graph" class="nav-item">Map Tool</a>
             </li>
         <% } %>
     </nav>
