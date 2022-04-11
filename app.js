@@ -19,6 +19,8 @@ const {connection} = require('./dbConnection');
 const {ROLE} = require('./roles');
 const crypto = require('crypto');
 
+var flash = require('connect-flash');
+
 dotenv.config({path: './.env'});
 
 const app = express();
@@ -48,6 +50,7 @@ const IN_PROD = NODE_ENV === 'production'
 app.use(express.json())
 //middleware to read req.body.<params>
 
+app.use(flash());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -217,11 +220,12 @@ app.post('/login', function (req, res) {
     if (!username || !password) {
         return res.status(422).json({error: "Please enter your username and password!"});
     } else {
-        connection.query("SELECT * FROM users WHERE username = ?", [username], function (error, result) {
+        connection.query("SELECT * FROM users WHERE username = ?", [username], function (error, result, success) {
             if (error) throw error;
 
             if (result.length === 0) {
-                return res.status(422).json({error: "Wrong username or password!"});
+                // return res.status(422).json({error: "Wrong username or password!"});
+                req.flash('message', 'Wrong username or password!');
             } else {
                 const hashedPassword = result[0].password
                 //get the hashedPassword from result
@@ -247,7 +251,7 @@ app.post('/login', function (req, res) {
                         res.redirect('/');
                     }
                 } else {
-                    return res.status(422).json({error: "Wrong username or password!"});
+                    req.flash('message', 'Wrong username or password!');
                 }
             }
         });

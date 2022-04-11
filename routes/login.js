@@ -1,7 +1,7 @@
 var express = require('express');
 const session = require("express-session");
 var router = express.Router();
-
+// var flash = require('connect-flash');
 // const redirectHome = (req, res, next) => {
 //     if (!req.session.username) {
 //         res.redirect('/')
@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
 
     res.render('login', {
         title: 'Login',
-        message: '',
+        message: req.flash('message'),
         error: '',
         userId: req.session.userId,
         username: req.session.username,
@@ -26,8 +26,6 @@ router.get('/', function (req, res, next) {
         country: req.session.country,
         city: req.session.city,
         dateRegister: req.session.dateRegister,
-        role: req.session.role
-
     });
 });
 
