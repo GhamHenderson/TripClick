@@ -13,6 +13,7 @@
     "bootstrap-toggle": "^2.2.2",
     "bower": "^1.8.13",
     "chart.js": "^3.7.1",
+    "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.0.0",
