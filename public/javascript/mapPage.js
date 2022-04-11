@@ -1,6 +1,5 @@
 let utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
 let titleHeader = "";
-let dataCount;
 let countryName;
 let countriesSelected = [];
 let graphdata = [];
@@ -357,13 +356,18 @@ const randColor = () =>  {
 }
 
 function covHandler(i) {
+    console.log(trigger);
     if (trigger === 0) {
         getCurrentCovid(i.properties.name,1);
         trigger++;
     } else if (trigger === 1) {
         getCurrentCovid(i.properties.name,2);
         trigger++;
-    } else getCurrentCovid(i.properties.name,3);
+    } else if (trigger === 2) {
+        getCurrentCovid(i.properties.name, 3);
+        trigger++;
+    }
+    else window.alert("Max 3 Countries for this Category")
     chart.update();
 }
 
@@ -387,7 +391,7 @@ async function getCurrentCovid(countryName, counter) {
         chart.update();
         chart.update();
     }
-    if (counter === 2) {
+    else if (counter === 2) {
         for (let j = 0; j < data.length; j++) {
             let dailytotal = 0;
             for (let i = 0; i < data[j].records.length; i++) {
@@ -401,7 +405,7 @@ async function getCurrentCovid(countryName, counter) {
         console.log(labeldata);
         chart.update();
     }
-    if (counter === 3) {
+    else if (counter === 3) {
         for (let j = 0; j < data.length; j++) {
             let dailytotal = 0;
             for (let i = 0; i < data[j].records.length; i++) {
@@ -415,7 +419,7 @@ async function getCurrentCovid(countryName, counter) {
         console.log(labeldata);
         chart.update();
     }
-
+    else{ window.alert("Max 3 Countries for this category")}
 }
 
 function isCovidDataAvailable(countryName){
