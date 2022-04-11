@@ -88,15 +88,14 @@ header #menu-btn:hover {
     color: #737373;
     flex-shrink: 0;
     margin-top: auto;
-    height: 230px;
+    height: 150px;
+    width: 100%;
     position: absolute;
 }
 
 .container-footer {
     font-size: 16px;
     /*font-family: 'Trebuchet MS', sans-serif;*/
-    padding-top: 20px;
-    padding-bottom: 20px;
 }
 
 hr {

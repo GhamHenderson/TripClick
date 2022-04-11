@@ -1,6 +1,6 @@
-.idea/
-.idea/inspectionProfiles/Project_Default.xml
+#.idea/
+#.idea/inspectionProfiles/Project_Default.xml
 configHide.js
 .env
-
+node_modules
 .idea/jsLibraryMappings.xml
