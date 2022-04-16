@@ -4,9 +4,59 @@
 </head>
 
 <body>
-<div class="register-page" id="register">
-Hello admin secret!
+<div class="admin-page" id="admin">
+    <div class="table-container">
+        <table class="table-users">
+            <tr>
+                <th>Id</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Gender</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Register Date</th>
+                <th>Role</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            <%
+            if (userData.length != 0) {
+                var i = 1;
+            userData.forEach(function (data) {
+            %>
+                <tr>
+                    <td><%= data.userId %></td>
+                    <td><%= data.firstname %></td>
+                    <td><%= data.lastname %></td>
+                    <td><%= data.username %></td>
+                    <td><%= data.email %></td>
+                    <td><%= data.phone %></td>
+                    <td><%= data.gender %></td>
+                    <td><%= data.country %></td>
+                    <td><%= data.city %></td>
+                    <td><%= data.dateRegister %></td>
+                    <td><%= data.role %></td>
+                    <td><a href="/editDetails?userId=<%= data.userId %>">Edit</a></td>
+                    <td>
+                        <form method="post" action="/deleteUserAccount">
+                            <button class="delete">Delete</button>
+
+                        </form>
+                    </td>
+                </tr>
+            <% i++; }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="7">No Data Found</td>
+                </tr>
+            <% } %>
+        </table>
+    </div>
 </div>
 
-<%- include('common/footer') %>
+</body>
+</html>
 

@@ -13,33 +13,31 @@
 <!--Map Page-->
 <!--as part of the Major Group Project.-->
 <body>
-
-<div class="container col-xxl-8 px-4 py-5">
-    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-        <div class="col-10 col-sm-8 col-lg-6">
-            <img src="images/TripClick.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="300" height="150" loading="lazy">
-        </div>
-        <div class="col-lg-6">
-            <h1 class="display-5 fw-bold lh-1 mb-3">TripClick™</h1><br>
-            <p class="lead">Welcome to TripClick.live!<br>
-            We help to show you live data visualised.</p>
-            <p></p>
-            <p class="lead">
-                Please Log in or register for free to use the Map and Graph Tools.
-
-            </p>
-            <% if (!username) { %>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                <a class="btn btn-dark mr-1" href="/login" role="button">Login</a>
-                <a class="btn btn-dark" href="/register" role="button">Register</a>
+<div class="home-page" id="main">
+    <div class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-6">
+                <img src="images/TripClick.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="300"
+                     height="150" loading="lazy">
             </div>
+            <div class="col-lg-6">
+                <h1 class="display-5 fw-bold lh-1 mb-3">TripClick™</h1><br>
+                <p class="lead">Welcome to TripClick.live!<br>
+                    We help to show you live data visualised.</p>
+                <% if (!username) { %>
+                    <p class="lead">
+                        Please Log in or register for free to use the Map and Graph Tools.
+
+                    </p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <a class="btn btn-dark mr-1" href="/login" role="button">Login</a>
+                        <a class="btn btn-dark" href="/register" role="button">Register</a>
+                    </div>
+            </div>
+            <% } else if(username) { %>
+                <a class="btn btn-dark" href="/graph" role="button">Graph Tool</a>
+            <% } %>
         </div>
-        <% } else if(username) { %>
-            <a class="btn btn-dark" href="/graph" role="button">Graph Tool</a>
-        <% } %>
     </div>
 </div>
-</body>
-
-
 <%- include('common/footer') %>

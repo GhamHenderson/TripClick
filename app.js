@@ -224,8 +224,8 @@ app.post('/login', function (req, res) {
             if (error) throw error;
 
             if (result.length === 0) {
-                // return res.status(422).json({error: "Wrong username or password!"});
-                req.flash('message', 'Wrong username or password!');
+                return res.status(422).json({error: "Wrong username or password!"});
+                // req.flash('message', 'Wrong username or password!');
             } else {
                 const hashedPassword = result[0].password
                 //get the hashedPassword from result
@@ -251,7 +251,9 @@ app.post('/login', function (req, res) {
                         res.redirect('/');
                     }
                 } else {
-                    req.flash('message', 'Wrong username or password!');
+                    return res.status(422).json({error: "Wrong username or password!"});
+
+                    // req.flash('message', 'Wrong username or password!');
                 }
             }
         });
@@ -340,6 +342,22 @@ app.post('/deleteAccount', function (req, res) {
 
     req.session.destroy();
     res.redirect('login');
+});
+
+
+app.post('/deleteUserAccount', function (req, res) {
+    var sql = 'SELECT userId from users';
+    connection.query(sql, function (error, resultId, fields) {
+        if (error) throw error;
+        var userId = resultId[0].userId;
+        connection.query("DELETE FROM `majorproject`.`users` WHERE  `userId`= '" + userId + "';", function (error, results, fields) {
+            if (error) throw error;
+
+            res.redirect('/admin');
+        });
+    });
+
+
 });
 
 

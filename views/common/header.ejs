@@ -12,6 +12,11 @@
 <header class="header" id="header">
     <a href="/" class="nav-item"><img src="images/TripClick.png" height="80px" width="170px" alt="logoImg"></img></a>
     <nav class="navbar">
+        <% if (role === 'admin') { %>
+            <li>
+                <a href="/admin" class="nav-item">Dashboard</a>
+            </li>
+        <% } %>
         <% if (!username) { %>
             <li>
                 <a href="/login" class="nav-item">Login</a>

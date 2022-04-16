@@ -8,6 +8,7 @@
 
 
 body {
+    height: 100%;
     font-family: montserrat;
     background-image: url("../images/map.jpg");
     margin-bottom: -230px;
@@ -15,6 +16,8 @@ body {
 
 .home-page {
     margin-top: 25px;
+    margin-bottom: 100px;
+
 }
 
 a {
