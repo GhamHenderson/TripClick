@@ -39,7 +39,7 @@ var resetPassRouter = require('./routes/resetPass');
 const HALF_HOUR = 1000 * 60 * 30
 
 const {
-    NODE_ENV = 'production',
+    NODE_ENV = 'development',
     SESS_NAME = 'sid',
     SESS_SECRET = 'keyboard cat',
     SESS_LIFETIME = HALF_HOUR
