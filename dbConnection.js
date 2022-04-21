@@ -14,7 +14,7 @@ connection.connect((err) => {
     if (err) {
         console.log(err)
     } else {
-        console.log("connected!")
+        console.log("Connected to Database.")
     }
 })
 module.exports = {
