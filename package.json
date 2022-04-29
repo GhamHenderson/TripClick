@@ -34,5 +34,8 @@
     "validator": "^13.7.0",
     "xss": "^1.0.10",
     "yarn": "^1.22.17"
+  },
+  "devDependencies": {
+    "sql-fixtures": "^1.0.4"
   }
 }

@@ -35,11 +35,13 @@ var userInfoRouter = require('./routes/userInfo');
 var editDetailsRouter = require('./routes/editDetails')
 var adminRouter = require('./routes/admin');
 var resetPassRouter = require('./routes/resetPass');
+var loginErrorRouter = require('./routes/loginError');
+
 
 const HALF_HOUR = 1000 * 60 * 30
 
 const {
-    NODE_ENV = 'production',
+    NODE_ENV = 'development',
     SESS_NAME = 'sid',
     SESS_SECRET = 'keyboard cat',
     SESS_LIFETIME = HALF_HOUR
@@ -86,6 +88,7 @@ app.use('/userInfo', userInfoRouter);
 app.use('/editDetails', editDetailsRouter);
 app.use('/admin', adminRouter);
 app.use('/resetPassword', resetPassRouter);
+app.use('/loginError', loginErrorRouter);
 
 const transporter = nodeMailer.createTransport(sendGridTransport({
     auth: {
@@ -224,7 +227,9 @@ app.post('/login', function (req, res) {
             if (error) throw error;
 
             if (result.length === 0) {
-                return res.status(422).json({error: "Wrong username or password!"});
+                return res.render('loginError', {
+                    error: 'Wrong username or pass',
+                });
                 // req.flash('message', 'Wrong username or password!');
             } else {
                 const hashedPassword = result[0].password
@@ -251,7 +256,9 @@ app.post('/login', function (req, res) {
                         res.redirect('/');
                     }
                 } else {
-                    return res.status(422).json({error: "Wrong username or password!"});
+                    return res.render('/loginError', {
+                        error: 'Wrong username or pass',
+                    });
 
                     // req.flash('message', 'Wrong username or password!');
                 }
@@ -420,13 +427,13 @@ app.get('/resetPassword/:token', function (req, res) {
         "        <div class=\"form\">\n" +
         `            <form action=\"/newPassword/${req.params.token}\" method=\"POST\">\n` +
         "                <div class=\"input-field\">\n" +
-        "                    <label for=\"password\">New password</label>\n" +
-        "                    <input type=\"password\" id=\"password\" class=\"input\" name=\"password\" pattern=\"{6,50}\"\n" +
+        "                    <label for=\"newPassword\">New password</label>\n" +
+        "                    <input type=\"password\" id=\"newPassword\" class=\"input\" name=\"newPassword\" pattern=\"{6,50}\"\n" +
         "                           title=\"Password must be at least 6 characters long!!\" required>\n" +
         "                </div>\n" +
         "                <div class=\"input-field\">\n" +
-        "                    <label for=\"passwordConfirm\">Confirm new password</label>\n" +
-        "                    <input type=\"password\" id=\"passwordConfirm\" class=\"input\" name=\"passwordConfirm\" pattern=\"{6,50}\"\n" +
+        "                    <label for=\"NewPasswordConfirm\">Confirm new password</label>\n" +
+        "                    <input type=\"password\" id=\"newPasswordConfirm\" class=\"input\" name=\"newPasswordConfirm\" pattern=\"{6,50}\"\n" +
         "                           title=\"Password must be at least 6 characters long!!\" required>\n" +
         "                </div>\n" +
         "                <div class=\"button-div\">\n" +
@@ -547,7 +554,8 @@ app.get('/resetPassword/:token', function (req, res) {
 });
 
 app.post('/newPassword/:token', function (req, res) {
-    const newPassword = req.body.password;
+    const newPassword = req.body.newPassword;
+    const newConfirmPassword = req.body.newPasswordConfirm;
     const sentToken = req.params.token;
     // console.log(sentToken);
     // console.log(newPassword)
@@ -555,17 +563,21 @@ app.post('/newPassword/:token', function (req, res) {
         if (result.length === 0) {
             return res.status(422).json({error: "Try again session expired!"});
         } else {
-            let hashedNewPassword = await bcryptjs.hash(newPassword, 10);
+            if (newPassword === newConfirmPassword) {
+                let hashedNewPassword = await bcryptjs.hash(newPassword, 10);
 
-            connection.query("UPDATE `majorproject`.`users` SET `password` = '" + hashedNewPassword + "', `resetToken` = 'undefined' WHERE `resetToken` = '" + sentToken + "';", function (error, results, fields) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    res.redirect('/login');
-                    // console.log(sentToken);
-                    // console.log(newPassword);
-                }
-            });
+                connection.query("UPDATE `majorproject`.`users` SET `password` = '" + hashedNewPassword + "', `resetToken` = 'undefined' WHERE `resetToken` = '" + sentToken + "';", function (error, results, fields) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        res.redirect('/login');
+                        // console.log(sentToken);
+                        // console.log(newPassword);
+                    }
+                });
+            } else {
+                return res.status(422).json({error: "Passwords do not match!"});
+            }
         }
     });
 });

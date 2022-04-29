@@ -15,6 +15,7 @@ connection.connect((err) => {
         console.log(err)
     } else {
         console.log("Connected to Database.")
+        // console.log(process.env)
     }
 })
 module.exports = {
