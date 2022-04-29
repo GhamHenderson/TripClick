@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="stylesheets/graph.css">
 <script src="javascript/mapPage.js" defer></script>
 
 <!--Map Page-->
@@ -45,10 +46,7 @@
 <div class="px-4 py-5 my-5 text-center">
     <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
     <div class="col-lg-6 mx-auto">
-        <div class="d-grid mr-1 d-sm-flex justify-content-sm-center">
-            <button type="button" class="btn btn-primary mr-1" onclick=selector("weather")>Weather</button>
-        </div><br>
-
+        <button type="button" class="btn btn-primary mr-4" onclick=selector("weather")>Weather</button>
         <label for="graphType"></label><select name="graphType" id="graphType">
             <option id="" value="">Please Select Graph type</option>
             <option value="line">Line Graph</option>
@@ -57,7 +55,7 @@
     </div>
     <div class='apicontainer'>
         <div class="graph1">
-            <canvas id="chart1" width="200" height="200"></canvas>
+            <canvas id="chart1" width="200" height="180"></canvas>
         </div>
     </div>
 </div>
