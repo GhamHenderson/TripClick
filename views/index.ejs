@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 <script src="javascript/mapPage.js" defer></script>
 
-
 <!--Map Page-->
 <!--as part of the Major Group Project.-->
 <body>
@@ -25,18 +24,40 @@
                 <p class="lead">Welcome to TripClick.live!<br>
                     We help to show you live data visualised.</p>
                 <% if (!username) { %>
-                    <p class="lead">
-                        Please Log in or register for free to use the Map and Graph Tools.
 
+                    <p class="lead">
+                        Please Log in or register for free to use the extended map features<br>
                     </p>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
                         <a class="btn btn-dark mr-1" href="/login" role="button">Login</a>
                         <a class="btn btn-dark" href="/register" role="button">Register</a>
                     </div>
+
             </div>
+            <b>Trial Version below.</b>
             <% } else if(username) { %>
                 <a class="btn btn-dark" href="/graph" role="button">Graph Tool</a>
             <% } %>
+        </div>
+    </div>
+</div>
+
+<div class="px-4 py-5 my-5 text-center">
+    <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
+    <div class="col-lg-6 mx-auto">
+        <div class="d-grid mr-1 d-sm-flex justify-content-sm-center">
+            <button type="button" class="btn btn-primary mr-1" onclick=selector("weather")>Weather</button>
+        </div><br>
+
+        <label for="graphType"></label><select name="graphType" id="graphType">
+            <option id="" value="">Please Select Graph type</option>
+            <option value="line">Line Graph</option>
+        </select>
+        <button type="button" class="btn btn-primary" onclick=changeGraphType(document.getElementById("graphType").value)>Change graph type</button>
+    </div>
+    <div class='apicontainer'>
+        <div class="graph1">
+            <canvas id="chart1" width="200" height="200"></canvas>
         </div>
     </div>
 </div>
