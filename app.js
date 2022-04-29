@@ -35,6 +35,8 @@ var userInfoRouter = require('./routes/userInfo');
 var editDetailsRouter = require('./routes/editDetails')
 var adminRouter = require('./routes/admin');
 var resetPassRouter = require('./routes/resetPass');
+var loginErrorRouter = require('./routes/loginError');
+
 
 const HALF_HOUR = 1000 * 60 * 30
 
@@ -86,6 +88,7 @@ app.use('/userInfo', userInfoRouter);
 app.use('/editDetails', editDetailsRouter);
 app.use('/admin', adminRouter);
 app.use('/resetPassword', resetPassRouter);
+app.use('/loginError', loginErrorRouter);
 
 const transporter = nodeMailer.createTransport(sendGridTransport({
     auth: {
@@ -224,7 +227,9 @@ app.post('/login', function (req, res) {
             if (error) throw error;
 
             if (result.length === 0) {
-                return res.status(422).json({error: "Wrong username or password!"});
+                return res.render('loginError', {
+                    error: 'Wrong username or pass',
+                });
                 // req.flash('message', 'Wrong username or password!');
             } else {
                 const hashedPassword = result[0].password
@@ -251,7 +256,9 @@ app.post('/login', function (req, res) {
                         res.redirect('/');
                     }
                 } else {
-                    return res.status(422).json({error: "Wrong username or password!"});
+                    return res.render('/loginError', {
+                        error: 'Wrong username or pass',
+                    });
 
                     // req.flash('message', 'Wrong username or password!');
                 }
@@ -556,7 +563,7 @@ app.post('/newPassword/:token', function (req, res) {
         if (result.length === 0) {
             return res.status(422).json({error: "Try again session expired!"});
         } else {
-            if (newPassword == newConfirmPassword) {
+            if (newPassword === newConfirmPassword) {
                 let hashedNewPassword = await bcryptjs.hash(newPassword, 10);
 
                 connection.query("UPDATE `majorproject`.`users` SET `password` = '" + hashedNewPassword + "', `resetToken` = 'undefined' WHERE `resetToken` = '" + sentToken + "';", function (error, results, fields) {
