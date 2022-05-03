@@ -19,7 +19,6 @@ const {connection} = require('./dbConnection');
 const {ROLE} = require('./roles');
 const crypto = require('crypto');
 
-var flash = require('connect-flash');
 
 dotenv.config({path: './.env'});
 
@@ -52,7 +51,6 @@ const IN_PROD = NODE_ENV === 'production'
 app.use(express.json())
 //middleware to read req.body.<params>
 
-app.use(flash());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -256,7 +254,7 @@ app.post('/login', function (req, res) {
                         res.redirect('/');
                     }
                 } else {
-                    return res.render('/loginError', {
+                    return res.render('loginError', {
                         error: 'Wrong username or pass',
                     });
 
