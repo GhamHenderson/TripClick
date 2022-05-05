@@ -9,11 +9,8 @@ const redirectLogin = (req, res, next) => {
     }
 }
 router.get('/', redirectLogin, function (req, res, next) {
-    // var {firstname} = req.session.firstname;
-
     res.render('editDetails', {
         title: 'Edit Details',
-        message: '',
         error: '',
         userId: req.session.userId,
         username: req.session.username,
@@ -26,7 +23,6 @@ router.get('/', redirectLogin, function (req, res, next) {
         city: req.session.city,
         dateRegister: req.session.dateRegister,
         role: req.session.role
-
     });
 });
 

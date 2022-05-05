@@ -7,7 +7,13 @@
 <body>
 <!--start of register page-->
 <div class="register-page" id="register">
-
+    <div class="error-message">
+        <% if(error.length > 0 ) { %>
+            <div class="error">
+                <%= error %>
+            </div>
+        <% } %>
+    </div>
     <!--    start of register form-->
     <div class="wrapper">
         <div class="title">

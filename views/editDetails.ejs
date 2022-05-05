@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<%- include('common/header') %>
 <head>
     <title><%= title %></title>
     <link rel="stylesheet" href="stylesheets/editDetails.css">
@@ -7,8 +6,14 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 </head>
 <body>
-<%- include('common/header') %>
 <div class="editDetails-Page" id="editDetails">
+    <div class="error-message">
+        <% if(error.length > 0 ) { %>
+            <div class="error">
+                <%= error %>
+            </div>
+        <% } %>
+    </div>
 
     <div class="wrapper">
         <div class="title">

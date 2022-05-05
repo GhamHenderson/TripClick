@@ -19,7 +19,6 @@ const {connection} = require('./dbConnection');
 const {ROLE} = require('./roles');
 const crypto = require('crypto');
 
-
 dotenv.config({path: './.env'});
 
 const app = express();
@@ -34,8 +33,7 @@ var userInfoRouter = require('./routes/userInfo');
 var editDetailsRouter = require('./routes/editDetails')
 var adminRouter = require('./routes/admin');
 var resetPassRouter = require('./routes/resetPass');
-var loginErrorRouter = require('./routes/loginError');
-
+var resetPasswordError = require('./routes/resetPasswordErrors');
 
 const HALF_HOUR = 1000 * 60 * 30
 
@@ -86,7 +84,7 @@ app.use('/userInfo', userInfoRouter);
 app.use('/editDetails', editDetailsRouter);
 app.use('/admin', adminRouter);
 app.use('/resetPassword', resetPassRouter);
-app.use('/loginError', loginErrorRouter);
+app.use('/resetPasswordErrors.ejs', resetPasswordError);
 
 const transporter = nodeMailer.createTransport(sendGridTransport({
     auth: {
@@ -116,7 +114,6 @@ app.post('/register', (req, res) => {
     if (emailValid == false) {
         valid = false;
     }
-    // console.log(emailValid);
 
     if (email.length === '') {
         errorMessage += 'Please enter a valid email address!!';
@@ -149,12 +146,39 @@ app.post('/register', (req, res) => {
 
     // var cleanedUsername = sqlString.escape(username);
 
-
     if (errorMessage.length > 0) {
-        res.status(422).json({error: errorMessage});
+        return res.render('register', {
+            title: 'Register',
+            error: errorMessage,
+            userId: req.session.userId,
+            username: req.session.username,
+            firstname: req.session.firstname,
+            lastname: req.session.lastname,
+            email: req.session.email,
+            phone: req.session.phone,
+            gender: req.session.gender,
+            country: req.session.country,
+            city: req.session.city,
+            dateRegister: req.session.dateRegister,
+            role: req.session.role
+        });
     } else {
         if (!firstname || !lastname || !username || !password || !confirmPassword || !email || !phone || !gender || !country || !city) {
-            return res.status(422).json({error: "Please fill in all the fields!"});
+            return res.render('register', {
+                title: 'Register',
+                error: 'Please fill in all the fields provided!',
+                userId: req.session.userId,
+                username: req.session.username,
+                firstname: req.session.firstname,
+                lastname: req.session.lastname,
+                email: req.session.email,
+                phone: req.session.phone,
+                gender: req.session.gender,
+                country: req.session.country,
+                city: req.session.city,
+                dateRegister: req.session.dateRegister,
+                role: req.session.role
+            });
         } else {
             connection.query('SELECT email from users WHERE email = ?', [email], (error, result) => {
                 if (error) {
@@ -162,7 +186,21 @@ app.post('/register', (req, res) => {
                 }
 
                 if (result.length > 0) {
-                    return res.status(422).json({error: "This email is already associated with an account!"});
+                    return res.render('register', {
+                        title: 'Register',
+                        error: 'This email is already associated with an account!',
+                        userId: req.session.userId,
+                        username: req.session.username,
+                        firstname: req.session.firstname,
+                        lastname: req.session.lastname,
+                        email: req.session.email,
+                        phone: req.session.phone,
+                        gender: req.session.gender,
+                        country: req.session.country,
+                        city: req.session.city,
+                        dateRegister: req.session.dateRegister,
+                        role: req.session.role
+                    });
                 } else {
                     connection.query('SELECT username from users WHERE username = ?', [username], async (error, result) => {
                         if (error) {
@@ -170,11 +208,38 @@ app.post('/register', (req, res) => {
                         }
 
                         if (result.length > 0) {
-                            return res.status(422).json({error: "This username is already in use!"});
+                            return res.render('register', {
+                                title: 'Register',
+                                error: 'This username is already in use!',
+                                userId: req.session.userId,
+                                username: req.session.username,
+                                firstname: req.session.firstname,
+                                lastname: req.session.lastname,
+                                email: req.session.email,
+                                phone: req.session.phone,
+                                gender: req.session.gender,
+                                country: req.session.country,
+                                city: req.session.city,
+                                dateRegister: req.session.dateRegister,
+                                role: req.session.role
+                            });
                         } else if (password !== confirmPassword) {
-                            return res.status(422).json({error: "Passwords do not match!"});
+                            return res.render('register', {
+                                title: 'Register',
+                                error: 'Passwords do not match!',
+                                userId: req.session.userId,
+                                username: req.session.username,
+                                firstname: req.session.firstname,
+                                lastname: req.session.lastname,
+                                email: req.session.email,
+                                phone: req.session.phone,
+                                gender: req.session.gender,
+                                country: req.session.country,
+                                city: req.session.city,
+                                dateRegister: req.session.dateRegister,
+                                role: req.session.role
+                            });
                         }
-
                         let hashedPassword = await bcryptjs.hash(password, 10);
 
                         password = hashedPassword;
@@ -199,7 +264,7 @@ app.post('/register', (req, res) => {
                                     to: email,
                                     from: "iacobedy2001@gmail.com",
                                     subject: "Account created successfully!",
-                                    html: "<p>Welcome to our website. Please log in using your username and password!<>https://tripclick.live/login</p>"
+                                    html: "<p>Welcome to our website. Please log in using your username and password!<>http://localhost:3000/login</p>"
                                 });
                                 req.session.save();
                                 res.redirect('/login');
@@ -217,18 +282,42 @@ app.post('/login', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
 
-    // This is the actual SQL query part
     if (!username || !password) {
-        return res.status(422).json({error: "Please enter your username and password!"});
+        return res.render('login', {
+            error: 'Please enter your username and password!',
+            title: 'Login',
+            userId: req.session.userId,
+            username: req.session.username,
+            firstname: req.session.firstname,
+            lastname: req.session.lastname,
+            email: req.session.email,
+            phone: req.session.phone,
+            gender: req.session.gender,
+            country: req.session.country,
+            city: req.session.city,
+            dateRegister: req.session.dateRegister,
+            role: req.session.role
+        });
     } else {
         connection.query("SELECT * FROM users WHERE username = ?", [username], function (error, result, success) {
             if (error) throw error;
 
             if (result.length === 0) {
-                return res.render('loginError', {
-                    error: 'Wrong username or pass',
+                return res.render('login', {
+                    error: 'Wrong username or password!',
+                    title: 'Login',
+                    userId: req.session.userId,
+                    username: req.session.username,
+                    firstname: req.session.firstname,
+                    lastname: req.session.lastname,
+                    email: req.session.email,
+                    phone: req.session.phone,
+                    gender: req.session.gender,
+                    country: req.session.country,
+                    city: req.session.city,
+                    dateRegister: req.session.dateRegister,
+                    role: req.session.role
                 });
-                // req.flash('message', 'Wrong username or password!');
             } else {
                 const hashedPassword = result[0].password
                 //get the hashedPassword from result
@@ -254,11 +343,21 @@ app.post('/login', function (req, res) {
                         res.redirect('/');
                     }
                 } else {
-                    return res.render('loginError', {
-                        error: 'Wrong username or pass',
+                    return res.render('login', {
+                        error: 'Wrong username or password!',
+                        title: 'Login',
+                        userId: req.session.userId,
+                        username: req.session.username,
+                        firstname: req.session.firstname,
+                        lastname: req.session.lastname,
+                        email: req.session.email,
+                        phone: req.session.phone,
+                        gender: req.session.gender,
+                        country: req.session.country,
+                        city: req.session.city,
+                        dateRegister: req.session.dateRegister,
+                        role: req.session.role
                     });
-
-                    // req.flash('message', 'Wrong username or password!');
                 }
             }
         });
@@ -309,32 +408,91 @@ app.post('/editDetails', function (req, res, next) {
     username = emojiStrip(username);
 
     var sqlString = require('sqlstring');
-    var cleanedUsername = sqlString.escape(username);
+    // var cleanedUsername = sqlString.escape(username);
 
-    username = cleanedUsername;
+    // username = cleanedUsername;
     //if the length of the error is > than 0 send back the error
     if (errorMessage.length > 0) {
-        return res.status(422).json({error: errorMessage});
+        return res.render('editDetails', {
+            title: 'Edit Details',
+            error: errorMessage,
+            userId: req.session.userId,
+            username: req.session.username,
+            firstname: req.session.firstname,
+            lastname: req.session.lastname,
+            email: req.session.email,
+            phone: req.session.phone,
+            gender: req.session.gender,
+            country: req.session.country,
+            city: req.session.city,
+            dateRegister: req.session.dateRegister,
+            role: req.session.role
+        });
     } else {
+        connection.query('SELECT email from users WHERE email = ? AND userId != ?', [email, userId], (error, result) => {
+            if (error) {
+                console.log(error);
+            }
 
-        var valid = true;
-        var validator = require('validator');
+            if (result.length > 0) {
+                return res.render('editDetails', {
+                    title: 'Edit Details',
+                    error: 'This email is already associated with an account!',
+                    userId: req.session.userId,
+                    username: req.session.username,
+                    firstname: req.session.firstname,
+                    lastname: req.session.lastname,
+                    email: req.session.email,
+                    phone: req.session.phone,
+                    gender: req.session.gender,
+                    country: req.session.country,
+                    city: req.session.city,
+                    dateRegister: req.session.dateRegister,
+                    role: req.session.role
+                });
+            } else {
+                connection.query('SELECT username from users WHERE username = ? AND userId != ?', [username, userId], async (error, result) => {
+                    if (error) {
+                        console.log(error);
+                    }
 
-        var response = validator.isEmail(email);
+                    if (result.length > 0) {
+                        return res.render('editDetails', {
+                            title: 'Edit Details',
+                            error: 'This username is already in use!',
+                            userId: req.session.userId,
+                            username: req.session.username,
+                            firstname: req.session.firstname,
+                            lastname: req.session.lastname,
+                            email: req.session.email,
+                            phone: req.session.phone,
+                            gender: req.session.gender,
+                            country: req.session.country,
+                            city: req.session.city,
+                            dateRegister: req.session.dateRegister,
+                            role: req.session.role
+                        });
+                    }
+                    var valid = true;
+                    var validator = require('validator');
 
-        if (response == false) {
-            valid = false;
-        }
-        // This is the actual SQL query part
-        connection.query("UPDATE `majorproject`.`users` SET  `firstname` = '" + firstname + "', `lastname` = '" + lastname + "', `username` = " + username + ", `email` = '" + email + "', `phone` = '" + phone + "', `gender` = '" + gender + "', `country` = '" + country + "', `city` = '" + city + "' WHERE `userId` = '" + userId + "';", function (error, result, fields) {
-            if (error) throw error;
+                    var response = validator.isEmail(email);
 
-
+                    if (response == false) {
+                        valid = false;
+                    }
+                    connection.query("UPDATE `majorproject`.`users` SET  `firstname` = '" + firstname + "', `lastname` = '" + lastname + "', `username` = " + username + ", `email` = '" + email + "', `phone` = '" + phone + "', `gender` = '" + gender + "', `country` = '" + country + "', `city` = '" + city + "' WHERE `userId` = " + userId + ";", function (error, result, fields) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            req.session.destroy();
+                            res.redirect('/login');
+                        }
+                    });
+                });
+            }
         });
     }
-
-    req.session.destroy();
-    res.redirect('/login');
 });
 
 app.post('/deleteAccount', function (req, res) {
@@ -389,7 +547,22 @@ app.post('/resetPassword', (req, res) => {
         const date = Date();
         connection.query('SELECT email from users WHERE email = ?', [email], (error, result) => {
             if (result.length === 0) {
-                return res.status(422).json({error: "This email is not associated with any account!"});
+                return res.render('resetPassword', {
+                    error: 'This email is not associated with any account!',
+                    message: '',
+                    title: 'Reset Password',
+                    userId: req.session.userId,
+                    username: req.session.username,
+                    firstname: req.session.firstname,
+                    lastname: req.session.lastname,
+                    email: req.session.email,
+                    phone: req.session.phone,
+                    gender: req.session.gender,
+                    country: req.session.country,
+                    city: req.session.city,
+                    dateRegister: req.session.dateRegister,
+                    role: req.session.role
+                });
             }
             connection.query("UPDATE `majorproject`.`users` SET `resetToken` = '" + token + "' WHERE `email` = '" + email + "';", function (error, results, fields) {
                 if (error) {
@@ -402,7 +575,22 @@ app.post('/resetPassword', (req, res) => {
                         html: `<p>You have requested for a password reset for your TripClick account.</p>` +
                             `<h5>Click on this <a href="http://localhost:3000/resetPassword/${token}">link</a> to reset your password</h5>`
                     })
-                    res.json({message: "Check your email!"})
+                    return res.render('resetPassword', {
+                        message: 'Please check your email!',
+                        error: '',
+                        title: 'Reset Password',
+                        userId: req.session.userId,
+                        username: req.session.username,
+                        firstname: req.session.firstname,
+                        lastname: req.session.lastname,
+                        email: req.session.email,
+                        phone: req.session.phone,
+                        gender: req.session.gender,
+                        country: req.session.country,
+                        city: req.session.city,
+                        dateRegister: req.session.dateRegister,
+                        role: req.session.role
+                    });
                 }
             });
         });
@@ -559,7 +747,10 @@ app.post('/newPassword/:token', function (req, res) {
     // console.log(newPassword)
     connection.query('SELECT resetToken from users WHERE resetToken = ?', [sentToken], async (error, result) => {
         if (result.length === 0) {
-            return res.status(422).json({error: "Try again session expired!"});
+            return res.render('resetPasswordErrors', {
+                title: 'Error',
+                error: 'Password recovery link expired , please get a new one using your email!'
+            });
         } else {
             if (newPassword === newConfirmPassword) {
                 let hashedNewPassword = await bcryptjs.hash(newPassword, 10);
@@ -574,7 +765,11 @@ app.post('/newPassword/:token', function (req, res) {
                     }
                 });
             } else {
-                return res.status(422).json({error: "Passwords do not match!"});
+                return res.render('resetPasswordErrors', {
+                    title: 'Error',
+                    error: 'Passwords do not match!',
+                    token: sentToken
+                });
             }
         }
     });

@@ -132,6 +132,30 @@ body #register {
     margin-bottom: 0;
 }
 
+.error-message {
+    text-align: center;
+    background-color: red;
+}
+
+.error {
+    color: white;
+    font-size: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.message-holder{
+    text-align: center;
+    background-color: lightgreen;
+}
+
+.message{
+    color: white;
+    font-size: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
 @media (max-width: 500px) {
     .wrapper .form .input-field {
         flex-direction: column;

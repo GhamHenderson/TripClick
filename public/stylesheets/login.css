@@ -13,7 +13,7 @@ body #login {
 }
 
 .login-page {
-    padding-top: 50px;
+    padding-top: 20px;
 }
 
 .wrapper-login {
@@ -99,6 +99,18 @@ body #login {
 
 .wrapper-login .login-form .input-field-login:last-child {
     margin-bottom: 0;
+}
+
+.error-message {
+    text-align: center;
+    background-color: red;
+}
+
+.error {
+    color: white;
+    font-size: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 @media (max-width: 500px) {

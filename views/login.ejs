@@ -9,6 +9,13 @@
 
 <!--start of login page-->
 <div class="login-page" id="login">
+    <div class="error-message">
+        <% if(error.length > 0 ) { %>
+            <div class="error">
+                <%= error %>
+            </div>
+        <% } %>
+    </div>
     <!--    start of login form-->
     <div class="wrapper-login">
         <div class="title">

@@ -1,0 +1,32 @@
+* {
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+}
+
+.error-message {
+    text-align: center;
+    background-color: red;
+}
+
+.error {
+    color: white;
+    font-size: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.redirect-link {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.link {
+    text-decoration: none;
+    font-size: 20px;
+    color: navy;
+}
+
+.link:hover {
+    text-decoration: underline #008CBA;
+    color: #008CBA;
+}

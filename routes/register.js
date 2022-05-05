@@ -10,11 +10,10 @@ var router = express.Router();
 // }
 
 router.get('/', function (req, res, next) {
-    var message;
-    var error;
 
     res.render('register', {
         title: 'Register',
+        error: '',
         userId: req.session.userId,
         username: req.session.username,
         firstname: req.session.firstname,
@@ -25,10 +24,7 @@ router.get('/', function (req, res, next) {
         country: req.session.country,
         city: req.session.city,
         dateRegister: req.session.dateRegister,
-        message: message,
-        error: error,
         role: req.session.role
-
     });
 });
 
