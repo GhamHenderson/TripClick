@@ -27,9 +27,9 @@
 
 <% } else if(username) { %>
 
-<div class="px-4 py-5 my-5 text-center">
-    <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
+<div class="px-4 py-5 my-5 text-center" id = "superContainer">
     <div class="col-lg-6 mx-auto">
+      <label id = 'dataLabel'>Please Select One Data Type</label>
         <div class="d-grid mr-1 d-sm-flex justify-content-sm-center">
             <button type="button" class="btn btn-primary mr-1" onclick=selector("covid")>Covid</button><BR>
             <button type="button" class="btn btn-primary mr-1" onclick=selector("weather")>Weather</button>
@@ -38,7 +38,12 @@
             <button type="button" class="btn btn-primary mr-1" onclick=selector("corruption")>Corruption</button>
             <button type="button" class="btn btn-primary mr-1" onclick=selector("health")>Health</button>
         </div><br>
-        <label for="graphType"></label><select name="graphType" id="graphType">
+    </div>
+    <br><br>
+    <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
+
+    <div>
+        <select name="graphType" id="graphType" onclick=changeGraphType(document.getElementById("graphType").value)>
             <option id="bar" value="bar">Bar Chart</option>
             <option value="line">Line Graph</option>
             <option value="pie">Pie Chart</option>
@@ -46,11 +51,12 @@
             <option value="doughnut">Donut Chart</option>
             <option value="polarArea">Polar Area Chart</option>
 
-
         </select>
-        <button type="button" class="btn btn-primary" onclick=changeGraphType(document.getElementById("graphType").value)>Change graph type</button>
-        <button type="button" class="btn btn-primary" onclick=reloadPage()>Reset</button>
+        <button type="button" class="btn btn-danger" id = "rstbtn" onclick=reloadPage()>Reset</button>
+
     </div>
+
+
     <div class='apicontainer'>
         <div class="graph1">
             <canvas id="chart1" width="200" height="200"></canvas>
