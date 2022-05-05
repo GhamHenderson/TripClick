@@ -138,6 +138,7 @@ async function chartIT2() {
     });
 }
 
+
 async function chartIT() {
     const ctx = document.getElementById('chart1').getContext('2d')
     chart = new Chart(ctx, {
@@ -236,7 +237,7 @@ async function buttonClicked(countryName,selectedItem) { // Api Info -> https://
     const response = await fetch(url);
     let apidata = await response.json();
 
-    if(selectedItem === "gdp"){
+    if(selectedItem === "gdp") {
         titleHeader = "GDP Per Capita 2022";
         graphdata.push(apidata[0].gdpPerCap);
         labeldata.push(countryName);
@@ -256,6 +257,8 @@ async function buttonClicked(countryName,selectedItem) { // Api Info -> https://
         graphdata.push(apidata[0].health);
         labeldata.push(countryName);
     }
+    destroyandRender("refresh");
+    chart.update();
 }
 function weatherHandler(i) {
     if (clickcount === 0) {
@@ -286,6 +289,14 @@ function displayWeatherData(apidata, gd, countryName){
         for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
             let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
             let day = apidata.forecast.forecastday[i].date;
+            if(chartType === "pie" || chartType === "doughnut")
+            {
+                graphdata.push(maxtemp);
+                labeldata.push(countryName);
+                namedata.push(day);
+                destroyandRender("refresh");
+                return;
+            }
             graphdata.push(maxtemp);
             labeldata.push(day);
         }
@@ -296,6 +307,13 @@ function displayWeatherData(apidata, gd, countryName){
         for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
             let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
             let day = apidata.forecast.forecastday[i].date;
+            if(chartType === "pie" || chartType === "doughnut")
+            {
+                graphdata.push(maxtemp);
+                labeldata.push(countryName);
+                destroyandRender("refresh");
+                return;
+            }
             graphdata2.push(maxtemp);
             labeldata2.push(day);
         }
@@ -306,6 +324,13 @@ function displayWeatherData(apidata, gd, countryName){
         for (let i = 0; i < apidata.forecast.forecastday.length; i++) {
             let maxtemp = apidata.forecast.forecastday[i].day.maxtemp_c;
             let day = apidata.forecast.forecastday[i].date;
+            if(chartType === "pie" || chartType === "doughnut")
+            {
+                graphdata.push(maxtemp);
+                labeldata.push(countryName);
+                destroyandRender("refresh");
+                return;
+            }
             graphdata3.push(maxtemp);
             labeldata3.push(day);
         }
@@ -367,24 +392,45 @@ function covHandler(i) {
         getCurrentCovid(i.properties.name, 3);
         trigger++;
     }
-    else window.alert("Max 3 Countries for this Category")
-    chart.update();
+    else {
+        window.alert("Max 3 Countries for this Category")
+
+    }
+
+
 }
 
 async function getCurrentCovid(countryName, counter) {
     let countryID = isCovidDataAvailable(countryName);
-    const response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=10");
-    const data = await response.json();
+    let response;
 
+    if(chartType === "pie")
+    {
+        response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=1");
+    }
+    else
+        response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=10");
+
+    console.log(response);
+
+    const data = await response.json();
     if (counter === 1) {
+        let dailytotal = 0;
         for (let j = 0; j < data.length; j++) {
-            let dailytotal = 0;
             for (let i = 0; i < data[j].records.length; i++) {
                 dailytotal = (data[j].records[i].cases + dailytotal);
+            }
+            if(chartType === "pie" || chartType === "doughnut")
+            {
+                graphdata.push(dailytotal);
+                labeldata.push(countryName);
+                destroyandRender("refresh");
+                return;
             }
             graphdata.push(dailytotal);
             labeldata.push(data[j].date);
         }
+
         namedata.push(countryName);
         console.log(graphdata);
         console.log(labeldata);
@@ -397,12 +443,19 @@ async function getCurrentCovid(countryName, counter) {
             for (let i = 0; i < data[j].records.length; i++) {
                 dailytotal = (data[j].records[i].cases + dailytotal);
             }
+            if(chartType === "pie" || chartType === "doughnut")
+            {
+                graphdata.push(dailytotal);
+                labeldata.push(countryName);
+                destroyandRender("refresh");
+                return;
+            }
             graphdata2.push(dailytotal);
             labeldata2.push(data[j].date);
         }
         namedata2.push(countryName);
-        console.log(graphdata);
-        console.log(labeldata);
+        console.log(graphdata2);
+        console.log(labeldata2);
         chart.update();
     }
     else if (counter === 3) {
@@ -411,15 +464,25 @@ async function getCurrentCovid(countryName, counter) {
             for (let i = 0; i < data[j].records.length; i++) {
                 dailytotal = (data[j].records[i].cases + dailytotal);
             }
+            if(chartType === "pie" || chartType === "doughnut")
+            {
+                graphdata.push(dailytotal);
+                labeldata.push(countryName);
+                destroyandRender("refresh");
+                return;
+            }
             graphdata3.push(dailytotal);
             labeldata3.push(data[j].date);
         }
         namedata3.push(countryName);
-        console.log(graphdata);
-        console.log(labeldata);
+        console.log(graphdata3);
+        console.log(labeldata3);
         chart.update();
     }
-    else{ window.alert("Max 3 Countries for this category")}
+    else{
+        window.alert("Max 3 Countries for this category");
+
+    }
 }
 
 function isCovidDataAvailable(countryName){
@@ -447,4 +510,9 @@ function isCovidDataAvailable(countryName){
     else if(countryName === "Wales") {countryID = "wales"}
     else if(countryName === 'Spain'){countryID = "es"}
     return countryID;
+}
+
+function reloadPage()
+{
+    location.reload();
 }

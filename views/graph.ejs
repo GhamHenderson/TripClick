@@ -39,13 +39,17 @@
             <button type="button" class="btn btn-primary mr-1" onclick=selector("health")>Health</button>
         </div><br>
         <label for="graphType"></label><select name="graphType" id="graphType">
-            <option id="" value="">Please Select Graph type</option>
             <option id="bar" value="bar">Bar Chart</option>
             <option value="line">Line Graph</option>
             <option value="pie">Pie Chart</option>
             <option value="radar">Radar Chart</option>
+            <option value="doughnut">Donut Chart</option>
+            <option value="polarArea">Polar Area Chart</option>
+
+
         </select>
         <button type="button" class="btn btn-primary" onclick=changeGraphType(document.getElementById("graphType").value)>Change graph type</button>
+        <button type="button" class="btn btn-primary" onclick=reloadPage()>Reset</button>
     </div>
     <div class='apicontainer'>
         <div class="graph1">
