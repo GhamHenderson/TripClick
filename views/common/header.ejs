@@ -12,9 +12,12 @@
 <header class="header" id="header">
     <a href="/" class="nav-item"><img src="images/TripClick.png" height="80px" width="170px" alt="logoImg"></img></a>
     <nav class="navbar">
+            <li>
+                <a href="/graph" class="nav-item">Map Tool</a>
+            </li>
         <% if (role === 'admin') { %>
             <li>
-                <a href="/admin" class="nav-item">Dashboard</a>
+                <a href="/admin" class="nav-item"> Admin Dashboard</a>
             </li>
         <% } %>
         <% if (!username) { %>
@@ -26,9 +29,7 @@
             </li>
 
         <% } else if(username) { %>
-            <li>
-                <a href="/graph" class="nav-item">Map Tool</a>
-            </li>
+
             <li><a href="/userInfo?userId=<%= userId %>" class="nav-item-info"><%= username %></a></li>
             <li>
                 <form method="post" action="/logout">
