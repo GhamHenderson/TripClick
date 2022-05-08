@@ -113,6 +113,9 @@ body #login {
     padding-bottom: 10px;
 }
 
+.register-link{
+    float: right;
+}
 @media (max-width: 500px) {
     .wrapper-login .login-form .input-field-login {
         flex-direction: column;

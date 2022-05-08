@@ -282,10 +282,28 @@ app.post('/login', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
 
-    if (!username || !password) {
+    var errorMessage = '';
+
+    if (password.length === '') {
+        errorMessage += 'Please enter a password!';
+    } else if (password.length < 8) {
+        errorMessage += 'Password too short. Minimum characters should be 8!';
+    } else if (password.length > 25) {
+        errorMessage += 'Password too long. Maximum length allowed is 25 characters!';
+    }
+
+    if (username.length === '') {
+        errorMessage += 'Please enter a username!';
+    } else if (username.length < 4) {
+        errorMessage += 'Username too short. Minimum characters should be 4!';
+    } else if (username.length > 15) {
+        errorMessage += 'Username too long. Maximum length allowed is 15 characters!';
+    }
+
+    if (errorMessage.length > 0) {
         return res.render('login', {
-            error: 'Please enter your username and password!',
             title: 'Login',
+            error: errorMessage,
             userId: req.session.userId,
             username: req.session.username,
             firstname: req.session.firstname,
@@ -299,50 +317,28 @@ app.post('/login', function (req, res) {
             role: req.session.role
         });
     } else {
-        connection.query("SELECT * FROM users WHERE username = ?", [username], function (error, result, success) {
-            if (error) throw error;
 
-            if (result.length === 0) {
-                return res.render('login', {
-                    error: 'Wrong username or password!',
-                    title: 'Login',
-                    userId: req.session.userId,
-                    username: req.session.username,
-                    firstname: req.session.firstname,
-                    lastname: req.session.lastname,
-                    email: req.session.email,
-                    phone: req.session.phone,
-                    gender: req.session.gender,
-                    country: req.session.country,
-                    city: req.session.city,
-                    dateRegister: req.session.dateRegister,
-                    role: req.session.role
-                });
-            } else {
-                const hashedPassword = result[0].password
-                //get the hashedPassword from result
-                var finalResult = bcryptjs.compareSync(password, hashedPassword);
+        if (!username || !password) {
+            return res.render('login', {
+                error: 'Please enter your username and password!',
+                title: 'Login',
+                userId: req.session.userId,
+                username: req.session.username,
+                firstname: req.session.firstname,
+                lastname: req.session.lastname,
+                email: req.session.email,
+                phone: req.session.phone,
+                gender: req.session.gender,
+                country: req.session.country,
+                city: req.session.city,
+                dateRegister: req.session.dateRegister,
+                role: req.session.role
+            });
+        } else {
+            connection.query("SELECT * FROM users WHERE username = ?", [username], function (error, result, success) {
+                if (error) throw error;
 
-                if (finalResult === true) {
-                    req.session.username = username;
-                    req.session.userId = result[0].userId;
-                    req.session.firstname = result[0].firstname;
-                    req.session.lastname = result[0].lastname;
-                    req.session.email = result[0].email;
-                    req.session.phone = result[0].phone;
-                    req.session.gender = result[0].gender;
-                    req.session.country = result[0].country;
-                    req.session.city = result[0].city;
-                    req.session.dateRegister = result[0].dateRegister;
-                    req.session.role = result[0].role;
-                    // const token = jwt.sign({_userId: result[0].userId}, JWT_SECRET);
-                    // res.json({token});
-                    if (req.session.role === ROLE.ADMIN) {
-                        return res.redirect('/admin');
-                    } else if (req.session.role === ROLE.USER) {
-                        res.redirect('/');
-                    }
-                } else {
+                if (result.length === 0) {
                     return res.render('login', {
                         error: 'Wrong username or password!',
                         title: 'Login',
@@ -358,9 +354,50 @@ app.post('/login', function (req, res) {
                         dateRegister: req.session.dateRegister,
                         role: req.session.role
                     });
+                } else {
+                    const hashedPassword = result[0].password
+                    //get the hashedPassword from result
+                    var finalResult = bcryptjs.compareSync(password, hashedPassword);
+
+                    if (finalResult === true) {
+                        req.session.username = username;
+                        req.session.userId = result[0].userId;
+                        req.session.firstname = result[0].firstname;
+                        req.session.lastname = result[0].lastname;
+                        req.session.email = result[0].email;
+                        req.session.phone = result[0].phone;
+                        req.session.gender = result[0].gender;
+                        req.session.country = result[0].country;
+                        req.session.city = result[0].city;
+                        req.session.dateRegister = result[0].dateRegister;
+                        req.session.role = result[0].role;
+                        // const token = jwt.sign({_userId: result[0].userId}, JWT_SECRET);
+                        // res.json({token});
+                        if (req.session.role === ROLE.ADMIN) {
+                            return res.redirect('/admin');
+                        } else if (req.session.role === ROLE.USER) {
+                            res.redirect('/');
+                        }
+                    } else {
+                        return res.render('login', {
+                            error: 'Wrong username or password!',
+                            title: 'Login',
+                            userId: req.session.userId,
+                            username: req.session.username,
+                            firstname: req.session.firstname,
+                            lastname: req.session.lastname,
+                            email: req.session.email,
+                            phone: req.session.phone,
+                            gender: req.session.gender,
+                            country: req.session.country,
+                            city: req.session.city,
+                            dateRegister: req.session.dateRegister,
+                            role: req.session.role
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 });
 
