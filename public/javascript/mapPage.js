@@ -508,7 +508,7 @@ async function getCurrentCovid(countryName, counter) {
 
 function isCovidDataAvailable(countryName){
     let countryID;
-    if(countryName === "Austria"){countryID = "at"}
+    if(countryName === "Austria"){countryID = "at"; return countryID;}
     else if(countryName === "Belgium") {countryID = "be"; return countryID;}
     else if(countryName === "Czech Republic") {countryID = "ch";return countryID;}
     else if(countryName === "Czech Republic") {countryID = "cz";return countryID;}
@@ -530,7 +530,8 @@ function isCovidDataAvailable(countryName){
     else if(countryName === "England") {countryID = "uk";return countryID;}
     else if(countryName === "Wales") {countryID = "wales";return countryID;}
     else if(countryName === 'Spain'){countryID = "es";return countryID;}
-    else {return "error"}
+    else {trigger--;return "error"}
+
 }
 
 function reloadPage()
