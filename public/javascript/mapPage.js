@@ -532,34 +532,62 @@ function reloadPage()
     location.reload();
 }
 
-
-function buttonColor(buttonName){
-    let Active = false;
-    buttonName.addEventListener('click', function onClick() {
-        if(covidActive === false){
-            buttonName.style.backgroundColor = '#0dade1';
-            buttonName.style.color = 'white';
-        }
-    });
-}
-
-let covidActive = false;
 btncov.addEventListener('click', function onClick() {
-    if(covidActive === false){
-        btncov.style.backgroundColor = '#0dade1';
-        btnwtr.style.backgroundColor = '#337ab7';
-        btncov.style.color = 'white';
-        covidActive=true;
-    }
+    btncov.style.backgroundColor = '#0dade1';
+    btnwtr.style.backgroundColor = '#007bff';
+    btngdp.style.backgroundColor = '#007bff';
+    btncorruption.style.backgroundColor = '#007bff';
+    btnhappiness.style.backgroundColor = '#007bff';
+    btnhealth.style.backgroundColor = '#007bff';
+    btncov.style.color = 'white';
 });
 
-let weatherActive = false;
 btnwtr.addEventListener('click', function onClick() {
-    if(weatherActive === false){
-        btnwtr.style.backgroundColor = '#0dade1';
-        btncov.style.backgroundColor = '#337ab7';
-        btnwtr.style.color = 'white';
-        weatherActive=true;
-    }
+    btnwtr.style.backgroundColor = '#0dade1';
+    btncov.style.backgroundColor = '#007bff';
+    btngdp.style.backgroundColor = '#007bff';
+    btncorruption.style.backgroundColor = '#007bff';
+    btnhappiness.style.backgroundColor = '#007bff';
+    btnhealth.style.backgroundColor = '##007bff';
+    btncov.style.color = 'white';
 });
 
+btngdp.addEventListener('click', function onClick() {
+    btngdp.style.backgroundColor = '#0dade1';
+    btncov.style.backgroundColor = '#007bff';
+    btnwtr.style.backgroundColor = '#007bff';
+    btncorruption.style.backgroundColor = '#007bff';
+    btnhappiness.style.backgroundColor = '#007bff';
+    btnhealth.style.backgroundColor = '#007bff';
+    btncov.style.color = 'white';
+});
+
+btnhappiness.addEventListener('click', function onClick() {
+    btnhappiness.style.backgroundColor = '#0dade1';
+    btncov.style.backgroundColor = '#007bff';
+    btnwtr.style.backgroundColor = '#007bff';
+    btncorruption.style.backgroundColor = '#007bff';
+    btngdp.style.backgroundColor = '#007bff';
+    btnhealth.style.backgroundColor = '#007bff';
+    btncov.style.color = 'white';
+});
+
+btncorruption.addEventListener('click', function onClick() {
+    btncorruption.style.backgroundColor = '#0dade1';
+    btncov.style.backgroundColor = '#007bff';
+    btnwtr.style.backgroundColor = '#007bff';
+    btngdp.style.backgroundColor = '#007bff';
+    btnhappiness.style.backgroundColor = '#007bff';
+    btnhealth.style.backgroundColor = '#007bff';
+    btncov.style.color = 'white';
+});
+
+btnhealth.addEventListener('click', function onClick() {
+    btnhealth.style.backgroundColor = '#0dade1';
+    btncov.style.backgroundColor = '#007bff';
+    btnwtr.style.backgroundColor = '#007bff';
+    btncorruption.style.backgroundColor = '#007bff';
+    btnhappiness.style.backgroundColor = '#007bff';
+    btngdp.style.backgroundColor = '#007bff';
+    btncov.style.color = 'white';
+});
