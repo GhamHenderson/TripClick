@@ -8,10 +8,10 @@
       </database-info>
       <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
-      <user-name>doadmin</user-name>
+      <user-name>graham</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema" qname="@" />
+          <node kind="schema" qname="majorproject" />
         </introspection-scope>
       </schema-mapping>
     </data-source>

@@ -13,6 +13,10 @@
 
 }
 
+.btn:focus {
+    background-color: #00b8e6;
+}
+
 a {
     color: blue;
 }

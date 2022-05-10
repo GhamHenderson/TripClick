@@ -27,10 +27,9 @@
             <li>
                 <a href="/register" class="nav-item">Register</a>
             </li>
-
         <% } else if(username) { %>
-
-            <li><a href="/userInfo?userId=<%= userId %>" class="nav-item-info"><%= username %></a></li>
+            <li><a href="/userInfo?userId=<%= userId %>" class="nav-item-info">
+                <%= username %></a></li>
             <li>
                 <form method="post" action="/logout">
                     <button class="logout-button">Log out</button>

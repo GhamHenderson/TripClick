@@ -1,3 +1,11 @@
+let btngdp = document.getElementById('gdpbutton');
+let btncov = document.getElementById('covidbutton');
+let btnwtr = document.getElementById('weatherbutton');
+let btncorruption = document.getElementById('corruptionbutton');
+let btnhappiness = document.getElementById('happinessbutton');
+let btnhealth = document.getElementById('healthbutton');
+
+
 let utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
 let titleHeader = "";
 let countryName;
@@ -114,14 +122,14 @@ async function chartIT2() {
             datasets: [{
                 label: namedata,
                 data: graphdata,
-                backgroundColor: ['rgba(0,100,255,0.27)'],
+                backgroundColor: ['rgba(0,56,224,0.37)','rgba(255,10,10,0.37)','rgba(208,17,255,0.37)'],
                 borderColor: ['rgb(33,119,232)',],
                 borderWidth: 2,
                 hoverOffset: 4,
             },{
                 label: namedata2,
                 data: graphdata2,
-                backgroundColor: ['rgba(255,0,0,0.37)'],
+                backgroundColor: ['rgba(255,0,0,0.37)','rgba(42,199,181,0.37)','rgba(63,217,91,0.37)'],
                 borderColor: ['rgb(0,0,76)',],
                 borderWidth: 2,
                 hoverOffset: 4,
@@ -174,7 +182,7 @@ async function chartIT() {
                 label: titleHeader,
                 data: graphdata,
                 backgroundColor: ['rgba(0,100,255,0.27)','rgba(94,255,0,0.27)','rgb(109,234,17)','rgba(255,0,0,0.66)','rgba(0,100,255,0.27)'],
-                borderColor: ['rgba(0,0,0,0.83)',],
+                borderColor: ['rgba(0,0,0,0.56)',],
             }],
         },
     });
@@ -196,14 +204,15 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
         .attr("fill", "#348C31") // Color Of Country
         .attr("d", d3.geoPath().projection(projection))
         .on('click', function (d, i) {
-            console.log(graphdata + " : " + labeldata);
+            // Cant select a country until you've clicked a category
             if(buttonBool === true) {
-                clickHandling(i);
-                chart.update();
                 if (countriesSelected.includes(i.properties.name) === true) {
                     countriesSelected.splice(countriesSelected.indexOf(i.properties.name), 1);
                     d3.select(this).style("fill", '#348C31');
                 } else if (countriesSelected.includes(i.properties.name) === false) {
+                    //Decide What happens next
+                    clickHandling(i);
+                    // push selected country into the countries selected array
                     countriesSelected.push(i.properties.name);
                     d3.select(this).style("fill", '#03a5fd');
                 }
@@ -213,7 +222,9 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
 })
 function clickHandling(i){
     countryName = i.properties.name;
+    //max countries selected is ten
     if (timesClicked < 10) {
+        // if statements for buttons
         if(selectedItem === "covid") {
             covHandler(i);
             chart.destroy();
@@ -225,6 +236,7 @@ function clickHandling(i){
             chartIT2();
             weatherHandler(i);
         }
+        // use a single data point api
         else {
             buttonClicked(countryName, selectedItem, i);
         }
@@ -238,6 +250,9 @@ async function buttonClicked(countryName,selectedItem) { // Api Info -> https://
     let apidata = await response.json();
 
     if(selectedItem === "gdp") {
+        btngdp.style.backgroundColor = 'salmon';
+        btngdp.style.color = 'white';
+
         titleHeader = "GDP Per Capita 2022";
         graphdata.push(apidata[0].gdpPerCap);
         labeldata.push(countryName);
@@ -516,3 +531,35 @@ function reloadPage()
 {
     location.reload();
 }
+
+
+function buttonColor(buttonName){
+    let Active = false;
+    buttonName.addEventListener('click', function onClick() {
+        if(covidActive === false){
+            buttonName.style.backgroundColor = '#0dade1';
+            buttonName.style.color = 'white';
+        }
+    });
+}
+
+let covidActive = false;
+btncov.addEventListener('click', function onClick() {
+    if(covidActive === false){
+        btncov.style.backgroundColor = '#0dade1';
+        btnwtr.style.backgroundColor = '#337ab7';
+        btncov.style.color = 'white';
+        covidActive=true;
+    }
+});
+
+let weatherActive = false;
+btnwtr.addEventListener('click', function onClick() {
+    if(weatherActive === false){
+        btnwtr.style.backgroundColor = '#0dade1';
+        btncov.style.backgroundColor = '#337ab7';
+        btnwtr.style.color = 'white';
+        weatherActive=true;
+    }
+});
+
