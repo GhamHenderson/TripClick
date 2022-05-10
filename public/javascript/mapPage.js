@@ -417,6 +417,11 @@ function covHandler(i) {
 
 async function getCurrentCovid(countryName, counter) {
     let countryID = isCovidDataAvailable(countryName);
+    if (countryID === "error"){
+        window.alert("Sorry this selection is not available");
+        return;
+    }
+    else{
     let response;
 
     if(chartType === "pie")
@@ -498,33 +503,34 @@ async function getCurrentCovid(countryName, counter) {
         window.alert("Max 3 Countries for this category");
 
     }
+    }
 }
 
 function isCovidDataAvailable(countryName){
     let countryID;
     if(countryName === "Austria"){countryID = "at"}
-    else if(countryName === "Belgium") {countryID = "be"}
-    else if(countryName === "Czech Republic") {countryID = "ch"}
-    else if(countryName === "Czech Republic") {countryID = "cz"}
-    else if(countryName === "Germany") {countryID = "de"}
-    else if(countryName === "England") {countryID = "england"}
-    else if(countryName === "Estonia") {countryID = "es"}
-    else if(countryName === "Finland") {countryID = "fi"}
-    else if(countryName === "France") {countryID = "fr"}
-    else if(countryName === "Greece") {countryID = "gr"}
-    else if(countryName === "Hungary") {countryID = "hu"}
-    else if(countryName === "Ireland") {countryID = "ie"}
-    else if(countryName === "Italy") {countryID = "it"}
-    else if(countryName === "Netherlands") {countryID = "nl"}
-    else if(countryName === "Norway") {countryID = "no"}
-    else if(countryName === "Poland") {countryID = "pl"}
-    else if(countryName === "Portugal") {countryID = "pt"}
-    else if(countryName === "Scotland") {countryID = "scotland"}
-    else if(countryName === "Sweden") {countryID = "se"}
-    else if(countryName === "England") {countryID = "uk"}
-    else if(countryName === "Wales") {countryID = "wales"}
-    else if(countryName === 'Spain'){countryID = "es"}
-    return countryID;
+    else if(countryName === "Belgium") {countryID = "be"; return countryID;}
+    else if(countryName === "Czech Republic") {countryID = "ch";return countryID;}
+    else if(countryName === "Czech Republic") {countryID = "cz";return countryID;}
+    else if(countryName === "Germany") {countryID = "de";return countryID;}
+    else if(countryName === "England") {countryID = "england";return countryID;}
+    else if(countryName === "Estonia") {countryID = "es";return countryID;}
+    else if(countryName === "Finland") {countryID = "fi";return countryID;}
+    else if(countryName === "France") {countryID = "fr";return countryID;}
+    else if(countryName === "Greece") {countryID = "gr";return countryID;}
+    else if(countryName === "Hungary") {countryID = "hu";return countryID;}
+    else if(countryName === "Ireland") {countryID = "ie";return countryID;}
+    else if(countryName === "Italy") {countryID = "it";return countryID;}
+    else if(countryName === "Netherlands") {countryID = "nl";return countryID;}
+    else if(countryName === "Norway") {countryID = "no";return countryID;}
+    else if(countryName === "Poland") {countryID = "pl";return countryID;}
+    else if(countryName === "Portugal") {countryID = "pt";return countryID;}
+    else if(countryName === "Scotland") {countryID = "scotland";return countryID;}
+    else if(countryName === "Sweden") {countryID = "se";return countryID;}
+    else if(countryName === "England") {countryID = "uk";return countryID;}
+    else if(countryName === "Wales") {countryID = "wales";return countryID;}
+    else if(countryName === 'Spain'){countryID = "es";return countryID;}
+    else {return "error"}
 }
 
 function reloadPage()
