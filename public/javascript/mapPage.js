@@ -424,7 +424,7 @@ async function getCurrentCovid(countryName, counter) {
     else{
     let response;
 
-    if(chartType === "pie")
+    if(chartType === "pie" || chartType === "doughnut")
     {
         response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=1");
     }
