@@ -20,7 +20,7 @@ let namedata = [];
 let namedata2 = [];
 let namedata3 = [];
 let chart;
-let chartType = "bar";
+let chartType = "line";
 let timesClicked = 0;
 let buttonBool = false;
 let selectedItem;
