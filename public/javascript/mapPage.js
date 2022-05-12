@@ -224,7 +224,7 @@ function clickHandling(i){
     if (timesClicked < 10) {
         // if statements for buttons
         if(selectedItem === "covid") {
-            covHandler(i)
+            covHandler(i);
             chart.destroy();
             chartIT3();
             chart.update();
@@ -269,7 +269,7 @@ async function buttonClicked(countryName,selectedItem) { // Api Info -> https://
     }
     if(selectedItem === "health"){
         titleHeader = "Average Health score per country 2020";
-        document.getElementById("dataForSelection").innerHTML = "The Health Index is a new tool to measure a broad variety of health outcomes <br> and risk factors over time, and for different geographic areas <br><br> The Higher the rating the better the healthcare system based on index";
+        document.getElementById("dataForSelection").innerHTML = " The Health Index is a new tool to measure a broad variety of health outcomes <br> and risk factors over time, and for different geographic areas <br><br> The Higher the rating the better the healthcare system based on index";
         graphdata.push(apidata[0].health);
         labeldata.push(countryName);
     }
@@ -277,14 +277,15 @@ async function buttonClicked(countryName,selectedItem) { // Api Info -> https://
     chart.update();
 }
 function weatherHandler(i) {
+    document.getElementById("dataForSelection").innerHTML = "Temperature Displayed in Celsius";
+
     if (clickcount === 0) {
         getCurrentWeather(i.properties.name, 1);
         titleHeader = "Average Temp for Last 3 Days"
-        document.getElementById("dataForSelection").innerHTML = "Temperature Displayed in Celsius";
         clickcount++;
     } else if (clickcount === 1) {
-        clickcount++;
         getCurrentWeather(i.properties.name, 2);
+        clickcount++;
     } else if (clickcount === 2){
         getCurrentWeather(i.properties.name, 3);
         clickcount++;
