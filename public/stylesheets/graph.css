@@ -6,7 +6,6 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-
 .home-page {
     margin-top: 25px;
     margin-bottom: 100px;
@@ -125,4 +124,11 @@ path:hover {
     justify-content: center;
     align-items: center;
 
+}
+
+#dataDiv{
+    color: white;
+}
+.dataDiv{
+    color: white;
 }

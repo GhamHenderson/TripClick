@@ -16,6 +16,7 @@
     "chart.js": "^3.7.1",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
+    "data.js": "^0.12.11",
     "debug": "~2.6.9",
     "dotenv": "^16.0.0",
     "ejs": "~2.6.1",

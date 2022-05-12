@@ -41,8 +41,8 @@
         <div>
             <div><label id = 'dataLabel'>Please Select a chart type</label></div>
             <select name="graphType" id="graphType" onclick=changeGraphType(document.getElementById("graphType").value)>
-                <option id="bar" value="bar">Bar Chart</option>
                 <option value="line">Line Graph</option>
+                <option id="bar" value="bar">Bar Chart</option>
                 <option value="pie">Pie Chart</option>
                 <option value="radar">Radar Chart</option>
                 <option value="doughnut">Donut Chart</option>
@@ -54,10 +54,9 @@
     <div><label id = 'dataLabel'>Please Only Select up to 3 countries if using Weather or Covid.</label></div>
     <svg id="europeMap" class="europe-map" width="800" height="300"></svg>
 
-    <div>
-
+    <div class="dataDiv">
         <button type="button" class="btn btn-danger" id = "rstbtn" onclick=reloadPage()>Reset!</button>
-
+        <p id="dataForSelection"></p>
     </div>
 
 

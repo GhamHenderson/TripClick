@@ -4,8 +4,6 @@ let btnwtr = document.getElementById('weatherbutton');
 let btncorruption = document.getElementById('corruptionbutton');
 let btnhappiness = document.getElementById('happinessbutton');
 let btnhealth = document.getElementById('healthbutton');
-
-
 let utc = new Date().toJSON().slice(0,10).replace(/-/g,'/');
 let titleHeader = "";
 let countryName;
@@ -226,7 +224,7 @@ function clickHandling(i){
     if (timesClicked < 10) {
         // if statements for buttons
         if(selectedItem === "covid") {
-            covHandler(i);
+            covHandler(i)
             chart.destroy();
             chartIT3();
             chart.update();
@@ -252,23 +250,26 @@ async function buttonClicked(countryName,selectedItem) { // Api Info -> https://
     if(selectedItem === "gdp") {
         btngdp.style.backgroundColor = 'salmon';
         btngdp.style.color = 'white';
-
-        titleHeader = "GDP Per Capita 2022";
+        titleHeader = "GDP Per Capita 2021";
+        document.getElementById("dataForSelection").innerHTML = "Gross Domestic Product: % Growth Per Annum";
         graphdata.push(apidata[0].gdpPerCap);
         labeldata.push(countryName);
     }
     if(selectedItem === "happiness"){
         titleHeader = "Happiness Score in Index 2020";
+        document.getElementById("dataForSelection").innerHTML = "0 = Low Score, 10 = High Score";
         graphdata.push(apidata[0].happiness);
         labeldata.push(countryName);
     }
     if(selectedItem === "corruption"){
-        titleHeader = "Country Corruption Score";
+        titleHeader = "Country Corruption Score 2019-21";
+        document.getElementById("dataForSelection").innerHTML = "0 = Most Likely to experience corruption";
         graphdata.push(apidata[0].corruption);
         labeldata.push(countryName);
     }
     if(selectedItem === "health"){
         titleHeader = "Average Health score per country 2020";
+        document.getElementById("dataForSelection").innerHTML = "The Health Index is a new tool to measure a broad variety of health outcomes <br> and risk factors over time, and for different geographic areas <br><br> The Higher the rating the better the healthcare system based on index";
         graphdata.push(apidata[0].health);
         labeldata.push(countryName);
     }
@@ -279,6 +280,7 @@ function weatherHandler(i) {
     if (clickcount === 0) {
         getCurrentWeather(i.properties.name, 1);
         titleHeader = "Average Temp for Last 3 Days"
+        document.getElementById("dataForSelection").innerHTML = "Temperature Displayed in Celsius";
         clickcount++;
     } else if (clickcount === 1) {
         clickcount++;
@@ -396,6 +398,7 @@ const randColor = () =>  {
 }
 
 function covHandler(i) {
+    document.getElementById("dataForSelection").innerHTML = "Total Covid Cases Since 1st Jan 2021";
     console.log(trigger);
     if (trigger === 0) {
         getCurrentCovid(i.properties.name,1);
@@ -422,87 +425,87 @@ async function getCurrentCovid(countryName, counter) {
         return;
     }
     else{
-    let response;
+        let response;
 
-    if(chartType === "pie" || chartType === "doughnut")
-    {
-        response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=1");
-    }
-    else
-        response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=10");
-
-    console.log(response);
-
-    const data = await response.json();
-    if (counter === 1) {
-        let dailytotal = 0;
-        for (let j = 0; j < data.length; j++) {
-            for (let i = 0; i < data[j].records.length; i++) {
-                dailytotal = (data[j].records[i].cases + dailytotal);
-            }
-            if(chartType === "pie" || chartType === "doughnut")
-            {
-                graphdata.push(dailytotal);
-                labeldata.push(countryName);
-                destroyandRender("refresh");
-                return;
-            }
-            graphdata.push(dailytotal);
-            labeldata.push(data[j].date);
+        if(chartType === "pie" || chartType === "doughnut")
+        {
+            response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=1");
         }
+        else
+            response = await fetch("https://covid19-eu-data-api-gamma.vercel.app/api/countries?alpha2=" + countryID + "&days=10");
 
-        namedata.push(countryName);
-        console.log(graphdata);
-        console.log(labeldata);
-        chart.update();
-        chart.update();
-    }
-    else if (counter === 2) {
-        for (let j = 0; j < data.length; j++) {
+        console.log(response);
+
+        const data = await response.json();
+        if (counter === 1) {
             let dailytotal = 0;
-            for (let i = 0; i < data[j].records.length; i++) {
-                dailytotal = (data[j].records[i].cases + dailytotal);
-            }
-            if(chartType === "pie" || chartType === "doughnut")
-            {
+            for (let j = 0; j < data.length; j++) {
+                for (let i = 0; i < data[j].records.length; i++) {
+                    dailytotal = (data[j].records[i].cases + dailytotal);
+                }
+                if(chartType === "pie" || chartType === "doughnut")
+                {
+                    graphdata.push(dailytotal);
+                    labeldata.push(countryName);
+                    destroyandRender("refresh");
+                    return;
+                }
                 graphdata.push(dailytotal);
-                labeldata.push(countryName);
-                destroyandRender("refresh");
-                return;
+                labeldata.push(data[j].date);
             }
-            graphdata2.push(dailytotal);
-            labeldata2.push(data[j].date);
-        }
-        namedata2.push(countryName);
-        console.log(graphdata2);
-        console.log(labeldata2);
-        chart.update();
-    }
-    else if (counter === 3) {
-        for (let j = 0; j < data.length; j++) {
-            let dailytotal = 0;
-            for (let i = 0; i < data[j].records.length; i++) {
-                dailytotal = (data[j].records[i].cases + dailytotal);
-            }
-            if(chartType === "pie" || chartType === "doughnut")
-            {
-                graphdata.push(dailytotal);
-                labeldata.push(countryName);
-                destroyandRender("refresh");
-                return;
-            }
-            graphdata3.push(dailytotal);
-            labeldata3.push(data[j].date);
-        }
-        namedata3.push(countryName);
-        console.log(graphdata3);
-        console.log(labeldata3);
-        chart.update();
-    }
-    else{
-        window.alert("Max 3 Countries for this category");
 
-    }
+            namedata.push(countryName);
+            console.log(graphdata);
+            console.log(labeldata);
+            chart.update();
+            chart.update();
+        }
+        else if (counter === 2) {
+            for (let j = 0; j < data.length; j++) {
+                let dailytotal = 0;
+                for (let i = 0; i < data[j].records.length; i++) {
+                    dailytotal = (data[j].records[i].cases + dailytotal);
+                }
+                if(chartType === "pie" || chartType === "doughnut")
+                {
+                    graphdata.push(dailytotal);
+                    labeldata.push(countryName);
+                    destroyandRender("refresh");
+                    return;
+                }
+                graphdata2.push(dailytotal);
+                labeldata2.push(data[j].date);
+            }
+            namedata2.push(countryName);
+            console.log(graphdata2);
+            console.log(labeldata2);
+            chart.update();
+        }
+        else if (counter === 3) {
+            for (let j = 0; j < data.length; j++) {
+                let dailytotal = 0;
+                for (let i = 0; i < data[j].records.length; i++) {
+                    dailytotal = (data[j].records[i].cases + dailytotal);
+                }
+                if(chartType === "pie" || chartType === "doughnut")
+                {
+                    graphdata.push(dailytotal);
+                    labeldata.push(countryName);
+                    destroyandRender("refresh");
+                    return;
+                }
+                graphdata3.push(dailytotal);
+                labeldata3.push(data[j].date);
+            }
+            namedata3.push(countryName);
+            console.log(graphdata3);
+            console.log(labeldata3);
+            chart.update();
+        }
+        else{
+            window.alert("Max 3 Countries for this category");
+
+        }
     }
 }
 
@@ -510,7 +513,7 @@ function isCovidDataAvailable(countryName){
     let countryID;
     if(countryName === "Austria"){countryID = "at"; return countryID;}
     else if(countryName === "Belgium") {countryID = "be"; return countryID;}
-    else if(countryName === "Czech Republic") {countryID = "ch";return countryID;}
+    else if(countryName === "Switzerland") {countryID = "ch";return countryID;}
     else if(countryName === "Czech Republic") {countryID = "cz";return countryID;}
     else if(countryName === "Germany") {countryID = "de";return countryID;}
     else if(countryName === "England") {countryID = "england";return countryID;}
@@ -531,7 +534,6 @@ function isCovidDataAvailable(countryName){
     else if(countryName === "Wales") {countryID = "wales";return countryID;}
     else if(countryName === 'Spain'){countryID = "es";return countryID;}
     else {trigger--;return "error"}
-
 }
 
 function reloadPage()
