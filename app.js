@@ -285,6 +285,7 @@ app.post('/login', function (req, res) {
     var errorMessage = '';
 
     if (password.length === '') {
+
         errorMessage += 'Please enter a password!';
     } else if (password.length < 8) {
         errorMessage += 'Password too short. Minimum characters should be 8!';
